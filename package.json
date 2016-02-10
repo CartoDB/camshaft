@@ -1,0 +1,40 @@
+{
+  "name": "camshaft",
+  "version": "0.1.0",
+  "description": "Analysis library to create data views from queries",
+  "main": "app.js",
+  "scripts": {
+    "test": "make test-all"
+  },
+  "keywords": [
+    "cartodb",
+    "analysis",
+    "framework",
+    "workflow",
+    "api",
+    "sql",
+    "postgresql",
+    "postgis"
+  ],
+  "author": "Raul Ochoa <rochoa@cartodb.com>",
+  "license": "BSD-3-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:CartoDB/camshaft.git"
+  },
+  "dependencies": {
+    "async": "^1.5.2",
+    "cartodb-psql": "^0.6.1",
+    "cartodb-redis": "^0.13.0",
+    "debug": "^2.2.0",
+    "dot": "^1.0.3",
+    "request": "^2.69.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.2",
+    "jshint": "^2.9.1",
+    "mocha": "^2.4.5",
+    "redis": "^2.4.2",
+    "yargs": "^3.32.0"
+  }
+}
