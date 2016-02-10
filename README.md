@@ -2,6 +2,8 @@
 
 Analysis library to create data views from queries.
 
+[![Build Status](https://travis-ci.org/CartoDB/camshaft.png?branch=master)](https://travis-ci.org/CartoDB/camshaft)
+
 Library intentions and responsibilities: TBA.
 
 ## Limitations
