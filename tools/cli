@@ -3,6 +3,7 @@
 'use strict';
 
 var fs = require('fs');
+var debug = require('../lib/util/debug')('cli');
 
 var argv = require('yargs')
     .help('h')
@@ -38,8 +39,8 @@ Analysis.create(username, analysisDefinition, function(err, analysis) {
         process.exit(1);
     }
 
-    console.info('[INFO] Most likely your query will NOT have the_geom_webmercator.');
-    console.info('[INFO] You will need to `st_transform(the_geom, 3857) the_geom_webmercator`.');
+    debug('[INFO] Most likely your query will NOT have the_geom_webmercator.');
+    debug('[INFO] You will need to `st_transform(the_geom, 3857) the_geom_webmercator`.');
     console.log('Query for your analysis is: "%s".', analysis.getQuery());
     process.exit(0);
 });
