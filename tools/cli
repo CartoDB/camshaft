@@ -32,6 +32,8 @@ var username = argv.username;
 
 var analysisDefinition = require(filename);
 
+console.log(JSON.stringify(analysisDefinition, null, 4));
+
 
 Analysis.create(username, analysisDefinition, function(err, analysis) {
     if (err) {
