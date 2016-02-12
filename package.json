@@ -2,7 +2,7 @@
   "name": "camshaft",
   "version": "0.1.0",
   "description": "Analysis library to create data views from queries",
-  "main": "app.js",
+  "main": "./lib/analysis.js",
   "scripts": {
     "test": "make test-all"
   },
