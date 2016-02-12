@@ -5,6 +5,17 @@
 var fs = require('fs');
 var debug = require('../lib/util/debug')('cli');
 
+var Analysis = require('../lib/analysis');
+var validator = require('../lib/dag/toposort');
+
+function header(value) {
+    console.log('');
+    var dashes = new Array(value.length + 1).join('=');
+    console.log(dashes);
+    console.log(value);
+    console.log(dashes);
+}
+
 var argv = require('yargs')
     .help('h')
     .alias('h', 'help')
@@ -13,9 +24,13 @@ var argv = require('yargs')
     .example('$0 examples/def/trade_area_atm_machines.json -o image.png', 'exports trade area analysis workflow')
     .demand('u')
     .alias('u', 'username')
+    .option('i', {
+        alias: 'intermediate',
+        type: 'boolean',
+        desc: 'whether to display intermediate queries or not',
+        default: false
+    })
     .argv;
-
-var Analysis = require('../lib/analysis');
 
 var filename = argv._[0];
 if (!filename) {
@@ -29,9 +44,12 @@ if (!fs.existsSync(filename)) {
 filename = fs.realpathSync(filename);
 
 var username = argv.username;
+var intermediate = argv.intermediate;
+debug('Displaying intermediate queries: %s', intermediate);
 
 var analysisDefinition = require(filename);
 
+header('Analysis definition:');
 console.log(JSON.stringify(analysisDefinition, null, 4));
 
 
@@ -41,8 +59,22 @@ Analysis.create(username, analysisDefinition, function(err, analysis) {
         process.exit(1);
     }
 
+    if (intermediate) {
+        var rootNode = analysis.getRoot();
+        var sortedNodes = validator(rootNode);
+        header('Intermediate for this analysis are:');
+        var i = 0;
+        sortedNodes.forEach(function(node) {
+            if (rootNode.id() !== node.id()) {
+                console.log('%d) %s', ++i, node.getQuery());
+            }
+        });
+    }
+
     debug('[INFO] Most likely your query will NOT have the_geom_webmercator.');
     debug('[INFO] You will need to `st_transform(the_geom, 3857) the_geom_webmercator`.');
-    console.log('Query for your analysis is: "%s".', analysis.getQuery());
+
+    header('Query for your analysis is:');
+    console.log(analysis.getQuery());
     process.exit(0);
 });
