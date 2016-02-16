@@ -61,7 +61,7 @@ Analysis.create(username, analysisDefinition, function(err, analysis) {
     if (intermediate) {
         header('Intermediate for this analysis are:');
         analysis.getSortedNodes().forEach(function(node, i) {
-            console.log('%d) %s', i, node.getQuery());
+            console.log('%d) [id=%s] query="%s"; JSON=%j', i, node.id(), node.getQuery(), node.toJSON());
         });
     }
 
