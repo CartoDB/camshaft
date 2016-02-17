@@ -36,6 +36,8 @@ describe('workflow-validator', function() {
         run: createServiceStub({}),
         getSchema: createServiceStub([]),
         getAffectedTables: createServiceStub([]),
+        registerNodesInCatalog: createServiceStub([]),
+        trackNode: createServiceStub([]),
         enqueue: createServiceStub({})
     };
 

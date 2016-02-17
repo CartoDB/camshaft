@@ -45,6 +45,7 @@ before(function startRedisServer(done) {
 });
 
 before(function setupTestDatabase(done) {
+    var catalogPath = fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql');
     var fixturesPath = fs.realpathSync('./test/fixtures/atm_machines.sql');
     async.waterfall(
         [
@@ -58,6 +59,9 @@ before(function setupTestDatabase(done) {
             },
             function createPostgisExtension(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -c "CREATE EXTENSION postgis;"', callback);
+            },
+            function createCatalogTable(stdout, stderr, callback) {
+                exec('psql -d ' + DATABASE_NAME + ' -f ' + catalogPath, callback);
             },
             function applyFixtures(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -f ' + fixturesPath, callback);
