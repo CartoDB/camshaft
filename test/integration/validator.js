@@ -35,6 +35,7 @@ describe('workflow-validator', function() {
     var DatabaseServiceStub = {
         run: createServiceStub({}),
         getSchema: createServiceStub([]),
+        getAffectedTables: createServiceStub([]),
         enqueue: createServiceStub({})
     };
 
