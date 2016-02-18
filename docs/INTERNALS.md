@@ -12,7 +12,7 @@ All Nodes in the Analysis are identified by an ID. IDs are unique within an the 
 
 ## Workflow data structure
 
-Workflow graph is a directed acyclic graph
+Workflow graph is a directed acyclic graph.
 
 
 ## References
