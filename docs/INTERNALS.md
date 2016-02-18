@@ -10,6 +10,12 @@ or as input for other Nodes.
 
 All Nodes in the Analysis are identified by an ID. IDs are unique within an the graph.
 
+Nodes work like black boxes, internal implementation is hidden and we only care about what their output is: a SQL query.
+
+In that matter a Node could cache result in a table, or several tables, and return a plain `SELECT * FROM cached_table`
+query from that cached table. Or it could even generate several cache tables, e.g., a routing analysis could generate a
+table for lines and another for points.
+
 ## Workflow data structure
 
 Workflow graph is a directed acyclic graph.
