@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/codemirror.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/theme/monokai.min.css">
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            height: 100%;
+            font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial, sans-serif;
+        }
+
+        .wrap {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        textarea {
+            padding: 0;
+            margin: 0;
+            border: solid 1px #999;
+            height: 64px;
+        }
+
+        .editor {
+            float: left;
+            width: 40%;
+            height: 100vh;
+        }
+        .editor p {
+            margin: 8px 0;
+        }
+        .editor label, .editor input, .editor select {
+            width: 80%;
+            margin-bottom: 12px;
+            margin-left: 10px;
+            display: block;
+        }
+        .CodeMirror {
+            float: left;
+            width: 100%;
+            height: 80vh;
+        }
+        #map {
+            width: 60%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <form class="editor">
+        <p>
+            <label for="examples">Examples</label>
+            <select name="examples" id="examples"></select>
+        </p>
+
+        <p>
+            <label for="endpoint">Maps API endpoint</label>
+            <input type="text" name="endpoint" id="endpoint" value="http://development.localhost.lan:8181/api/v1/map">
+        </p>
+
+        <p>
+            <label for="apikey">API key</label>
+            <input type="text" name="apikey" id="apikey" value="YOUR API KEY">
+        </p>
+
+        <p>
+            <label for="layers_editor">Layers</label>
+            <textarea id="layers_editor" class="code"></textarea>
+        </p>
+    </form>
+    <div id="map"></div>
+</div>
+</body>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/codemirror.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/mode/javascript/javascript.min.js"></script>
+
+<script src="config.js"></script>
+<script src="examples.js"></script>
+<script src="app.js"></script>
+
+</html>
