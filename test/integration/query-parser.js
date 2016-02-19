@@ -5,7 +5,7 @@ var assert = require('assert');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 var QueryParser = require('../../lib/postgresql/query-parser');
 
-var UserConfigurationFixture = require('../fixtures/user-configuration');
+var testConfig = require('../test-config');
 
 
 //select * from (select * from populated_places_simple) _cdb_schema_discovery limit 0;
@@ -26,7 +26,7 @@ describe('query-parser', function() {
     var queryParser;
 
     before(function() {
-        var queryRunner = new QueryRunner(UserConfigurationFixture.dbParams);
+        var queryRunner = new QueryRunner(testConfig.db);
         queryParser = new QueryParser(queryRunner);
     });
 

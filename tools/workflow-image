@@ -6,6 +6,8 @@ var fs = require('fs');
 var spawn = require('child_process').spawn;
 var stream = require('stream');
 
+var DevUser = require('./dev-user');
+
 var argv = require('yargs')
     .help('h')
     .alias('h', 'help')
@@ -38,16 +40,23 @@ var analysisDefinition = require(filename);
 
 var username = argv.username;
 
-Analysis.create(username, analysisDefinition, function(err, analysis) {
+DevUser.getConfiguration(username, function(err, analysisConfiguration) {
     if (err) {
         console.error('Error happened: %s', err.message || 'unknown error');
         process.exit(1);
     }
 
-    var dotSpawn = spawn('dot', ['-T', 'png','-o', outputPath]);
-    dotSpawn.stdout.on('end', process.exit.bind(process, 0));
+    Analysis.create(analysisConfiguration, analysisDefinition, function (err, analysis) {
+        if (err) {
+            console.error('Error happened: %s', err.message || 'unknown error');
+            process.exit(1);
+        }
 
-    var bufferStream = new stream.PassThrough();
-    bufferStream.end(new Buffer(graphviz.dotFromNode(analysis.getRoot())));
-    bufferStream.pipe(dotSpawn.stdin);
+        var dotSpawn = spawn('dot', ['-T', 'png', '-o', outputPath]);
+        dotSpawn.stdout.on('end', process.exit.bind(process, 0));
+
+        var bufferStream = new stream.PassThrough();
+        bufferStream.end(new Buffer(graphviz.dotFromNode(analysis.getRoot())));
+        bufferStream.pipe(dotSpawn.stdin);
+    });
 });

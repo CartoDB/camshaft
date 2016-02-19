@@ -7,6 +7,8 @@ var debug = require('../lib/util/debug')('cli');
 
 var Analysis = require('../lib/analysis');
 
+var DevUser = require('./dev-user');
+
 function header(value) {
     console.log('');
     var dashes = new Array(value.length + 1).join('=');
@@ -52,23 +54,30 @@ header('Analysis definition:');
 console.log(JSON.stringify(analysisDefinition, null, 4));
 
 
-Analysis.create(username, analysisDefinition, function(err, analysis) {
+DevUser.getConfiguration(username, function(err, analysisConfiguration) {
     if (err) {
         console.error('Error happened: %s', err.message || 'unknown error');
         process.exit(1);
     }
 
-    if (intermediate) {
-        header('Intermediate for this analysis are:');
-        analysis.getSortedNodes().forEach(function(node, i) {
-            console.log('%d) [id=%s] query="%s"; JSON=%j', i, node.id(), node.getQuery(), node.toJSON());
-        });
-    }
+    Analysis.create(analysisConfiguration, analysisDefinition, function(err, analysis) {
+        if (err) {
+            console.error('Error happened: %s', err.message || 'unknown error');
+            process.exit(1);
+        }
 
-    debug('[INFO] Most likely your query will NOT have the_geom_webmercator.');
-    debug('[INFO] You will need to `st_transform(the_geom, 3857) the_geom_webmercator`.');
+        if (intermediate) {
+            header('Intermediate for this analysis are:');
+            analysis.getSortedNodes().forEach(function(node, i) {
+                console.log('%d) [id=%s] query="%s"; JSON=%j', i, node.id(), node.getQuery(), node.toJSON());
+            });
+        }
 
-    header('Query for your analysis is:');
-    console.log(analysis.getQuery());
-    process.exit(0);
+        debug('[INFO] Most likely your query will NOT have the_geom_webmercator.');
+        debug('[INFO] You will need to `st_transform(the_geom, 3857) the_geom_webmercator`.');
+
+        header('Query for your analysis is:');
+        console.log(analysis.getQuery());
+        process.exit(0);
+    });
 });

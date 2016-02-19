@@ -6,9 +6,9 @@ var Analysis = require('../../lib/analysis');
 
 var BatchClient = require('../../lib/postgresql/batch-client');
 
-describe('workflow', function() {
+var testConfig = require('../test-config');
 
-    var USERNAME = 'localhost';
+describe('workflow', function() {
 
     describe('create', function() {
 
@@ -33,7 +33,7 @@ describe('workflow', function() {
         };
 
         it('should work for basic source analysis', function(done) {
-            Analysis.create(USERNAME, sourceAnalysisDefinition, function(err, analysis) {
+            Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
                 assert.ok(!err, err);
                 assert.equal(analysis.getQuery(), QUERY_ATM_MACHINES);
 
@@ -51,7 +51,7 @@ describe('workflow', function() {
                 return callback(null, {status: 'ok'});
             };
 
-            Analysis.create(USERNAME, tradeAreaAnalysisDefinition, function(err, analysis) {
+            Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
                 assert.ok(enqueueCalled);
@@ -65,7 +65,7 @@ describe('workflow', function() {
 
         it('should fail for invalid types', function(done) {
             var analysisType = 'wadus';
-            Analysis.create(USERNAME, {type: analysisType}, function(err) {
+            Analysis.create(testConfig, {type: analysisType}, function(err) {
                 assert.ok(err);
                 assert.equal(err.message, 'Unknown analysis type: "' + analysisType + '"');
                 done();

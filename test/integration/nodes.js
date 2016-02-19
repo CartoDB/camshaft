@@ -6,13 +6,12 @@ var async = require('async');
 var Analysis = require('../../lib/analysis');
 var BatchClient = require('../../lib/postgresql/batch-client');
 
+var testConfig = require('../test-config');
 
 describe('nodes', function() {
 
-    var USERNAME = 'localhost';
-
     function create(definition, callback) {
-        Analysis.create(USERNAME, definition, callback);
+        Analysis.create(testConfig, definition, callback);
     }
 
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
