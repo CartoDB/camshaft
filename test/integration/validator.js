@@ -35,6 +35,7 @@ describe('workflow-validator', function() {
     var DatabaseServiceStub = {
         run: createServiceStub({}),
         getSchema: createServiceStub([]),
+        getColumnNames: createServiceStub([]),
         getAffectedTables: createServiceStub([]),
         registerNodesInCatalog: createServiceStub([]),
         trackNode: createServiceStub([]),
