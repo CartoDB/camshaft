@@ -2,7 +2,7 @@
 
 var QUERY_ATM_MACHINES = 'select * from atm_machines';
 var TRADE_AREA_WALK = 'walk';
-var TRADE_AREA_15M = 1200;
+var TRADE_AREA_15M = 900;
 
 var sourceAtmDef = {
     type: 'source',
