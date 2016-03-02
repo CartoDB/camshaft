@@ -39,6 +39,17 @@ var examples = {
     pointsInPolygon: {
         name: 'airbnb in atm trade areas',
         def: pointsInPolygonDefinition,
+        cartocss: [
+            '#layer{',
+            '  marker-placement: point;',
+            '  marker-allow-overlap: true;',
+            '  marker-line-opacity: 0.2;',
+            '  marker-line-width: 0.5;',
+            '  marker-opacity: 1;',
+            '  marker-width: 5;',
+            '  marker-fill: red;',
+            '}'
+        ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
     }

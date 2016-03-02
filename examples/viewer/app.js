@@ -15,12 +15,20 @@ L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
     maxZoom: 18
 }).addTo(map);
 
-var layersEditor = CodeMirror.fromTextArea(document.getElementById('layers_editor'), {
+var analysisEditor = CodeMirror.fromTextArea(document.getElementById('analysis_editor'), {
     theme: 'monokai',
     lineNumbers: true,
     lineWrapping: true,
     mode: 'application/json',
     height: '400px'
+});
+
+var cssEditor = CodeMirror.fromTextArea(document.getElementById('css_editor'), {
+    theme: 'monokai',
+    lineNumbers: true,
+    lineWrapping: true,
+    mode: "text/x-scss",
+    height: "200px"
 });
 
 function tilesEndpoint(layergroupId) {
@@ -43,7 +51,8 @@ function updateMap(example) {
             {
                 type: 'analysis',
                 options: {
-                    def: layersEditor.getValue()
+                    def: analysisEditor.getValue(),
+                    cartocss: cssEditor.getValue()
                 }
             }
         ]
@@ -82,7 +91,8 @@ function currentApiKey() {
 
 function loadExample() {
     var example = currentExample();
-    layersEditor.setValue(JSON.stringify(example.def, null, 2));
+    analysisEditor.setValue(JSON.stringify(example.def, null, 2) + '\n');
+    cssEditor.setValue(example.cartocss + '\n');
 
     updateMap(example);
 }

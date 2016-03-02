@@ -39,14 +39,15 @@
         }
         .editor label, .editor input, .editor select {
             width: 80%;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             margin-left: 10px;
             display: block;
         }
         .CodeMirror {
             float: left;
             width: 100%;
-            height: 80vh;
+            height: 40vh;
+            margin-bottom: 8px;
         }
         #map {
             width: 60%;
@@ -73,8 +74,13 @@
         </p>
 
         <p>
-            <label for="layers_editor">Layers</label>
-            <textarea id="layers_editor" class="code"></textarea>
+            <label for="analysis_editor">Analysis</label>
+            <textarea id="analysis_editor" class="code"></textarea>
+        </p>
+
+        <p>
+            <label for="css_editor">CartoCSS</label>
+            <textarea id="css_editor" class="code"></textarea>
         </p>
     </form>
     <div id="map"></div>
@@ -85,6 +91,7 @@
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/codemirror.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/mode/javascript/javascript.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/codemirror/4.7.0/mode/css/css.min.js"></script>
 
 <script src="config.js"></script>
 <script src="examples.js"></script>
