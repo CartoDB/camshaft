@@ -5,6 +5,7 @@ var async = require('async');
 
 var Analysis = require('../../lib/analysis');
 var BatchClient = require('../../lib/postgresql/batch-client');
+var QueryParser = require('../../lib/postgresql/query-parser');
 
 var testConfig = require('../test-config');
 
@@ -26,6 +27,16 @@ describe('nodes', function() {
 
     describe('source', function() {
 
+        var getColumnNamesFn;
+        before(function() {
+            getColumnNamesFn = QueryParser.prototype.getColumnNames;
+            QueryParser.prototype.getColumnNames = function(query, callback) {
+                return callback(null, []);
+            };
+        });
+        after(function() {
+            QueryParser.prototype.getColumnNames = getColumnNamesFn;
+        });
 
         it('should have same ids for same queries', function(done) {
             async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
