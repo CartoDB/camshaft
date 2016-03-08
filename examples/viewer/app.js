@@ -15,6 +15,11 @@ L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
     maxZoom: 18
 }).addTo(map);
 
+L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+    attribution: '<a href="http://cartodb.com">CartoDB</a> © 2014',
+    maxZoom: 18
+}).setZIndex(3).addTo(map);
+
 var analysisEditor = CodeMirror.fromTextArea(document.getElementById('analysis_editor'), {
     theme: 'monokai',
     lineNumbers: true,
@@ -42,7 +47,7 @@ function updateMap(example) {
     }
 
     if (example) {
-        map.setView(example.center, example.zoom);
+        map.setView(example.center || [30, 0], example.zoom || 3);
     }
 
     var config = {
@@ -67,7 +72,7 @@ function updateMap(example) {
 
             tilesLayer = L.tileLayer(tilesEndpoint(layergroup.layergroupid), {
                 maxZoom: 18
-            }).addTo(map);
+            }).setZIndex(2).addTo(map);
 
             console.log('Current zoom = %d', map.getZoom());
         } else {
