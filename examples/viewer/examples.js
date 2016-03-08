@@ -37,38 +37,43 @@ var pointsInPolygonDefinition = {
 
 var examples = {
     mapboxBlogPost: {
-        name: 'mapbox analysis blog post',
+    phillyProperties: {
+        name: 'philly properties',
         def: {
-            "type": "point-in-polygon",
-            "params": {
-                "pointsSource": {
-                    "type": "source",
-                    "params": {
-                        "query": "select the_geom, _market_value, category_code_description from properties"
+            'type': 'point-in-polygon',
+            'params': {
+                'pointsSource': {
+                    'type': 'source',
+                    'params': {
+                        'query': 'select the_geom, _market_value, category_code_description from properties'
                     }
                 },
-                "polygonsSource": {
-                    "type": "buffer",
-                    "params": {
-                        "source": {
-                            "type": "source",
-                            "params": {
-                                "query": "SELECT 1 as cartodb_id, ST_SetSRID(st_makepoint(-75.176,39.946), 4326) as the_geom"
-//                                "query": "SELECT 1 as cartodb_id, ST_SetSRID(st_makepoint(-75.196,39.936), 4326) as the_geom"
+                'polygonsSource': {
+                    'type': 'buffer',
+                    'params': {
+                        'source': {
+                            'type': 'source',
+                            'params': {
+                                'query': [
+                                    'SELECT',
+                                    '1 as cartodb_id,',
+                                    'ST_SetSRID(st_makepoint(-75.176,39.946), 4326) as the_geom'
+                                ].join(' ')
                             }
                         },
-                        "radio": 2000
+                        'radio': 2000
                     }
                 }
             }
         },
         cartocss: [
-            '@green: #27B691;',
-            '@magenta: #ED5299;',
-            '@blue: #484896;',
-            '@red: #EC3649;',
-            '@orange: #F06F42;',
-            '@yellow: #F6D845;',
+            '/*colorbrewer: Set1*/',
+            '@green: #4daf4a;',
+            '@magenta: #984ea3;',
+            '@blue: #377eb8;',
+            '@red: #e41a1c;',
+            '@orange: #ff7f00;',
+            '@yellow: #ffff33;',
             '',
             '#layer{',
             '    marker-placement: point;',
