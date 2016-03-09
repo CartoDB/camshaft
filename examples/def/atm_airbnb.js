@@ -28,8 +28,8 @@ var tradeAreaDefinition = {
 var pointsInPolygonDefinition = {
     type: 'point-in-polygon',
     params: {
-        pointsSource: sourceRentListings,
-        polygonsSource: tradeAreaDefinition
+        points_source: sourceRentListings,
+        polygons_source: tradeAreaDefinition
     }
 };
 

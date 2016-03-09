@@ -32,8 +32,8 @@ var bufferEstimatedPopulationDefinition = {
 var pointsInPolygonDefinition = {
     type: 'point-in-polygon',
     params: {
-        pointsSource: sourceRentListings,
-        polygonsSource: bufferEstimatedPopulationDefinition
+        points_source: sourceRentListings,
+        polygons_source: bufferEstimatedPopulationDefinition
     }
 };
 

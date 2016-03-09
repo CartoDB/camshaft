@@ -30,8 +30,8 @@ var tradeAreaDefinition = {
 var pointsInPolygonDefinition = {
     type: 'point-in-polygon',
     params: {
-        pointsSource: sourceRentListings,
-        polygonsSource: tradeAreaDefinition
+        points_source: sourceRentListings,
+        polygons_source: tradeAreaDefinition
     }
 };
 
@@ -110,13 +110,13 @@ var examples = {
         def: {
             'type': 'point-in-polygon',
             'params': {
-                'pointsSource': {
+                'points_source': {
                     'type': 'source',
                     'params': {
                         'query': 'select the_geom, _market_value, category_code_description from properties'
                     }
                 },
-                'polygonsSource': {
+                'polygons_source': {
                     'type': 'buffer',
                     'params': {
                         'source': {
