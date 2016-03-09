@@ -54,12 +54,17 @@ function updateMap(example) {
         version: '1.5.0',
         layers: [
             {
-                type: 'analysis',
+                type: 'cartodb',
                 options: {
-                    def: analysisEditor.getValue(),
-                    cartocss: cssEditor.getValue()
+                    source: { id: 'a0' },
+                    cartocss: cssEditor.getValue(),
+                    cartocss_version: '2.3.0'
                 }
             }
+        ],
+        dataviews: {},
+        analyses: [
+            JSON.parse(analysisEditor.getValue())
         ]
     };
 
@@ -96,7 +101,12 @@ function currentApiKey() {
 
 function loadExample() {
     var example = currentExample();
-    analysisEditor.setValue(JSON.stringify(example.def, null, 2) + '\n');
+    var analysis = {
+        id: 'a0',
+        type: example.def.type,
+        params: example.def.params
+    };
+    analysisEditor.setValue(JSON.stringify(analysis, null, 2) + '\n');
     cssEditor.setValue(example.cartocss + '\n');
 
     updateMap(example);
