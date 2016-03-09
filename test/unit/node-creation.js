@@ -34,10 +34,39 @@ describe('node-creation', function() {
                 source = new TestSource({ query: 2 });
             },
             function(err) {
-                assert.equal(err.message, 'Invalid type for param "query", expects a "TEXT" type, got `2`');
+                assert.equal(err.message, 'Invalid type for param "query", expects "TEXT" type, got `2`');
                 return true;
             }
         );
+    });
+
+    describe('Node.PARAM_TYPE.ENUM', function() {
+        var EnumSource = Node.create('test-source', { type: Node.PARAM_TYPE.ENUM('knn', 'queen') });
+
+        it('should check ENUM uses one of the values', function() {
+            var TYPES = ['knn', 'queen'];
+            TYPES.forEach(function(type) {
+                var enumSource = new EnumSource({ type: type });
+                assert.equal(enumSource.type, type);
+            });
+        });
+
+        it('should fail for invalid ENUM values', function() {
+            var enumSource;
+            assert.throws(
+                function() {
+                    enumSource = new EnumSource({ type: 'wadus' });
+                },
+                function(err) {
+                    assert.equal(
+                        err.message,
+                        'Invalid type for param "type", expects "{"knn","queen"}" type, got `"wadus"`'
+                    );
+                    return true;
+                }
+            );
+        });
+
     });
 
 });
