@@ -60,7 +60,7 @@ describe('node-creation', function() {
                 function(err) {
                     assert.equal(
                         err.message,
-                        'Invalid type for param "type", expects "{"knn","queen"}" type, got `"wadus"`'
+                        'Invalid type for param "type", expects "ENUM("knn","queen")" type, got `"wadus"`'
                     );
                     return true;
                 }
