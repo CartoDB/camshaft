@@ -36,7 +36,75 @@ var pointsInPolygonDefinition = {
 };
 
 var examples = {
-    mapboxBlogPost: {
+    moran: {
+        name: 'cluster outliers',
+        def: {
+            type: 'moran',
+            params: {
+                source: {
+                    'type': 'source',
+                    'params': {
+                        'query': 'select * from working_from_home'
+                    }
+                },
+                'numerator_column': 'worked_at_home',
+                'denominator_column': 'workers_16_years_and_over',
+                'significance': 0.05,
+                'neighbours': 5,
+                'permutations': 999,
+                'w_type': 'queen'
+            }
+        },
+        cartocss: [
+            '@HL: #00695C;//dark teal',
+            '@HH: #4DB6AC;//light teal',
+            '@LL: #FB8C00;//light orange',
+            '@LH: #d84315;//dark orange',
+            '@notsig: transparent;',
+            '@null: transparent;',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HH"] {',
+            '    polygon-fill: @HH;',
+            '}',
+            '#layer[quads="HL"] {',
+            '    polygon-fill: @HL;',
+            '}',
+            '#layer[quads="LH"] {',
+            '    polygon-fill: @LH;',
+            '}',
+            '#layer[quads="LL"] {',
+            '    polygon-fill: @LL;',
+            '}',
+            '#layer[significance >= 0.05] {',
+            '    polygon-fill: transparent;',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
+    moran_input: {
+        name: 'cluster outliers input',
+        def: {
+            'type': 'source',
+            'params': {
+                'query': 'select the_geom, worked_at_home, workers_16_years_and_over from working_from_home'
+            }
+        },
+        cartocss: [
+            '#layer{',
+            '    polygon-fill: ramp([worked_at_home], colorbrewer(PuBu));',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
     phillyProperties: {
         name: 'philly properties',
         def: {
