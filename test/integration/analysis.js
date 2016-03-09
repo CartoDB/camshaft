@@ -72,6 +72,21 @@ describe('workflow', function() {
             });
         });
 
+        it('should not fail to callback with error when analysis receives invalid param', function(done) {
+            var invalidAnalysis = {
+                type: 'trade-area',
+                params: {
+                    source: sourceAnalysisDefinition,
+                    kind: TRADE_AREA_WALK,
+                    time: 'text is invalid here'
+                }
+            };
+            Analysis.create(testConfig, invalidAnalysis, function(err, analysis) {
+                console.log(err, analysis);
+                done();
+            });
+        });
+
     });
 
 });
