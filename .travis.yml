@@ -1,5 +1,8 @@
 sudo: false
 
+addons:
+  postgresql: "9.3"
+
 language: node_js
 node_js:
   - "0.10"
