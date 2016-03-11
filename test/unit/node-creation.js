@@ -6,7 +6,7 @@ var Node = require('../../lib/node/node');
 
 describe('node-creation', function() {
 
-    var TestSource = Node.create('test-source', {query: Node.PARAM_TYPE.TEXT});
+    var TestSource = Node.create('test-source', {query: Node.PARAM.STRING});
 
     it('should validate params', function() {
         var QUERY = 'select * from table';
@@ -40,8 +40,8 @@ describe('node-creation', function() {
         );
     });
 
-    describe('Node.PARAM_TYPE.ENUM', function() {
-        var EnumSource = Node.create('test-source', { type: Node.PARAM_TYPE.ENUM('knn', 'queen') });
+    describe('Node.PARAM.ENUM', function() {
+        var EnumSource = Node.create('test-source', { type: Node.PARAM.ENUM('knn', 'queen') });
 
         it('should check ENUM uses one of the values', function() {
             var TYPES = ['knn', 'queen'];
