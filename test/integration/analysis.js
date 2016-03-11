@@ -81,8 +81,13 @@ describe('workflow', function() {
                     time: 'text is invalid here'
                 }
             };
-            Analysis.create(testConfig, invalidAnalysis, function(err, analysis) {
-                console.log(err, analysis);
+            Analysis.create(testConfig, invalidAnalysis, function(err) {
+                assert.ok(err);
+                assert.equal(
+                    err.message,
+                    'Invalid type for param "time", expects "number" type, got `"text is invalid here"`'
+                );
+
                 done();
             });
         });
