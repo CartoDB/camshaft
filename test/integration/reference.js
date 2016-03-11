@@ -17,6 +17,10 @@ describe('camshaft-reference', function() {
         assert.ok(latest.version);
     });
 
+    it('should NOT expose latest version through versions', function() {
+        assert.ok(reference.versions.indexOf('latest') < 0, '`latest` reference found in versions');
+    });
+
     it('should fail to retrieve an invalid reference version', function() {
         assert.throws(
             function() {
