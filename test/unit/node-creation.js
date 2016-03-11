@@ -34,7 +34,7 @@ describe('node-creation', function() {
                 source = new TestSource({ query: 2 });
             },
             function(err) {
-                assert.equal(err.message, 'Invalid type for param "query", expects "TEXT" type, got `2`');
+                assert.equal(err.message, 'Invalid type for param "query", expects "string" type, got `2`');
                 return true;
             }
         );
@@ -60,7 +60,7 @@ describe('node-creation', function() {
                 function(err) {
                     assert.equal(
                         err.message,
-                        'Invalid type for param "type", expects "ENUM("knn","queen")" type, got `"wadus"`'
+                        'Invalid type for param "type", expects "enum("knn","queen")" type, got `"wadus"`'
                     );
                     return true;
                 }
