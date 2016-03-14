@@ -6,16 +6,14 @@ var fs = require('fs');
 var spawn = require('child_process').spawn;
 var stream = require('stream');
 
-var DevUser = require('./dev-user');
+var FakeDatabaseService = require('./fake-database-service');
 
 var argv = require('yargs')
     .help('h')
     .alias('h', 'help')
     .usage('Usage: $0 <filename> -o [path]')
     .demand(1)
-    .example('$0 examples/def/trade_area_atm_machines.json -o image.png', 'exports trade area analysis workflow')
-    .demand('u')
-    .alias('u', 'username')
+    .example('$0 examples/def/trade_area_atm_machines.json -o image.png', 'generate workflow representation')
     .demand('o')
     .alias('o', 'output')
     .argv;
@@ -38,25 +36,16 @@ var outputPath = argv.output;
 
 var analysisDefinition = require(filename);
 
-var username = argv.username;
-
-DevUser.getConfiguration(username, function(err, analysisConfiguration) {
+new Analysis(FakeDatabaseService).create({}, analysisDefinition, function (err, analysis) {
     if (err) {
         console.error('Error happened: %s', err.message || 'unknown error');
         process.exit(1);
     }
 
-    Analysis.create(analysisConfiguration, analysisDefinition, function (err, analysis) {
-        if (err) {
-            console.error('Error happened: %s', err.message || 'unknown error');
-            process.exit(1);
-        }
+    var dotSpawn = spawn('dot', ['-T', 'png', '-o', outputPath]);
+    dotSpawn.stdout.on('end', process.exit.bind(process, 0));
 
-        var dotSpawn = spawn('dot', ['-T', 'png', '-o', outputPath]);
-        dotSpawn.stdout.on('end', process.exit.bind(process, 0));
-
-        var bufferStream = new stream.PassThrough();
-        bufferStream.end(new Buffer(graphviz.dotFromNode(analysis.getRoot())));
-        bufferStream.pipe(dotSpawn.stdin);
-    });
+    var bufferStream = new stream.PassThrough();
+    bufferStream.end(new Buffer(graphviz.dotFromNode(analysis.getRoot())));
+    bufferStream.pipe(dotSpawn.stdin);
 });
