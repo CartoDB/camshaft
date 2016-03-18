@@ -19,6 +19,24 @@ AnalysisGraph.prototype.getNodesList = function() {
     return appendAllNodes([], this.definition, this.reference);
 };
 
+AnalysisGraph.prototype.getDefinitionWith = function(nodeId, extendedWithParams) {
+    return extendDefinition(this.definition, this.reference, nodeId, extendedWithParams);
+};
+
+function extendDefinition(definition, reference, nodeId, extendedWithParams) {
+    if (definition.id && definition.id === nodeId) {
+        Object.keys(extendedWithParams).forEach(function(extendWithParamsKey) {
+            definition.params[extendWithParamsKey] = extendedWithParams[extendWithParamsKey];
+        });
+    }
+
+    childNodes(definition.type, reference).forEach(function(childNodeParamName) {
+        extendDefinition(definition.params[childNodeParamName], reference, nodeId, extendedWithParams);
+    });
+
+    return definition;
+}
+
 function appendAllNodes(allNodes, definition, reference) {
     allNodes.push(definition);
 

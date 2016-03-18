@@ -81,4 +81,23 @@ describe('camshaft-reference-graph', function() {
         assert.deepEqual(nodeIds, ['b0', 'a1', 'a0']);
     });
 
+    it('should return a modified node with filters', function() {
+        var analysisGraph = new reference.AnalysisGraph(tradeAreaDefinition);
+        var filters = {
+            bank_category: {
+                type: 'category',
+                column: 'bank',
+                params: {
+                    accept: ['BBVA']
+                }
+            }
+        };
+        var analysisDefinition = analysisGraph.getDefinitionWith('a0', {filters: filters});
+
+        var extendedGraph = new reference.AnalysisGraph(analysisDefinition);
+        var nodes = extendedGraph.getNodesWithId();
+
+        assert.deepEqual(nodes.a0.params.filters, filters);
+    });
+
 });
