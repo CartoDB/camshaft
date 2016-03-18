@@ -2,7 +2,7 @@
 
 var assert = require('assert');
 
-var reference = require('../../reference');
+var reference = require('../../../reference/index');
 
 describe('camshaft-reference', function() {
 
