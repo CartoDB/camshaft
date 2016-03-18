@@ -9,7 +9,7 @@ clean:
 jshint:
 	@./node_modules/.bin/jshint lib/ test/
 
-TEST_SUITE := $(shell find test/{integration,unit} -name "*.js")
+TEST_SUITE := $(shell find test/{acceptance,integration,unit} -name "*.js")
 TEST_SUITE_UNIT := $(shell find test/unit -name "*.js")
 
 MOCHA_TIMEOUT := 5000
