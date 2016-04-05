@@ -15,6 +15,10 @@ AnalysisGraph.prototype.getNodesWithId = function() {
     return reduceById({}, this.definition, this.reference);
 };
 
+AnalysisGraph.prototype.getChildNodesNames = function() {
+    return childNodes(this.definition.type, this.reference);
+};
+
 AnalysisGraph.prototype.getNodesList = function() {
     return appendAllNodes([], this.definition, this.reference);
 };
