@@ -22,7 +22,7 @@ var argv = require('yargs')
     .alias('h', 'help')
     .usage('Usage: $0 <filename> -o [path]')
     .demand(1)
-    .example('$0 examples/def/trade_area_atm_machines.json -o image.png', 'exports trade area analysis workflow')
+    .example('$0 examples/def/point_in_polygon.json', 'creates point in polygon analysis')
     .demand('u')
     .alias('u', 'username')
     .option('i', {

@@ -35,8 +35,8 @@ var estimatedPopulationDefinition = {
 var pointsInPolygonDefinition = {
     type: 'point-in-polygon',
     params: {
-        pointsSource: sourceRentListings,
-        polygonsSource: estimatedPopulationDefinition
+        points_source: sourceRentListings,
+        polygons_source: estimatedPopulationDefinition
     }
 };
 

@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+'use strict';
+
+var fs = require('fs');
+var util = require('util');
+
+
+var existingVersions = fs.readdirSync('./versions').filter(function(path) {
+    return fs.statSync('./versions/' + path).isDirectory();
+});
+if (existingVersions.length > 0) {
+    console.info('Existing versions are: %s.', existingVersions.join(', '));
+}
+
+var reference = require('../current-reference');
+var targetVersion = reference.version;
+console.info('Target version is: %s.', targetVersion);
+
+var targetVersionPath = './versions/' + targetVersion;
+var targetVersionPathExists = fs.existsSync(targetVersionPath);
+
+if (targetVersionPathExists) {
+    console.error('Target version "%s" already exists, check you have bumped the camshaft version.', targetVersion);
+    process.exit(1);
+}
+
+fs.mkdirSync(targetVersionPath);
+var targetVersionReferencePath = targetVersionPath + '/reference.json';
+fs.writeFileSync(targetVersionReferencePath, JSON.stringify(reference, null, 4), {encoding: 'utf8'});
+console.info('Reference file "%s" created.', targetVersionReferencePath);
+
+var VERSION_TEMPLATE = '    "%s": require("./%s/reference.json")';
+existingVersions.push(targetVersion);
+var allVersions = existingVersions.map(function(version) {
+    return util.format(VERSION_TEMPLATE, version, version);
+}).join(',\n');
+
+var VERSIONS_TEMPLATE = [
+    'var versions = {',
+    '%s',
+    '};',
+    '',
+    'versions.latest = versions["%s"];',
+
+    'module.exports = versions;',
+    ''
+].join('\n');
+var versionsFileContents = util.format(VERSIONS_TEMPLATE, allVersions, targetVersion);
+fs.writeFileSync('./versions/index.js', versionsFileContents, {encoding: 'utf8'});
+
+
+console.info('New versions are: %s.', existingVersions.join(', '));

@@ -15,12 +15,25 @@ L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
     maxZoom: 18
 }).addTo(map);
 
-var layersEditor = CodeMirror.fromTextArea(document.getElementById('layers_editor'), {
+L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+    attribution: '<a href="http://cartodb.com">CartoDB</a> © 2014',
+    maxZoom: 18
+}).setZIndex(3).addTo(map);
+
+var analysisEditor = CodeMirror.fromTextArea(document.getElementById('analysis_editor'), {
     theme: 'monokai',
     lineNumbers: true,
     lineWrapping: true,
     mode: 'application/json',
     height: '400px'
+});
+
+var cssEditor = CodeMirror.fromTextArea(document.getElementById('css_editor'), {
+    theme: 'monokai',
+    lineNumbers: true,
+    lineWrapping: true,
+    mode: "text/x-scss",
+    height: "200px"
 });
 
 function tilesEndpoint(layergroupId) {
@@ -34,18 +47,24 @@ function updateMap(example) {
     }
 
     if (example) {
-        map.setView(example.center, example.zoom);
+        map.setView(example.center || [30, 0], example.zoom || 3);
     }
 
     var config = {
         version: '1.5.0',
         layers: [
             {
-                type: 'analysis',
+                type: 'cartodb',
                 options: {
-                    def: layersEditor.getValue()
+                    source: { id: 'a0' },
+                    cartocss: cssEditor.getValue(),
+                    cartocss_version: '2.3.0'
                 }
             }
+        ],
+        dataviews: {},
+        analyses: [
+            JSON.parse(analysisEditor.getValue())
         ]
     };
 
@@ -58,7 +77,7 @@ function updateMap(example) {
 
             tilesLayer = L.tileLayer(tilesEndpoint(layergroup.layergroupid), {
                 maxZoom: 18
-            }).addTo(map);
+            }).setZIndex(2).addTo(map);
 
             console.log('Current zoom = %d', map.getZoom());
         } else {
@@ -82,7 +101,13 @@ function currentApiKey() {
 
 function loadExample() {
     var example = currentExample();
-    layersEditor.setValue(JSON.stringify(example.def, null, 2));
+    var analysis = {
+        id: 'a0',
+        type: example.def.type,
+        params: example.def.params
+    };
+    analysisEditor.setValue(JSON.stringify(analysis, null, 2) + '\n');
+    cssEditor.setValue(example.cartocss + '\n');
 
     updateMap(example);
 }
