@@ -1,0 +1,89 @@
+{
+    "version": "0.3.0",
+    "analyses": {
+        "buffer": {
+            "params": {
+                "source": {
+                    "type": "node"
+                },
+                "radio": {
+                    "type": "number"
+                }
+            }
+        },
+        "moran": {
+            "params": {
+                "source": {
+                    "type": "node"
+                },
+                "numerator_column": {
+                    "type": "string"
+                },
+                "denominator_column": {
+                    "type": "string"
+                },
+                "significance": {
+                    "type": "number"
+                },
+                "neighbours": {
+                    "type": "number"
+                },
+                "permutations": {
+                    "type": "number"
+                },
+                "w_type": {
+                    "type": "enum",
+                    "values": [
+                        "knn",
+                        "queen"
+                    ]
+                }
+            }
+        },
+        "point-in-polygon": {
+            "params": {
+                "points_source": {
+                    "type": "node"
+                },
+                "polygons_source": {
+                    "type": "node"
+                }
+            }
+        },
+        "population-in-area": {
+            "params": {
+                "source": {
+                    "type": "node"
+                },
+                "final_column": {
+                    "type": "string"
+                }
+            }
+        },
+        "source": {
+            "params": {
+                "query": {
+                    "type": "string"
+                }
+            }
+        },
+        "trade-area": {
+            "params": {
+                "source": {
+                    "type": "node"
+                },
+                "kind": {
+                    "type": "enum",
+                    "values": [
+                        "walk",
+                        "drive",
+                        "bike"
+                    ]
+                },
+                "time": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}
