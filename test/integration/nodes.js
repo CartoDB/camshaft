@@ -70,6 +70,29 @@ describe('nodes', function() {
             });
         });
 
+        it('should have different ids for same query but columns changing', function(done) {
+            var called = false;
+            QueryParser.prototype.getColumnNames = function(query, callback) {
+                var columns = ['a', 'b', 'c'];
+                if (called) {
+                    columns = ['x', 'y', 'z'];
+                }
+                if (!called) {
+                    called = true;
+                }
+                return callback(null, columns);
+            };
+
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+                assert.ok(!err, err);
+
+                assert.equal(results.length, 2);
+                assert.notEqual(results[0].id(), results[1].id());
+
+                done();
+            });
+        });
+
     });
 
     describe('operation', function() {
