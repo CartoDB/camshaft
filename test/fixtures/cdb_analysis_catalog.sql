@@ -128,3 +128,6 @@ create table cdb_analysis_catalog (
 --         '{"type":"point-in-polygon","pointsNodeId":"bb72c4656df99ed98367889372f1e0752bf33e6a","polygonsNodeNodeId":"a0dcaef19b3ca54591e350737057ab37c9fc0396"}'::json,
 --         '{}'
 --     WHERE NOT EXISTS (SELECT * FROM upsert);
+
+-- Filter by analysis type
+-- SELECT * FROM cdb_analysis_catalog WHERE analysis_def->>'type' = 'trade-area'
