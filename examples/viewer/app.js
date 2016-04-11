@@ -46,8 +46,15 @@ function updateMap(example) {
         map.removeLayer(tilesLayer);
     }
 
+    var analysis = JSON.parse(analysisEditor.getValue());
+
+    var dataviews = {};
+    var filters = {};
+    var sourceId = analysis.id || 'a0';
     if (example) {
         map.setView(example.center || [30, 0], example.zoom || 3);
+        dataviews = example.dataviews || {};
+        filters = example.filters || {};
     }
 
     var config = {
@@ -56,20 +63,21 @@ function updateMap(example) {
             {
                 type: 'cartodb',
                 options: {
-                    source: { id: 'a0' },
+                    source: { id: sourceId },
                     cartocss: cssEditor.getValue(),
                     cartocss_version: '2.3.0'
                 }
             }
         ],
-        dataviews: {},
+        dataviews: dataviews,
         analyses: [
-            JSON.parse(analysisEditor.getValue())
+            analysis
         ]
     };
 
     var request = new XMLHttpRequest();
-    request.open('POST', currentEndpoint() + '?api_key=' + currentApiKey(), true);
+    var filtersParam = JSON.stringify(filters);
+    request.open('POST', currentEndpoint() + '?filters=' + filtersParam + '&api_key=' + currentApiKey(), true);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.onload = function() {
         if (this.status >= 200 && this.status < 400){
@@ -80,11 +88,25 @@ function updateMap(example) {
             }).setZIndex(2).addTo(map);
 
             console.log('Current zoom = %d', map.getZoom());
+
+            var dataviews = layergroup.metadata.dataviews || {};
+            Object.keys(dataviews).forEach(function(dataviewName) {
+                outputResponse(dataviewName, dataviews[dataviewName].url.http);
+            });
         } else {
             throw 'Error calling server: Error ' + this.status + ' -> ' + this.response;
         }
     };
     request.send(JSON.stringify(config));
+}
+
+function outputResponse(dataviewName, url) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url + '?own_filter=1&api_key=' + currentApiKey(), true);
+    request.onload = function() {
+        console.log(dataviewName, this.status, JSON.stringify(JSON.parse(this.response), null, 4));
+    };
+    request.send();
 }
 
 function currentExample() {
@@ -102,7 +124,7 @@ function currentApiKey() {
 function loadExample() {
     var example = currentExample();
     var analysis = {
-        id: 'a0',
+        id: example.def.id || 'a0',
         type: example.def.type,
         params: example.def.params
     };
