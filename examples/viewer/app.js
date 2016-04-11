@@ -46,8 +46,15 @@ function updateMap(example) {
         map.removeLayer(tilesLayer);
     }
 
+    var analysis = JSON.parse(analysisEditor.getValue());
+
+    var dataviews = {};
+    var filters = {};
+    var sourceId = analysis.id || 'a0';
     if (example) {
         map.setView(example.center || [30, 0], example.zoom || 3);
+        dataviews = example.dataviews || {};
+        filters = example.filters || {};
     }
 
     var config = {
@@ -56,15 +63,15 @@ function updateMap(example) {
             {
                 type: 'cartodb',
                 options: {
-                    source: { id: 'a0' },
+                    source: { id: sourceId },
                     cartocss: cssEditor.getValue(),
                     cartocss_version: '2.3.0'
                 }
             }
         ],
-        dataviews: {},
+        dataviews: dataviews,
         analyses: [
-            JSON.parse(analysisEditor.getValue())
+            analysis
         ]
     };
 
@@ -102,7 +109,7 @@ function currentApiKey() {
 function loadExample() {
     var example = currentExample();
     var analysis = {
-        id: 'a0',
+        id: example.def.id || 'a0',
         type: example.def.type,
         params: example.def.params
     };
