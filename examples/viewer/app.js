@@ -76,7 +76,8 @@ function updateMap(example) {
     };
 
     var request = new XMLHttpRequest();
-    request.open('POST', currentEndpoint() + '?api_key=' + currentApiKey(), true);
+    var filtersParam = JSON.stringify(filters);
+    request.open('POST', currentEndpoint() + '?filters=' + filtersParam + '&api_key=' + currentApiKey(), true);
     request.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
     request.onload = function() {
         if (this.status >= 200 && this.status < 400){
@@ -87,11 +88,25 @@ function updateMap(example) {
             }).setZIndex(2).addTo(map);
 
             console.log('Current zoom = %d', map.getZoom());
+
+            var dataviews = layergroup.metadata.dataviews || {};
+            Object.keys(dataviews).forEach(function(dataviewName) {
+                outputResponse(dataviewName, dataviews[dataviewName].url.http);
+            });
         } else {
             throw 'Error calling server: Error ' + this.status + ' -> ' + this.response;
         }
     };
     request.send(JSON.stringify(config));
+}
+
+function outputResponse(dataviewName, url) {
+    var request = new XMLHttpRequest();
+    request.open('GET', url + '?own_filter=1&api_key=' + currentApiKey(), true);
+    request.onload = function() {
+        console.log(dataviewName, this.status, JSON.stringify(JSON.parse(this.response), null, 4));
+    };
+    request.send();
 }
 
 function currentExample() {
