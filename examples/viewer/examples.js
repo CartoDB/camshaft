@@ -12,6 +12,7 @@ var sourceAtmDef = {
 };
 
 var sourceRentListings = {
+    id: 'airbnb-source',
     type: 'source',
     params: {
         query: 'select * from airbnb_madrid_oct_2015_listings'
@@ -19,6 +20,7 @@ var sourceRentListings = {
 };
 
 var tradeAreaDefinition = {
+    id: 'ta-example',
     type: 'trade-area',
     params: {
         source: sourceAtmDef,
@@ -35,7 +37,216 @@ var pointsInPolygonDefinition = {
     }
 };
 
+var UUID = '4d82e8df-f21b-4225-b776-61b1bdffde6c';
+var populatedPlacesSource = {
+    id: UUID,
+    type: 'source',
+    params: {
+        query: 'select * from populated_places_simple'
+    }
+};
+
+
 var examples = {
+    dataviews: {
+        name: 'airbnb in atm trade areas',
+        def: pointsInPolygonDefinition,
+        dataviews: {
+            price_histogram: {
+                source: {
+                    id: 'airbnb-source'
+                },
+                type: 'histogram',
+                options: {
+                    column: 'price'
+                }
+            },
+            number_of_reviews_histogram: {
+                source: {
+                    id: 'airbnb-source'
+                },
+                type: 'histogram',
+                options: {
+                    column: 'number_of_reviews'
+                }
+            }
+        },
+        filters: {
+            dataviews: {
+                price_histogram: {
+                    min: 50,
+                    max: 200
+                },
+                number_of_reviews_histogram: {
+                    min: 5
+                }
+            }
+        },
+        cartocss: [
+            '#layer{',
+            '  marker-placement: point;',
+            '  marker-allow-overlap: true;',
+            '  marker-line-opacity: 0.2;',
+            '  marker-line-width: 0.5;',
+            '  marker-opacity: 1;',
+            '  marker-width: 5;',
+            '  marker-fill: red;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    population_in_area: {
+        name: 'population in area',
+        def: {
+            type: 'population-in-area',
+            params: {
+                final_column: 'population',
+                source: tradeAreaDefinition
+            }
+        },
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([population], colorbrewer(Reds));',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    pop_places_radius: {
+        name: 'populated places radius',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radio: 10000,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                }
+            }
+        },
+        dataviews: {
+            pop_max_histogram: {
+                source: {
+                    id: UUID
+                },
+                type: 'histogram',
+                options: {
+                    column: 'pop_max'
+                }
+            },
+            by_country_count_aggregation: {
+                source: {
+                    id: UUID
+                },
+                type: 'aggregation',
+                options: {
+                    column: 'adm0_a3',
+                    aggregation: 'count'
+                }
+            },
+            pop_max_formula_sum: {
+                source: {
+                    id: UUID
+                },
+                type: 'formula',
+                options: {
+                    column: 'pop_max',
+                    operation: 'sum'
+                }
+            },
+            names_list: {
+                source: {
+                    id: UUID
+                },
+                type: 'list',
+                options: {
+                    columns: ['name']
+                }
+            }
+        },
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    populated_places: {
+        name: 'populated places',
+        def: populatedPlacesSource,
+        dataviews: {
+            pop_max_histogram: {
+                source: {
+                    id: UUID
+                },
+                type: 'histogram',
+                options: {
+                    column: 'pop_max'
+                }
+            },
+            by_country_count_aggregation: {
+                source: {
+                    id: UUID
+                },
+                type: 'aggregation',
+                options: {
+                    column: 'adm0_a3',
+                    aggregation: 'count'
+                }
+            },
+            pop_max_formula_sum: {
+                source: {
+                    id: UUID
+                },
+                type: 'formula',
+                options: {
+                    column: 'pop_max',
+                    operation: 'sum'
+                }
+            },
+            names_list: {
+                source: {
+                    id: UUID
+                },
+                type: 'list',
+                options: {
+                    columns: ['name']
+                }
+            }
+        },
+        filters: {
+            dataviews: {
+                pop_max_histogram: {
+                    min: 1e6
+                },
+                by_country_count_aggregation: {
+                    accept: ['FRA']
+                }
+            }
+        },
+        cartocss: [
+            '#layer{',
+            '  marker-placement: point;',
+            '  marker-allow-overlap: true;',
+            '  marker-line-opacity: 0.2;',
+            '  marker-line-width: 0.5;',
+            '  marker-opacity: 1;',
+            '  marker-width: 5;',
+            '  marker-fill: red;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     moran: {
         name: 'cluster outliers',
         def: {
@@ -174,6 +385,41 @@ var examples = {
             '  marker-fill: red;',
             '}'
         ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    pointsInPolygonFiltered: {
+        name: 'airbnb in atm trade areas (filtered)',
+        def: pointsInPolygonDefinition,
+        cartocss: [
+            '#layer{',
+            '  marker-placement: point;',
+            '  marker-allow-overlap: true;',
+            '  marker-line-opacity: 0.2;',
+            '  marker-line-width: 0.5;',
+            '  marker-opacity: 1;',
+            '  marker-width: 5;',
+            '  marker-fill: red;',
+            '}'
+        ].join('\n'),
+        dataviews: {
+            price_histogram: {
+                source: {
+                    id: 'airbnb-source'
+                },
+                type: 'histogram',
+                options: {
+                    column: 'price'
+                }
+            }
+        },
+        filters: {
+            dataviews: {
+                price_histogram: {
+                    max: 200
+                }
+            }
+        },
         center: [40.44, -3.7],
         zoom: 12
     }
