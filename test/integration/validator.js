@@ -37,7 +37,9 @@ describe('workflow-validator', function() {
         getSchema: createServiceStub([]),
         getColumnNames: createServiceStub([]),
         getAffectedTables: createServiceStub([]),
-        tableExists: createServiceStub(true),
+        createTableIfNotExists: function(table, query, callback) {
+            return callback(null, true);
+        },
         registerNodesInCatalog: createServiceStub([]),
         trackNode: createServiceStub([]),
         enqueue: createServiceStub({})
