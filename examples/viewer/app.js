@@ -104,7 +104,7 @@ function outputResponse(dataviewName, url) {
     var request = new XMLHttpRequest();
     request.open('GET', url + '?own_filter=1&api_key=' + currentApiKey(), true);
     request.onload = function() {
-        console.log(dataviewName, this.status, JSON.stringify(JSON.parse(this.response), null, 4));
+        console.log(dataviewName, this.status, JSON.parse(this.response));
     };
     request.send();
 }
