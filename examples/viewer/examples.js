@@ -181,7 +181,7 @@ var examples = {
         zoom: 3
     },
     populated_places: {
-        name: 'populated places',
+        name: 'populated places filtered',
         def: populatedPlacesSource,
         dataviews: {
             pop_max_histogram: {
