@@ -23,10 +23,6 @@ MockNode.prototype.getCacheTables = function() {
     return [];
 };
 
-MockNode.prototype.getAffectedTables = function() {
-    return [];
-};
-
 MockNode.prototype.toJSON = function() {
     return {
         id: this._id,
