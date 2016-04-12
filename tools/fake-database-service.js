@@ -11,10 +11,6 @@ FakeDatabaseService.prototype = {
         return callback(null, {});
     },
 
-    getAffectedTables: function(sql, callback) {
-        return callback(null, []);
-    },
-
     createTable: function(targetTableName, query, callback) {
         return callback(null, {});
     },
