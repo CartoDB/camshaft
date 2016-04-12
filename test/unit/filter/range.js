@@ -28,7 +28,7 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filter query', function() {
+        it('should retrieve a filtered query', function() {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
