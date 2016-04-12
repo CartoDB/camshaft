@@ -9,7 +9,7 @@ describe('range-filter', function () {
         it('should throw an error', function() {
             var shouldThrow = function () {
                 this.column = 'age';
-                this.filterParams = {}
+                this.filterParams = {};
                 this.range = new Range(this.column, this.filterParams);
             }.bind(this);
 
@@ -24,7 +24,7 @@ describe('range-filter', function () {
             this.column = 'age';
             this.filterParams = {
                 min: 18
-            }
+            };
             this.range = new Range(this.column, this.filterParams);
         });
 
@@ -41,7 +41,7 @@ describe('range-filter', function () {
             this.column = 'age';
             this.filterParams = {
                 max: 65
-            }
+            };
             this.range = new Range(this.column, this.filterParams);
         });
 
@@ -52,14 +52,17 @@ describe('range-filter', function () {
     });
 
     describe('with min and max values', function () {
-        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _cdb_range_filter WHERE age BETWEEN 18 AND 65';
+        var EXPECTED_RANGE_SQL = [
+            'SELECT * FROM (select age from population) _cdb_range_filter',
+            'WHERE age BETWEEN 18 AND 65'
+        ].join(' ');
 
         beforeEach(function () {
             this.column = 'age';
             this.filterParams = {
                 min: 18,
                 max: 65
-            }
+            };
             this.range = new Range(this.column, this.filterParams);
         });
 
