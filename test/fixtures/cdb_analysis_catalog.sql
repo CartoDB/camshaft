@@ -3,6 +3,10 @@ create table cdb_analysis_catalog (
     node_id char(40) CONSTRAINT cdb_analysis_catalog_pkey PRIMARY KEY,
     analysis_def json NOT NULL,
     input_nodes char(40) ARRAY NOT NULL DEFAULT '{}',
+    status TEXT NOT NULL DEFAULT 'pending',
+    CONSTRAINT valid_status CHECK (
+        status IN ( 'pending', 'waiting', 'running', 'canceled', 'failed', 'ready' )
+    ),
     created_at timestamp with time zone NOT NULL DEFAULT now(),
     updated_at timestamp with time zone NOT NULL DEFAULT now(),
     used_at timestamp with time zone NOT NULL DEFAULT now(),
