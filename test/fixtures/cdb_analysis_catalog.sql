@@ -8,7 +8,7 @@ create table cdb_analysis_catalog (
         status IN ( 'pending', 'waiting', 'running', 'canceled', 'failed', 'ready' )
     ),
     created_at timestamp with time zone NOT NULL DEFAULT now(),
-    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT NULL,
     used_at timestamp with time zone NOT NULL DEFAULT now(),
     hits NUMERIC DEFAULT 0,
     last_used_from char(40)
