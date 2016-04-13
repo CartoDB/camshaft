@@ -46,8 +46,90 @@ var populatedPlacesSource = {
     }
 };
 
+var moranDefinition = {
+    id: 'moran-demo',
+    type: 'moran',
+    params: {
+        source: {
+            'type': 'source',
+            'params': {
+                'query': 'select * from working_from_home'
+            }
+        },
+        'numerator_column': 'worked_at_home',
+        'denominator_column': 'workers_16_years_and_over',
+        'significance': 0.05,
+        'neighbours': 5,
+        'permutations': 999,
+        'w_type': 'queen'
+    }
+};
 
 var examples = {
+    population_in_trade_area: {
+        name: 'population in trade area',
+        def: {
+            type: 'population-in-area',
+            params: {
+                final_column: 'population',
+                source: tradeAreaDefinition
+            }
+        },
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    population_in_moran: {
+        name: 'population in moran',
+        def: {
+            type: 'population-in-area',
+            params: {
+                final_column: 'population',
+                source: moranDefinition
+            }
+        },
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  /*polygon-fill: ramp([population], colorbrewer(Reds));*/',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
+    popuplated_places_radius: {
+        name: 'populated places radius',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radio: 10000,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                }
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     dataviews: {
         name: 'airbnb in atm trade areas',
         def: pointsInPolygonDefinition,
@@ -91,24 +173,6 @@ var examples = {
             '  marker-opacity: 1;',
             '  marker-width: 5;',
             '  marker-fill: red;',
-            '}'
-        ].join('\n'),
-        center: [40.44, -3.7],
-        zoom: 12
-    },
-    population_in_area: {
-        name: 'population in area',
-        def: {
-            type: 'population-in-area',
-            params: {
-                final_column: 'population',
-                source: tradeAreaDefinition
-            }
-        },
-        cartocss: [
-            '#layer{',
-            '  polygon-fill: ramp([population], colorbrewer(Reds));',
-            '  polygon-opacity: 1.0;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
@@ -249,23 +313,7 @@ var examples = {
     },
     moran: {
         name: 'cluster outliers',
-        def: {
-            type: 'moran',
-            params: {
-                source: {
-                    'type': 'source',
-                    'params': {
-                        'query': 'select * from working_from_home'
-                    }
-                },
-                'numerator_column': 'worked_at_home',
-                'denominator_column': 'workers_16_years_and_over',
-                'significance': 0.05,
-                'neighbours': 5,
-                'permutations': 999,
-                'w_type': 'queen'
-            }
-        },
+        def: moranDefinition,
         cartocss: [
             '@HL: #00695C;//dark teal',
             '@HH: #4DB6AC;//light teal',
