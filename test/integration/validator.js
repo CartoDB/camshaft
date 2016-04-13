@@ -36,6 +36,7 @@ describe('workflow-validator', function() {
         run: createServiceStub({}),
         getSchema: createServiceStub([]),
         getColumnNames: createServiceStub([]),
+        getLastUpdatedTimeFromAffectedTables: createServiceStub([]),
         createTableIfNotExists: function(table, query, callback) {
             return callback(null, true);
         },
