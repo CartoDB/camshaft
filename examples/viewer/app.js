@@ -93,6 +93,11 @@ function updateMap(example) {
             Object.keys(dataviews).forEach(function(dataviewName) {
                 outputResponse(dataviewName, dataviews[dataviewName].url.http);
             });
+
+            var analyses = layergroup.metadata.analyses;
+            Object.keys(analyses[0].nodes).forEach(function(nodeId) {
+               console.log(nodeId, analyses[0].nodes[nodeId].status);
+            });
         } else {
             throw 'Error calling server: Error ' + this.status + ' -> ' + this.response;
         }
