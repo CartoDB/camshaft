@@ -6,15 +6,28 @@ var async = require('async');
 var Analysis = require('../../lib/analysis');
 
 var testConfig = require('../test-config');
+var BatchClient = require('../../lib/postgresql/batch-client');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 
 
 describe('filters', function() {
 
     var queryRunner;
+    var enqueueFn;
+    var enqueueCalled;
 
     before(function() {
         queryRunner = new QueryRunner(testConfig.db);
+        enqueueFn = BatchClient.prototype.enqueue;
+        enqueueCalled = 0;
+        BatchClient.prototype.enqueue = function(query, callback) {
+            enqueueCalled += 1;
+            return callback(null, {status: 'ok'});
+        };
+    });
+    after(function() {
+        assert.ok(enqueueCalled > 0);
+        BatchClient.prototype.enqueue = enqueueFn;
     });
 
     function getRows(query, callback) {
