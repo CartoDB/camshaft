@@ -158,11 +158,18 @@ Object.keys(examples).forEach(function(k) {
 
 document.getElementById('endpoint').addEventListener('blur', updateMap, false);
 
-if (window.analysisConfig && window.analysisConfig.API_KEY) {
-    document.getElementById('apikey').value = window.analysisConfig.API_KEY;
+if (window.analysisConfig) {
+    if (window.analysisConfig.API_KEY) {
+        document.getElementById('apikey').value = window.analysisConfig.API_KEY;
+    }
+
+    if (window.analysisConfig.ENDPOINT) {
+        document.getElementById('endpoint').value = window.analysisConfig.ENDPOINT;
+    }
+
     loadExample();
 } else {
-    var message = 'You can use a config.js file to setup your API key, check config.sample.js for reference';
+    var message = 'You can use a config.js file to setup your settings, check config.sample.js for reference';
     alert(message);
     console.info(message);
 }
