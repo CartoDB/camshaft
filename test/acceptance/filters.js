@@ -146,7 +146,7 @@ describe('filters', function() {
             type: 'buffer',
             params: {
                 source: filteredSource,
-                radio: 5000
+                radius: 5000
             }
         };
 
