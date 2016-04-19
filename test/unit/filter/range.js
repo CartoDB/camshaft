@@ -18,7 +18,7 @@ describe('range-filter', function () {
     });
 
     describe('with min value', function () {
-        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _cdb_range_filter WHERE age >= 18';
+        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age >= 18';
 
         beforeEach(function () {
             this.column = 'age';
@@ -35,7 +35,7 @@ describe('range-filter', function () {
     });
 
     describe('with max value', function () {
-        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _cdb_range_filter WHERE age <= 65';
+        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age <= 65';
 
         beforeEach(function () {
             this.column = 'age';
@@ -53,7 +53,7 @@ describe('range-filter', function () {
 
     describe('with min and max values', function () {
         var EXPECTED_RANGE_SQL = [
-            'SELECT * FROM (select age from population) _cdb_range_filter',
+            'SELECT * FROM (select age from population) _camshaft_range_filter',
             'WHERE age BETWEEN 18 AND 65'
         ].join(' ');
 

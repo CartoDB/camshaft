@@ -16,7 +16,7 @@ describe('query-builder-filter', function () {
         var sql = 'select * form populated_places';
         var EXPECTED_QUERY = [
             'SELECT *',
-            'FROM (select * form populated_places) _cdb_category_filter',
+            'FROM (select * form populated_places) _camshaft_category_filter',
             'WHERE age IN (25)'
         ].join('\n');
 
