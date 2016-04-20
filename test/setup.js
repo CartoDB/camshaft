@@ -13,8 +13,13 @@ var debug = require('../lib/util/debug')('test-setup');
 var DATABASE_NAME = testConfig.db.dbname;
 
 before(function setupTestDatabase(done) {
-    var catalogPath = fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql');
-    var fixturesPath = fs.realpathSync('./test/fixtures/atm_machines.sql');
+    var fixturePaths = [
+        fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql'),
+        fs.realpathSync('./test/fixtures/atm_machines.sql'),
+        fs.realpathSync('./test/fixtures/madrid_districts.sql'),
+        fs.realpathSync('./test/fixtures/airbnb_rooms.sql')
+    ];
+
     async.waterfall(
         [
             function dropDatabaseIfExists(callback) {
@@ -28,11 +33,10 @@ before(function setupTestDatabase(done) {
             function createPostgisExtension(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -c "CREATE EXTENSION postgis;"', callback);
             },
-            function createCatalogTable(stdout, stderr, callback) {
-                exec('psql -d ' + DATABASE_NAME + ' -f ' + catalogPath, callback);
-            },
             function applyFixtures(stdout, stderr, callback) {
-                exec('psql -d ' + DATABASE_NAME + ' -f ' + fixturesPath, callback);
+                async.map(fixturePaths, function (path, callback) {
+                    exec('psql -d ' + DATABASE_NAME + ' -f ' + path, callback);
+                }, callback);
             }
         ],
         function finish(err, results) {
