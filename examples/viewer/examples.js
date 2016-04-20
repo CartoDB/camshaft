@@ -109,7 +109,7 @@ var examples = {
             id: UUID,
             type: 'buffer',
             params: {
-                radio: 10000,
+                radius: 10000,
                 source: {
                     id: 'a0',
                     type: 'source',
@@ -184,7 +184,7 @@ var examples = {
             id: UUID,
             type: 'buffer',
             params: {
-                radio: 10000,
+                radius: 10000,
                 source: {
                     id: 'a0',
                     type: 'source',
@@ -388,7 +388,7 @@ var examples = {
                                 ].join(' ')
                             }
                         },
-                        'radio': 2000
+                        'radius': 2000
                     }
                 }
             }

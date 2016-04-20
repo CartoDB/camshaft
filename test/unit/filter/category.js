@@ -43,7 +43,7 @@ describe('category-filter', function () {
     describe('with only accept values', function () {
         var EXPECTED_CATEGORY_SQL =[
             'SELECT *',
-            'FROM (select continent from populated_places) _cdb_category_filter',
+            'FROM (select continent from populated_places) _camshaft_category_filter',
             'WHERE continent IN ($escape_0$Europe$escape_0$)'
         ].join('\n');
 
@@ -64,7 +64,7 @@ describe('category-filter', function () {
     describe('with only reject values', function () {
         var EXPECTED_CATEGORY_SQL =[
             'SELECT *',
-            'FROM (select continent from populated_places) _cdb_category_filter',
+            'FROM (select continent from populated_places) _camshaft_category_filter',
             'WHERE continent NOT IN ($escape_0$Europe$escape_0$)'
         ].join('\n');
 
@@ -85,7 +85,7 @@ describe('category-filter', function () {
     describe('accepting all values', function () {
         var EXPECTED_CATEGORY_SQL =[
             'SELECT *',
-            'FROM (select continent from populated_places) _cdb_category_filter',
+            'FROM (select continent from populated_places) _camshaft_category_filter',
             'WHERE 1 = 1'
         ].join('\n');
 
@@ -106,7 +106,7 @@ describe('category-filter', function () {
     describe('rejecting all values', function () {
         var EXPECTED_CATEGORY_SQL =[
             'SELECT *',
-            'FROM (select continent from populated_places) _cdb_category_filter',
+            'FROM (select continent from populated_places) _camshaft_category_filter',
             'WHERE 0 = 1'
         ].join('\n');
 

@@ -6,7 +6,7 @@
                 "source": {
                     "type": "node"
                 },
-                "radio": {
+                "radius": {
                     "type": "number"
                 }
             }
@@ -47,29 +47,6 @@
                 },
                 "polygons_source": {
                     "type": "node"
-                }
-            }
-        },
-        "aggregate-point-in-polygon": {
-            "params": {
-                "points_source": {
-                    "type": "node"
-                },
-                "polygons_source": {
-                    "type": "node"
-                },
-                "aggregate_function": {
-                    "type": "enum",
-                    "values": [
-                        "avg",
-                        "count",
-                        "max",
-                        "min",
-                        "sum"
-                    ]
-                },
-                "aggregate_column": {
-                    "type": "string"
                 }
             }
         },
