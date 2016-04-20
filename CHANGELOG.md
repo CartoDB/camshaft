@@ -2,7 +2,9 @@
 
 ## 0.5.0
 
-Released 2015-mm-dd
+Released 2015-04-20
+
+ - Add param to configure batch api host header template
 
 
 ## 0.4.0
