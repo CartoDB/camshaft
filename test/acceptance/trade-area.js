@@ -30,8 +30,8 @@ describe('trade-area analysis', function() {
         BatchClient.prototype.enqueue = enqueueFn;
     });
 
-    var QUERY = 'select * from atm_machines';
-    var KIND = 'drive';
+    var QUERY = 'select * from atm_machines limit 2';
+    var KIND = 'car';
     var TIME = 600;
 
     var sourceAtmMachines = {
@@ -68,13 +68,16 @@ describe('trade-area analysis', function() {
             params: {
                 source: sourceAtmMachines,
                 kind: KIND,
-                time: TIME
+                time: TIME,
+                isolines: 4
             }
         };
 
         it('should create an analysis and get districts with their average price', function (done) {
             performAnalysis(tradeAreaDefinition, function (err, values) {
-                assert.ok(!err, err);
+                if(err) {
+                    return done(err);
+                }
                 assert.ok(values);
                 done();
             });

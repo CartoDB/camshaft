@@ -14,6 +14,7 @@ var DATABASE_NAME = testConfig.db.dbname;
 
 before(function setupTestDatabase(done) {
     var catalogPath = fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql');
+    var isochronePath = fs.realpathSync('./test/fixtures/cdb_isochrone.sql');
     var fixturesPath = fs.realpathSync('./test/fixtures/atm_machines.sql');
     async.waterfall(
         [
@@ -30,6 +31,9 @@ before(function setupTestDatabase(done) {
             },
             function createCatalogTable(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -f ' + catalogPath, callback);
+            },
+            function createIsochromeFunction(stdout, stderr, callback) {
+                exec('psql -d ' + DATABASE_NAME + ' -f ' + isochronePath, callback);
             },
             function applyFixtures(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -f ' + fixturesPath, callback);
