@@ -1,6 +1,7 @@
 var QUERY_ATM_MACHINES = 'select * from atm_machines';
-var TRADE_AREA_WALK = 'bike';
+var TRADE_AREA_WALK = 'walk';
 var TRADE_AREA_TIME = 900;
+var ISOLINES = 4;
 
 var sourceAtmDef = {
     type: 'source',
@@ -14,7 +15,8 @@ var tradeAreaDefinition = {
     params: {
         source: sourceAtmDef,
         kind: TRADE_AREA_WALK,
-        time: TRADE_AREA_TIME
+        time: TRADE_AREA_TIME,
+        isolines: ISOLINES
     }
 };
 
