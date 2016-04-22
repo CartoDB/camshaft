@@ -33,6 +33,7 @@ describe('trade-area analysis', function() {
     var QUERY = 'select * from atm_machines limit 2';
     var KIND = 'car';
     var TIME = 600;
+    var ISOLINES = 4;
 
     var sourceAtmMachines = {
         type: 'source',
@@ -69,7 +70,7 @@ describe('trade-area analysis', function() {
                 source: sourceAtmMachines,
                 kind: KIND,
                 time: TIME,
-                isolines: 4
+                isolines: ISOLINES
             }
         };
 
