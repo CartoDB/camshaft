@@ -19,7 +19,6 @@ describe('trade-area analysis', function() {
         enqueueFn = BatchClient.prototype.enqueue;
         enqueueCalled = 0;
         BatchClient.prototype.enqueue = function(query, callback) {
-            console.log(query);
             enqueueCalled += 1;
             return callback(null, { status: 'ok' });
         };
