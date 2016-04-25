@@ -29,11 +29,11 @@ var tradeAreaDefinition = {
     }
 };
 
-var pointsInPolygonDefinition = {
-    type: 'point-in-polygon',
+var intersectionDefinition = {
+    type: 'intersection',
     params: {
-        points_source: sourceRentListings,
-        polygons_source: tradeAreaDefinition
+        source_a: sourceRentListings,
+        source_b: tradeAreaDefinition
     }
 };
 
@@ -132,7 +132,7 @@ var examples = {
     },
     dataviews: {
         name: 'airbnb in atm trade areas',
-        def: pointsInPolygonDefinition,
+        def: intersectionDefinition,
         dataviews: {
             price_histogram: {
                 source: {
@@ -367,15 +367,15 @@ var examples = {
     phillyProperties: {
         name: 'philly properties',
         def: {
-            'type': 'point-in-polygon',
+            'type': 'intersection',
             'params': {
-                'points_source': {
+                'source_a': {
                     'type': 'source',
                     'params': {
                         'query': 'select the_geom, _market_value, category_code_description from properties'
                     }
                 },
-                'polygons_source': {
+                'source_b': {
                     'type': 'buffer',
                     'params': {
                         'source': {
@@ -419,9 +419,9 @@ var examples = {
         center: [39.946, -75.176],
         zoom: 15
     },
-    pointsInPolygon: {
+    intersection: {
         name: 'airbnb in atm trade areas',
-        def: pointsInPolygonDefinition,
+        def: intersectionDefinition,
         cartocss: [
             '#layer{',
             '  marker-placement: point;',
@@ -436,9 +436,9 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
-    pointsInPolygonFiltered: {
+    intersectionFiltered: {
         name: 'airbnb in atm trade areas (filtered)',
-        def: pointsInPolygonDefinition,
+        def: intersectionDefinition,
         cartocss: [
             '#layer{',
             '  marker-placement: point;',

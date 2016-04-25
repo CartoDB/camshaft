@@ -29,12 +29,12 @@ var bufferEstimatedPopulationDefinition = {
     }
 };
 
-var pointsInPolygonDefinition = {
-    type: 'point-in-polygon',
+var intersectionDefinition = {
+    type: 'intersection',
     params: {
-        points_source: sourceRentListings,
-        polygons_source: bufferEstimatedPopulationDefinition
+        source_a: sourceRentListings,
+        source_b: bufferEstimatedPopulationDefinition
     }
 };
 
-module.exports = pointsInPolygonDefinition;
+module.exports = intersectionDefinition;

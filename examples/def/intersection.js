@@ -32,12 +32,12 @@ var estimatedPopulationDefinition = {
     }
 };
 
-var pointsInPolygonDefinition = {
-    type: 'point-in-polygon',
+var intersectionDefinition = {
+    type: 'intersection',
     params: {
-        points_source: sourceRentListings,
-        polygons_source: estimatedPopulationDefinition
+        source_a: sourceRentListings,
+        source_b: estimatedPopulationDefinition
     }
 };
 
-module.exports = pointsInPolygonDefinition;
+module.exports = intersectionDefinition;

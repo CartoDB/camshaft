@@ -8,7 +8,7 @@ var testConfig = require('../test-config');
 var BatchClient = require('../../lib/postgresql/batch-client');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 
-describe('aggregate-point-in-polygon analysis', function() {
+describe('aggregate-intersection analysis', function() {
 
     var queryRunner;
     var enqueueFn;
@@ -29,8 +29,8 @@ describe('aggregate-point-in-polygon analysis', function() {
         BatchClient.prototype.enqueue = enqueueFn;
     });
 
-    var POINTS_QUERY = 'select * from airbnb_rooms';
-    var POLYGONS_QUERY = 'select * from madrid_districts';
+    var SOURCE_AIRBNB = 'select * from airbnb_rooms';
+    var SOURCE_DISTRICTS = 'select * from madrid_districts';
     var AGGREGATE_COLUMN = 'price';
     var UNIQUE_COLUMN = 'cartodb_id';
     var AVERAGE_FUNCTION = 'avg';
@@ -40,14 +40,14 @@ describe('aggregate-point-in-polygon analysis', function() {
     var sourceAirbnbRooms = {
         type: 'source',
         params: {
-            query: POINTS_QUERY
+            query: SOURCE_AIRBNB
         }
     };
 
     var sourceMadridDistrict = {
         type: 'source',
         params: {
-            query: POLYGONS_QUERY
+            query: SOURCE_DISTRICTS
         }
     };
 
@@ -87,10 +87,10 @@ describe('aggregate-point-in-polygon analysis', function() {
 
     describe('average price analysis', function  () {
         var averagePriceAnalysisDefinition = {
-            type: 'aggregate-point-in-polygon',
+            type: 'aggregate-intersection',
             params: {
-                points_source: sourceAirbnbRooms,
-                polygons_source: sourceMadridDistrict,
+                source_a: sourceAirbnbRooms,
+                source_b: sourceMadridDistrict,
                 aggregate_function: AVERAGE_FUNCTION,
                 aggregate_column: AGGREGATE_COLUMN
             }
@@ -110,10 +110,10 @@ describe('aggregate-point-in-polygon analysis', function() {
     describe('max price analysis', function  () {
 
         var maxPriceAnalysisDefinition = {
-            type: 'aggregate-point-in-polygon',
+            type: 'aggregate-intersection',
             params: {
-                points_source: sourceAirbnbRooms,
-                polygons_source: sourceMadridDistrict,
+                source_a: sourceAirbnbRooms,
+                source_b: sourceMadridDistrict,
                 aggregate_function: MAX_FUNCTION,
                 aggregate_column: AGGREGATE_COLUMN
             }
@@ -132,10 +132,10 @@ describe('aggregate-point-in-polygon analysis', function() {
     describe('count rooms analysis', function  () {
 
         var countRoomsAnalysisDefinition = {
-            type: 'aggregate-point-in-polygon',
+            type: 'aggregate-intersection',
             params: {
-                points_source: sourceAirbnbRooms,
-                polygons_source: sourceMadridDistrict,
+                source_a: sourceAirbnbRooms,
+                source_b: sourceMadridDistrict,
                 aggregate_function: COUNT_FUNCTION,
                 aggregate_column: UNIQUE_COLUMN
             }
