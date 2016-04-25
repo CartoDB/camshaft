@@ -89,8 +89,8 @@ describe('aggregate-intersection analysis', function() {
         var averagePriceAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
-                source_a: sourceAirbnbRooms,
-                source_b: sourceMadridDistrict,
+                source: sourceAirbnbRooms,
+                target: sourceMadridDistrict,
                 aggregate_function: AVERAGE_FUNCTION,
                 aggregate_column: AGGREGATE_COLUMN
             }
@@ -112,8 +112,8 @@ describe('aggregate-intersection analysis', function() {
         var maxPriceAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
-                source_a: sourceAirbnbRooms,
-                source_b: sourceMadridDistrict,
+                source: sourceAirbnbRooms,
+                target: sourceMadridDistrict,
                 aggregate_function: MAX_FUNCTION,
                 aggregate_column: AGGREGATE_COLUMN
             }
@@ -134,8 +134,8 @@ describe('aggregate-intersection analysis', function() {
         var countRoomsAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
-                source_a: sourceAirbnbRooms,
-                source_b: sourceMadridDistrict,
+                source: sourceAirbnbRooms,
+                target: sourceMadridDistrict,
                 aggregate_function: COUNT_FUNCTION,
                 aggregate_column: UNIQUE_COLUMN
             }

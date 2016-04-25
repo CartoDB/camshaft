@@ -40,16 +40,16 @@ describe('camshaft-reference-graph', function() {
         id: 'a2',
         type: 'intersection',
         params: {
-            source_a: sourceRentListings,
-            source_b: tradeAreaDefinition
+            source: sourceRentListings,
+            target: tradeAreaDefinition
         }
     };
 
     var noIdPointsInPolygonDefinition = {
         type: 'intersection',
         params: {
-            source_a: sourceRentListings,
-            source_b: tradeAreaDefinition
+            source: sourceRentListings,
+            target: tradeAreaDefinition
         }
     };
 

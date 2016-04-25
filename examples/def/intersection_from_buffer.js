@@ -32,8 +32,8 @@ var bufferEstimatedPopulationDefinition = {
 var intersectionDefinition = {
     type: 'intersection',
     params: {
-        source_a: sourceRentListings,
-        source_b: bufferEstimatedPopulationDefinition
+        source: sourceRentListings,
+        target: bufferEstimatedPopulationDefinition
     }
 };
 

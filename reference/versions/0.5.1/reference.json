@@ -42,20 +42,20 @@
         },
         "intersection": {
             "params": {
-                "source_a": {
+                "source": {
                     "type": "node"
                 },
-                "source_b": {
+                "target": {
                     "type": "node"
                 }
             }
         },
         "aggregate-intersection": {
             "params": {
-                "source_a": {
+                "source": {
                     "type": "node"
                 },
-                "source_b": {
+                "target": {
                     "type": "node"
                 },
                 "aggregate_function": {

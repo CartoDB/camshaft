@@ -28,8 +28,8 @@ var tradeAreaDefinition = {
 var intersectionDefinition = {
     type: 'intersection',
     params: {
-        source_a: sourceRentListings,
-        source_b: tradeAreaDefinition
+        source: sourceRentListings,
+        target: tradeAreaDefinition
     }
 };
 

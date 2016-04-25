@@ -32,8 +32,8 @@ var tradeAreaDefinition = {
 var intersectionDefinition = {
     type: 'intersection',
     params: {
-        source_a: sourceRentListings,
-        source_b: tradeAreaDefinition
+        source: sourceRentListings,
+        target: tradeAreaDefinition
     }
 };
 
@@ -369,13 +369,13 @@ var examples = {
         def: {
             'type': 'intersection',
             'params': {
-                'source_a': {
+                'source': {
                     'type': 'source',
                     'params': {
                         'query': 'select the_geom, _market_value, category_code_description from properties'
                     }
                 },
-                'source_b': {
+                'target': {
                     'type': 'buffer',
                     'params': {
                         'source': {
