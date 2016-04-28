@@ -69,11 +69,35 @@ describe('trade-area analysis', function() {
                 source: sourceAtmMachines,
                 kind: KIND,
                 time: TIME,
-                isolines: ISOLINES
+                isolines: ISOLINES,
+                dissolved: false
             }
         };
 
-        it('should create an analysis and get districts with their average price', function (done) {
+        it('should create an analysis', function (done) {
+            performAnalysis(tradeAreaDefinition, function (err, values) {
+                if(err) {
+                    return done(err);
+                }
+                assert.ok(values);
+                done();
+            });
+        });
+    });
+
+    describe('trade area analysis dissolved', function () {
+        var tradeAreaDefinition = {
+            type: 'trade-area',
+            params: {
+                source: sourceAtmMachines,
+                kind: KIND,
+                time: TIME,
+                isolines: ISOLINES,
+                dissolved: true
+            }
+        };
+
+        it('should create an analysis with boudaries dissolved', function (done) {
             performAnalysis(tradeAreaDefinition, function (err, values) {
                 if(err) {
                     return done(err);

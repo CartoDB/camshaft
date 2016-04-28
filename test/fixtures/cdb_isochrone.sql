@@ -1,13 +1,10 @@
-CREATE OR REPLACE FUNCTION cdb_isochrone(center GEOMETRY, kind TEXT, range INTEGER[])
-RETURNS SETOF GEOMETRY
+CREATE OR REPLACE FUNCTION cdb_isochrone(center GEOMETRY, kind TEXT, range INTEGER[], OUT center geometry, OUT data_range integer, OUT the_geom geometry)
 AS $$
   SELECT
-    ST_Collect(_b.geom) as geom
+    $1 center,
+    _t.radius data_range,
+    ST_Buffer($1, _t.radius * 0.001) as the_geom
   FROM (
-    SELECT
-      ST_Buffer(ST_SetSRID($1::geometry, 4326), _t.radius * 0.001) as geom
-    FROM (
-      SELECT unnest($3) as radius
-    ) _t
-  ) _b
+    SELECT unnest($3) as radius
+  ) _t
 $$ LANGUAGE 'sql' IMMUTABLE STRICT;
