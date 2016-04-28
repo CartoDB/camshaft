@@ -29,11 +29,11 @@ var tradeAreaDefinition = {
     }
 };
 
-var intersectionDefinition = {
-    type: 'intersection',
+var pointsInPolygonDefinition = {
+    type: 'point-in-polygon',
     params: {
-        source: sourceRentListings,
-        target: tradeAreaDefinition
+        points_source: sourceRentListings,
+        polygons_source: tradeAreaDefinition
     }
 };
 
@@ -132,7 +132,7 @@ var examples = {
     },
     dataviews: {
         name: 'airbnb in atm trade areas',
-        def: intersectionDefinition,
+        def: pointsInPolygonDefinition,
         dataviews: {
             price_histogram: {
                 source: {
@@ -367,15 +367,15 @@ var examples = {
     phillyProperties: {
         name: 'philly properties',
         def: {
-            'type': 'intersection',
+            'type': 'point-in-polygon',
             'params': {
-                'source': {
+                'points_source': {
                     'type': 'source',
                     'params': {
                         'query': 'select the_geom, _market_value, category_code_description from properties'
                     }
                 },
-                'target': {
+                'polygons_source': {
                     'type': 'buffer',
                     'params': {
                         'source': {
@@ -419,9 +419,9 @@ var examples = {
         center: [39.946, -75.176],
         zoom: 15
     },
-    intersection: {
+    pointsInPolygon: {
         name: 'airbnb in atm trade areas',
-        def: intersectionDefinition,
+        def: pointsInPolygonDefinition,
         cartocss: [
             '#layer{',
             '  marker-placement: point;',
@@ -436,9 +436,9 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
-    intersectionFiltered: {
+    pointsInPolygonFiltered: {
         name: 'airbnb in atm trade areas (filtered)',
-        def: intersectionDefinition,
+        def: pointsInPolygonDefinition,
         cartocss: [
             '#layer{',
             '  marker-placement: point;',

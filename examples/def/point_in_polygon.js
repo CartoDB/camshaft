@@ -1,6 +1,6 @@
 var QUERY_ATM_MACHINES = 'select * from atm_machines';
 var TRADE_AREA_WALK = 'walk';
-var TRADE_AREA_15M = 1200;
+var TRADE_AREA_15M = 900;
 
 var sourceAtmDef = {
     type: 'source',
@@ -12,7 +12,7 @@ var sourceAtmDef = {
 var sourceRentListings = {
     type: 'source',
     params: {
-        query: 'select the_geom, listing_url, price from airbnb_madrid_oct_2015_listings'
+        query: 'select * from rent_listings'
     }
 };
 
@@ -25,11 +25,18 @@ var tradeAreaDefinition = {
     }
 };
 
+var estimatedPopulationDefinition = {
+    type: 'estimated-population',
+    params: {
+        source: tradeAreaDefinition
+    }
+};
+
 var pointsInPolygonDefinition = {
     type: 'point-in-polygon',
     params: {
         points_source: sourceRentListings,
-        polygons_source: tradeAreaDefinition
+        polygons_source: estimatedPopulationDefinition
     }
 };
 
