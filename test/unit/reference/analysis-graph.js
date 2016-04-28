@@ -38,18 +38,18 @@ describe('camshaft-reference-graph', function() {
 
     var pointsInPolygonDefinition = {
         id: 'a2',
-        type: 'intersection',
+        type: 'point-in-polygon',
         params: {
-            source: sourceRentListings,
-            target: tradeAreaDefinition
+            points_source: sourceRentListings,
+            polygons_source: tradeAreaDefinition
         }
     };
 
     var noIdPointsInPolygonDefinition = {
-        type: 'intersection',
+        type: 'point-in-polygon',
         params: {
-            source: sourceRentListings,
-            target: tradeAreaDefinition
+            points_source: sourceRentListings,
+            polygons_source: tradeAreaDefinition
         }
     };
 
