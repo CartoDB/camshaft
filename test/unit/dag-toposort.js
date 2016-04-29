@@ -14,7 +14,8 @@ describe('dag-toposort', function() {
 
         var sorted = toposort(aNode);
 
-        assert.equal(sorted.length, 0);
+        assert.equal(sorted.length, 1);
+        assert.equal(sorted[0].id(), 'A');
     });
 
     it('should work for happy case: two nodes connected', function() {
