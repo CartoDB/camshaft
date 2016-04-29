@@ -12,6 +12,7 @@ describe('workflow-validator', function() {
     var TRADE_AREA_WALK = 'walk';
     var TRADE_AREA_15M = 900;
     var ISOLINES = 6;
+    var DISSOLVED = false;
 
     var tradeAreaAnalysisDefinition = {
         type: 'trade-area',
@@ -24,7 +25,8 @@ describe('workflow-validator', function() {
             },
             kind: TRADE_AREA_WALK,
             time: TRADE_AREA_15M,
-            isolines: ISOLINES
+            isolines: ISOLINES,
+            dissolved: DISSOLVED
         }
     };
 

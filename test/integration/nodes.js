@@ -100,6 +100,7 @@ describe('nodes', function() {
         var TRADE_AREA_WALK = 'walk';
         var TRADE_AREA_15M = 900;
         var ISOLINES = 4;
+        var DISSOLVED = false;
 
         var enqueueFn;
         var enqueueCalled;
@@ -123,7 +124,8 @@ describe('nodes', function() {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
                     time: TRADE_AREA_15M,
-                    isolines: ISOLINES
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
                 }
             };
 
@@ -133,7 +135,8 @@ describe('nodes', function() {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
                     time: TRADE_AREA_15M,
-                    isolines: ISOLINES
+                    isolines: ISOLINES,
+                    dissolved: false
                 }
             };
 
@@ -155,7 +158,8 @@ describe('nodes', function() {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
                     time: TRADE_AREA_15M,
-                    isolines: ISOLINES
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
                 }
             };
             var tradeArea30m = {
@@ -164,7 +168,8 @@ describe('nodes', function() {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
                     time: 1800,
-                    isolines: ISOLINES
+                    isolines: ISOLINES,
+                    dissolved: true
                 }
             };
 
