@@ -2,7 +2,7 @@
 
 ## 0.5.1
 
-Released 2015-mm-dd
+Released 2015-04-29
 
  - Decouple workflow factory from camshaft-reference
  - Fixes Analysis.getSortedNodes/toposort including root node when is the only node #12
