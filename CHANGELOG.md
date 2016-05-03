@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.1
+
+Released 2016-mm-dd
+
+
 ## 0.6.0
 
 Released 2016-05-03
