@@ -1,7 +1,8 @@
 'use strict';
 
 var assert = require('assert');
-var buildQuery = require(__lib + 'node/nodes/moran/moran-query-builder');
+var Node = require('../../../../lib/node/node');
+var buildQuery = Node.getSqlTemplateFn('moran');
 
 describe('moran-query-builder', function() {
     var queryExpected = [
