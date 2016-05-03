@@ -1,8 +1,11 @@
 # Changelog
 
-## 0.5.2
+## 0.6.0
 
-Released 2016-mm-dd
+Released 2016-05-03
+
+ - Added intersection and aggregate-intersection analyses
+ - Added trade-area analysis
 
 
 ## 0.5.1
