@@ -1,6 +1,7 @@
 'use strict';
 
 process.env.NODE_ENV = 'test';
+global.__lib = process.cwd() + '/lib/';
 
 var testConfig = require('./test-config');
 var exec = require('child_process').exec;
