@@ -1,5 +1,5 @@
 var QUERY_ATM_MACHINES = 'select * from atm_machines';
-var TRADE_AREA_WALK = 'bike';
+var TRADE_AREA_WALK = 'walk';
 var TRADE_AREA_TIME = 900;
 
 var sourceAtmDef = {
