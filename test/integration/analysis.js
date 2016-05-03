@@ -15,6 +15,8 @@ describe('workflow', function() {
         var QUERY_ATM_MACHINES = 'select * from atm_machines';
         var TRADE_AREA_WALK = 'walk';
         var TRADE_AREA_15M = 900;
+        var ISOLINES = 4;
+        var DISSOLVED = false;
 
         var sourceAnalysisDefinition = {
             type: 'source',
@@ -28,7 +30,9 @@ describe('workflow', function() {
             params: {
                 source: sourceAnalysisDefinition,
                 kind: TRADE_AREA_WALK,
-                time: TRADE_AREA_15M
+                time: TRADE_AREA_15M,
+                isolines: ISOLINES,
+                dissolved: DISSOLVED
             }
         };
 
@@ -78,7 +82,8 @@ describe('workflow', function() {
                 params: {
                     source: sourceAnalysisDefinition,
                     kind: TRADE_AREA_WALK,
-                    time: 'text is invalid here'
+                    time: 'text is invalid here',
+                    dissolved: DISSOLVED
                 }
             };
             Analysis.create(testConfig, invalidAnalysis, function(err) {
