@@ -20,6 +20,30 @@ var sourceRentListings = {
     }
 };
 
+var sourceExpensiveRentListings = {
+    id: 'expensive-airbnb-source',
+    type: 'source',
+    params: {
+        query: 'select * from airbnb_madrid_oct_2015_listings where price > 100'
+    }
+}
+
+var sourceBarrios = {
+    id: 'barrios-source',
+    type: 'source',
+    params: {
+        query: 'select * from barrios'
+    }
+};
+
+var sourceLaLatina = {
+    id: 'barrios-source',
+    type: 'source',
+    params: {
+        query: "select * from barrios where codbarrio like '10%'"
+    }
+};
+
 var tradeAreaDefinition = {
     id: 'ta-example',
     type: 'trade-area',
@@ -27,7 +51,30 @@ var tradeAreaDefinition = {
         source: sourceAtmDef,
         kind: TRADE_AREA_WALK,
         time: TRADE_AREA_15M,
-        isolines: ISOLINES
+        isolines: ISOLINES,
+        dissolved: false
+    }
+};
+
+
+var intersectionDefinition = {
+    id: 'intersection-example-1',
+    type: 'intersection',
+    params: {
+        source: sourceLaLatina,
+        target: sourceRentListings
+    }
+};
+
+
+var aggregateIntersectionDefinition = {
+    id: 'aggregate-intersection-example-1',
+    type: 'aggregate-intersection',
+    params: {
+        source: sourceRentListings,
+        target: sourceBarrios,
+        aggregate_function: 'max',
+        aggregate_column: 'price'
     }
 };
 
@@ -67,6 +114,18 @@ var moranDefinition = {
     }
 };
 
+var tradeAreaAtmMachines = {
+    id: 'taam-example',
+    type: 'trade-area',
+    params: {
+        source: sourceAtmDef,
+        kind: TRADE_AREA_WALK,
+        time: 1000,
+        isolines: ISOLINES,
+        dissolved: false
+    }
+};
+
 var examples = {
     population_in_trade_area: {
         name: 'population in trade area',
@@ -81,6 +140,22 @@ var examples = {
             '#layer{',
             '  polygon-fill: red;',
             '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    atm_machines_in_trade_area: {
+        name: 'atm machines in trade area',
+        def: tradeAreaAtmMachines,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
@@ -470,6 +545,38 @@ var examples = {
                 }
             }
         },
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    intersection: {
+        name: 'airbnb and districts intersection',
+        def: intersectionDefinition,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'aggregate-intersection': {
+        name: 'airbnb and districts intersection with max price aggregation',
+        def: aggregateIntersectionDefinition,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([max_price], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
     }
