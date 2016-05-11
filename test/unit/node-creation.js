@@ -7,7 +7,7 @@ var Node = require('../../lib/node/node');
 describe('node-creation', function() {
 
     describe('reserved keywords', function() {
-        it.only('should fail for reserved param names', function() {
+        it('should fail for reserved param names', function() {
             var ReservedKeywordNode;
             assert.throws(
                 function() {
