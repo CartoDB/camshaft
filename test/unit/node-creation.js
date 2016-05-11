@@ -6,6 +6,25 @@ var Node = require('../../lib/node/node');
 
 describe('node-creation', function() {
 
+    describe('reserved keywords', function() {
+        it.only('should fail for reserved param names', function() {
+            var ReservedKeywordNode;
+            assert.throws(
+                function() {
+                    ReservedKeywordNode = Node.create('test-reserved-keyword', { type: Node.PARAM.STRING });
+                },
+                function(err) {
+                    assert.equal(
+                        err.message,
+                        'Invalid param name "type". It is a reserved keyword.'
+                    );
+                    return true;
+                }
+            );
+        });
+
+    });
+
     var TestSource = Node.create('test-source', {query: Node.PARAM.STRING});
 
     it('should validate params', function() {
@@ -41,13 +60,13 @@ describe('node-creation', function() {
     });
 
     describe('Node.PARAM.ENUM', function() {
-        var EnumSource = Node.create('test-source', { type: Node.PARAM.ENUM('knn', 'queen') });
+        var EnumSource = Node.create('test-source', { classification: Node.PARAM.ENUM('knn', 'queen') });
 
         it('should check ENUM uses one of the values', function() {
-            var TYPES = ['knn', 'queen'];
-            TYPES.forEach(function(type) {
-                var enumSource = new EnumSource({ type: type });
-                assert.equal(enumSource.type, type);
+            var CLASSIFICATIONS = ['knn', 'queen'];
+            CLASSIFICATIONS.forEach(function(classification) {
+                var enumSource = new EnumSource({ classification: classification });
+                assert.equal(enumSource.classification, classification);
             });
         });
 
@@ -55,12 +74,12 @@ describe('node-creation', function() {
             var enumSource;
             assert.throws(
                 function() {
-                    enumSource = new EnumSource({ type: 'wadus' });
+                    enumSource = new EnumSource({ classification: 'wadus' });
                 },
                 function(err) {
                     assert.equal(
                         err.message,
-                        'Invalid type for param "type", expects "enum("knn","queen")" type, got `"wadus"`'
+                        'Invalid type for param "classification", expects "enum("knn","queen")" type, got `"wadus"`'
                     );
                     return true;
                 }
