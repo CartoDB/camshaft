@@ -1,8 +1,15 @@
 # Changelog
 
-## 0.6.1
+## 0.7.0
 
 Released 2016-mm-dd
+
+ - Filter by category analysis #23
+ - Filter by range analysis #22
+ - Option to validate node before being returned #21
+ - Add support for array params #20
+ - Avoid Node class creation with reserved keywords #19
+ - Allow to have optional/nullable params #18
 
 
 ## 0.6.0
