@@ -245,4 +245,32 @@ describe('node-creation', function() {
         });
     });
 
+    describe('Node custom validate', function() {
+        var validList = [1, 2, 3, 4];
+        var CustomValidationNode = Node.create('test-custom-validation', { list: Node.PARAM.ARRAY() }, {
+            validate: function(node) {
+                assert.deepEqual(node.list, validList, 'Custom validation throws this');
+            }
+        });
+
+        it('should work for expected array list', function () {
+            var customValidationNode = new CustomValidationNode({ list: validList });
+            assert.deepEqual(customValidationNode.list, validList);
+        });
+
+        it('should fail for unexpected array list', function() {
+            var customValidationNode;
+
+            assert.throws(
+                function() {
+                    customValidationNode = new CustomValidationNode({ list: [1] });
+                },
+                function(err) {
+                    assert.equal(err.message, 'Custom validation throws this');
+                    return true;
+                }
+            );
+        });
+    });
+
 });
