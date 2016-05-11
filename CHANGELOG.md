@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.0
+
+Released 2016-mm-dd
+
+ - Public Node.getFilters method
+
+
 ## 0.7.0
 
 Released 2016-05-11
