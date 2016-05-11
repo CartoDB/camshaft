@@ -146,4 +146,103 @@ describe('node-creation', function() {
 
     });
 
+    describe('Node.PARAM.ARRAY', function() {
+        var ListNode = Node.create('test-array', {
+            list: Node.PARAM.ARRAY()
+        });
+
+        it('should work for mixed arrays', function() {
+            var listNode = new ListNode({ list: [ 1, 'wadus' ] });
+            assert.deepEqual(listNode.list, [ 1, 'wadus' ]);
+        });
+
+        it('should work for empty arrays', function() {
+            var listNode = new ListNode({ list: [] });
+            assert.deepEqual(listNode.list, []);
+        });
+
+        describe('typed array', function() {
+            var StringTypedListNode = Node.create('test-array-string', {
+                list: Node.PARAM.ARRAY(Node.PARAM.STRING)
+            });
+
+            var NumberTypedListNode = Node.create('test-array-string', {
+                list: Node.PARAM.ARRAY(Node.PARAM.NUMBER)
+            });
+
+            it('should work for string arrays', function() {
+                var listNode = new StringTypedListNode({ list: [ 'wadus', 'wadus' ] });
+                assert.deepEqual(listNode.list, [ 'wadus', 'wadus' ]);
+            });
+
+            it('should work for number arrays', function() {
+                var listNode = new NumberTypedListNode({ list: [ 1, 2, 3, 4 ] });
+                assert.deepEqual(listNode.list, [ 1, 2, 3, 4 ]);
+            });
+
+            it('should fail for mixed arrays', function() {
+                var listNode;
+
+                assert.throws(
+                    function() {
+                        listNode = new StringTypedListNode({ list: [ 1, 'wadus' ] });
+                    },
+                    function(err) {
+                        assert.equal(
+                            err.message,
+                            'Invalid type for param "list", expects "array<string>" type, got `[1,"wadus"]`'
+                        );
+                        return true;
+                    }
+                );
+            });
+
+            it('should fail for mixed arrays', function() {
+                var listNode;
+
+                assert.throws(
+                    function() {
+                        listNode = new NumberTypedListNode({ list: [ 1, 'wadus' ] });
+                    },
+                    function(err) {
+                        assert.equal(
+                            err.message,
+                            'Invalid type for param "list", expects "array<number>" type, got `[1,"wadus"]`'
+                        );
+                        return true;
+                    }
+                );
+            });
+
+            describe('nullable', function() {
+                var NullableStringTypedListNode = Node.create('test-array-string', {
+                    list: Node.PARAM.NULLABLE(Node.PARAM.ARRAY(Node.PARAM.STRING))
+                });
+
+                it('should work for null param', function() {
+                    var listNode = new NullableStringTypedListNode({});
+                    assert.equal(listNode.list, null);
+                });
+
+                it('still should fail for mixed arrays', function() {
+                    var listNode;
+
+                    assert.throws(
+                        function() {
+                            listNode = new NullableStringTypedListNode({ list: [ 1, 'wadus' ] });
+                        },
+                        function(err) {
+                            assert.equal(
+                                err.message,
+                                'Invalid type for param "list", expects "array<string>" type, got `[1,"wadus"]`'
+                            );
+                            return true;
+                        }
+                    );
+                });
+
+            });
+        });
+    });
+
 });
