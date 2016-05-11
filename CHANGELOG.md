@@ -2,7 +2,7 @@
 
 ## 0.7.0
 
-Released 2016-mm-dd
+Released 2016-05-11
 
  - Filter by category analysis #23
  - Filter by range analysis #22
