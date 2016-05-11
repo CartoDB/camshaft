@@ -2,7 +2,7 @@
 
 ## 0.8.0
 
-Released 2016-mm-dd
+Released 2016-05-11
 
  - Public Node.getFilters method
 
