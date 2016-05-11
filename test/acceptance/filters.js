@@ -77,18 +77,22 @@ describe('filters', function() {
         });
     });
 
-    it('should return just BBVA banks as they are filtered', function(done) {
-        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, {
-            bank_category: {
-                type: 'category',
-                column: 'bank',
-                params: {
-                    accept: ['BBVA']
-                }
+    var filters = {
+        bank_category: {
+            type: 'category',
+            column: 'bank',
+            params: {
+                accept: ['BBVA']
             }
-        });
+        }
+    };
+
+    it('should return just BBVA banks as they are filtered', function(done) {
+        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
         Analysis.create(testConfig, filteredSource, function(err, analysis) {
             assert.ok(!err, err);
+
+            assert.deepEqual(analysis.getRoot().getFilters(), filters);
 
             getRows(analysis.getQuery(), function(err, rows) {
                 assert.ok(!err, err);
@@ -105,15 +109,7 @@ describe('filters', function() {
     });
 
     it('should return all banks as we are skipping the category filter', function(done) {
-        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, {
-            bank_category: {
-                type: 'category',
-                column: 'bank',
-                params: {
-                    accept: ['BBVA']
-                }
-            }
-        });
+        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
         Analysis.create(testConfig, filteredSource, function(err, analysis) {
             assert.ok(!err, err);
 
@@ -132,15 +128,7 @@ describe('filters', function() {
     });
 
     it('should filter dependant analyses based on filters', function(done) {
-        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, {
-            bank_category: {
-                type: 'category',
-                column: 'bank',
-                params: {
-                    accept: ['BBVA']
-                }
-            }
-        });
+        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
 
         var tradeAreaAnalysisDefinition = {
             type: 'buffer',
@@ -173,15 +161,7 @@ describe('filters', function() {
         }
 
         it('should have different id when filter is applied', function(done) {
-            var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, {
-                bank_category: {
-                    type: 'category',
-                    column: 'bank',
-                    params: {
-                        accept: ['BBVA']
-                    }
-                }
-            });
+            var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
 
             async.map([sourceAnalysisDefinition, filteredSource], create, function(err, results) {
                 assert.ok(!err, err);
