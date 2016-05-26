@@ -3,10 +3,12 @@ create table cdb_analysis_catalog (
     node_id char(40) CONSTRAINT cdb_analysis_catalog_pkey PRIMARY KEY,
     analysis_def json NOT NULL,
     input_nodes char(40) ARRAY NOT NULL DEFAULT '{}',
-    affected_tables regclass[] NOT NULL DEFAULT '{}',
-    cache_tables regclass[] NOT NULL DEFAULT '{}',
+    status TEXT NOT NULL DEFAULT 'pending',
+    CONSTRAINT valid_status CHECK (
+        status IN ( 'pending', 'waiting', 'running', 'canceled', 'failed', 'ready' )
+    ),
     created_at timestamp with time zone NOT NULL DEFAULT now(),
-    updated_at timestamp with time zone NOT NULL DEFAULT now(),
+    updated_at timestamp with time zone DEFAULT NULL,
     used_at timestamp with time zone NOT NULL DEFAULT now(),
     hits NUMERIC DEFAULT 0,
     last_used_from char(40)
@@ -128,3 +130,6 @@ create table cdb_analysis_catalog (
 --         '{"type":"point-in-polygon","pointsNodeId":"bb72c4656df99ed98367889372f1e0752bf33e6a","polygonsNodeNodeId":"a0dcaef19b3ca54591e350737057ab37c9fc0396"}'::json,
 --         '{}'
 --     WHERE NOT EXISTS (SELECT * FROM upsert);
+
+-- Filter by analysis type
+-- SELECT * FROM cdb_analysis_catalog WHERE analysis_def->>'type' = 'trade-area'

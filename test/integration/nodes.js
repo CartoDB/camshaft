@@ -70,12 +70,37 @@ describe('nodes', function() {
             });
         });
 
+        it('should have different ids for same query but columns changing', function(done) {
+            var called = false;
+            QueryParser.prototype.getColumnNames = function(query, callback) {
+                var columns = ['a', 'b', 'c'];
+                if (called) {
+                    columns = ['x', 'y', 'z'];
+                }
+                if (!called) {
+                    called = true;
+                }
+                return callback(null, columns);
+            };
+
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+                assert.ok(!err, err);
+
+                assert.equal(results.length, 2);
+                assert.notEqual(results[0].id(), results[1].id());
+
+                done();
+            });
+        });
+
     });
 
     describe('operation', function() {
 
         var TRADE_AREA_WALK = 'walk';
         var TRADE_AREA_15M = 900;
+        var ISOLINES = 4;
+        var DISSOLVED = false;
 
         var enqueueFn;
         var enqueueCalled;
@@ -98,7 +123,9 @@ describe('nodes', function() {
                 params: {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
-                    time: TRADE_AREA_15M
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
                 }
             };
 
@@ -107,7 +134,9 @@ describe('nodes', function() {
                 params: {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
-                    time: TRADE_AREA_15M
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: false
                 }
             };
 
@@ -128,7 +157,9 @@ describe('nodes', function() {
                 params: {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
-                    time: TRADE_AREA_15M
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
                 }
             };
             var tradeArea30m = {
@@ -136,7 +167,9 @@ describe('nodes', function() {
                 params: {
                     source: SOURCE_ATM_MACHINES_DEF,
                     kind: TRADE_AREA_WALK,
-                    time: 1800
+                    time: 1800,
+                    isolines: ISOLINES,
+                    dissolved: true
                 }
             };
 

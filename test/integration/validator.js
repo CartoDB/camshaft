@@ -11,6 +11,8 @@ describe('workflow-validator', function() {
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
     var TRADE_AREA_WALK = 'walk';
     var TRADE_AREA_15M = 900;
+    var ISOLINES = 6;
+    var DISSOLVED = false;
 
     var tradeAreaAnalysisDefinition = {
         type: 'trade-area',
@@ -22,7 +24,9 @@ describe('workflow-validator', function() {
                 }
             },
             kind: TRADE_AREA_WALK,
-            time: TRADE_AREA_15M
+            time: TRADE_AREA_15M,
+            isolines: ISOLINES,
+            dissolved: DISSOLVED
         }
     };
 
@@ -36,7 +40,10 @@ describe('workflow-validator', function() {
         run: createServiceStub({}),
         getSchema: createServiceStub([]),
         getColumnNames: createServiceStub([]),
-        getAffectedTables: createServiceStub([]),
+        getLastUpdatedTimeFromAffectedTables: createServiceStub([]),
+        createTableIfNotExists: function(table, query, callback) {
+            return callback(null, true);
+        },
         registerNodesInCatalog: createServiceStub([]),
         trackNode: createServiceStub([]),
         enqueue: createServiceStub({})

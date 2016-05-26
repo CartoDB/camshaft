@@ -18,7 +18,7 @@ var bufferDefinition = {
     type: 'buffer',
     params: {
         source: sourceAtmDef,
-        radio: 1000
+        radius: 1000
     }
 };
 

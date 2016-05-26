@@ -4,12 +4,9 @@
         "buffer": {
             "params": {
                 "source": {
-                    "type": "node",
-                    "geometry": [
-                        "point"
-                    ]
+                    "type": "node"
                 },
-                "radio": {
+                "radius": {
                     "type": "number"
                 }
             }
@@ -17,10 +14,7 @@
         "moran": {
             "params": {
                 "source": {
-                    "type": "node",
-                    "geometry": [
-                        "polygon"
-                    ]
+                    "type": "node"
                 },
                 "numerator_column": {
                     "type": "string"
@@ -49,26 +43,17 @@
         "point-in-polygon": {
             "params": {
                 "points_source": {
-                    "type": "node",
-                    "geometry": [
-                        "point"
-                    ]
+                    "type": "node"
                 },
                 "polygons_source": {
-                    "type": "node",
-                    "geometry": [
-                        "polygon"
-                    ]
+                    "type": "node"
                 }
             }
         },
         "population-in-area": {
             "params": {
                 "source": {
-                    "type": "node",
-                    "geometry": [
-                        "polygon"
-                    ]
+                    "type": "node"
                 },
                 "final_column": {
                     "type": "string"
@@ -85,10 +70,7 @@
         "trade-area": {
             "params": {
                 "source": {
-                    "type": "node",
-                    "geometry": [
-                        "point"
-                    ]
+                    "type": "node"
                 },
                 "kind": {
                     "type": "enum",
