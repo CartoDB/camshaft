@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.9.1
+## 0.10.0
 
 Released 2016-mm-dd
+
+ - Add `isolines` and `dissolved` optional params to buffer #26
 
 
 ## 0.9.0
