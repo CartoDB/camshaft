@@ -127,6 +127,90 @@ var tradeAreaAtmMachines = {
 };
 
 var examples = {
+    buffer_radius: {
+        name: 'populated places radius',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radius: 1500,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                }
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    buffer_radius_isolines: {
+        name: 'populated places radius isolines',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radius: 1500,
+                isolines: 3,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                }
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 500, 1000));',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    buffer_radius_isolines_dissolved: {
+        name: 'populated places radius dissolved',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radius: 1500,
+                isolines: 5,
+                dissolved: true,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                }
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 500, 1000));',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
     population_in_trade_area: {
         name: 'population in trade area',
         def: {
