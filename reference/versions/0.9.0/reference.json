@@ -1,0 +1,199 @@
+{
+    "version": "0.9.0",
+    "analyses": {
+        "aggregate-intersection": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "target": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "aggregate_function": {
+                    "type": "enum",
+                    "values": [
+                        "avg",
+                        "count",
+                        "max",
+                        "min",
+                        "sum"
+                    ]
+                },
+                "aggregate_column": {
+                    "type": "string"
+                }
+            }
+        },
+        "buffer": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "radius": {
+                    "type": "number"
+                }
+            }
+        },
+        "filter-category": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "column": {
+                    "type": "string"
+                },
+                "accept": {
+                    "type": "array",
+                    "optional": true
+                },
+                "reject": {
+                    "type": "array",
+                    "optional": true
+                }
+            }
+        },
+        "filter-range": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "column": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "number",
+                    "optional": true
+                },
+                "max": {
+                    "type": "number",
+                    "optional": true
+                }
+            }
+        },
+        "intersection": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "target": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                }
+            }
+        },
+        "moran": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "polygon"
+                    ]
+                },
+                "numerator_column": {
+                    "type": "string"
+                },
+                "denominator_column": {
+                    "type": "string"
+                },
+                "significance": {
+                    "type": "number"
+                },
+                "neighbours": {
+                    "type": "number"
+                },
+                "permutations": {
+                    "type": "number"
+                },
+                "w_type": {
+                    "type": "enum",
+                    "values": [
+                        "knn",
+                        "queen"
+                    ]
+                }
+            }
+        },
+        "point-in-polygon": {
+            "params": {
+                "points_source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "polygons_source": {
+                    "type": "node",
+                    "geometry": [
+                        "polygon"
+                    ]
+                }
+            }
+        },
+        "population-in-area": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "polygon"
+                    ]
+                },
+                "final_column": {
+                    "type": "string"
+                }
+            }
+        },
+        "source": {
+            "params": {
+                "query": {
+                    "type": "string"
+                }
+            }
+        },
+        "trade-area": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "kind": {
+                    "type": "enum",
+                    "values": [
+                        "walk",
+                        "car"
+                    ]
+                },
+                "time": {
+                    "type": "number"
+                },
+                "isolines": {
+                    "type": "number"
+                },
+                "dissolved": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
