@@ -15,6 +15,12 @@ var argv = require('yargs')
         desc: 'when provided it will force an update over current version',
         default: false
     })
+    .option('t', {
+        alias: 'target',
+        type: 'string',
+        desc: 'target version, to override or use a different one',
+        default: false
+    })
     .argv;
 
 var forceUpdate = argv.f;
@@ -27,7 +33,8 @@ if (existingVersions.length > 0) {
 }
 
 var reference = require('../current-reference');
-var targetVersion = reference.version;
+var targetVersion = argv.t || reference.version;
+reference.version = targetVersion;
 console.info('Target version is: %s.', targetVersion);
 
 var targetVersionPath = './versions/' + targetVersion;
