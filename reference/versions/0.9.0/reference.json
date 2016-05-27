@@ -35,7 +35,7 @@
                 "source": {
                     "type": "node",
                     "geometry": [
-                        "point"
+                        "*"
                     ]
                 },
                 "radius": {
@@ -86,7 +86,20 @@
             }
         },
         "intersection": {
-            "params": {}
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "target": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                }
+            }
         },
         "moran": {
             "params": {
