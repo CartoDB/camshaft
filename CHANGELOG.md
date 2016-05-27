@@ -2,7 +2,7 @@
 
 ## 0.10.0
 
-Released 2016-mm-dd
+Released 2016-05-27
 
  - Add `isolines` and `dissolved` optional params to buffer #26
 
