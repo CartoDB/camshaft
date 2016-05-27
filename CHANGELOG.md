@@ -2,7 +2,7 @@
 
 ## 0.9.0
 
-Released 2016-mm-dd
+Released 2016-05-27
 
  - NODE param provides a list of accepted geometries for the analysis.
 
