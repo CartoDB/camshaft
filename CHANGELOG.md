@@ -2,6 +2,13 @@
 
 ## 0.8.0
 
+Released 2016-mm-dd
+
+ - NODE param provides a list of accepted geometries for the analysis.
+
+
+## 0.8.0
+
 Released 2016-05-11
 
  - Public Node.getFilters method
