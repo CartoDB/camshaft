@@ -20,7 +20,7 @@ test:
 test-unit:
 	./node_modules/.bin/mocha -u bdd -t $(MOCHA_TIMEOUT) $(TEST_SUITE_UNIT) ${MOCHA_ARGS}
 
-test-all: jshint test
+test-all: test jshint
 
 coverage:
 	./node_modules/.bin/istanbul cover node_modules/.bin/_mocha -- -u bdd -t $(MOCHA_TIMEOUT) test/setup.js $(TEST_SUITE) ${MOCHA_ARGS}
