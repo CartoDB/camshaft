@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.10.1
+## 0.11.0
 
 Released 2016-mm-dd
+ - Fixes for node status: #32 and #33
+ - New public method to retrieve all nodes from an analysis #31
 
 
 ## 0.10.0
