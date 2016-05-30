@@ -46,7 +46,7 @@ describe('workflow', function() {
             });
         });
 
-        it('should have same ids for same queries', function(done) {
+        it('should work for trade-area analysis', function(done) {
             var enqueueFn = BatchClient.prototype.enqueue;
 
             var enqueueCalled = false;
@@ -62,6 +62,10 @@ describe('workflow', function() {
 
                 assert.ok(!err, err);
                 assert.ok(analysis.getQuery().match(/select\s\*\sfrom analysis_trade_area/));
+
+                var nodesList = analysis.getNodes();
+                assert.equal(nodesList.length, 2);
+                assert.deepEqual(nodesList.map(function(node) { return node.type; }), ['trade-area', 'source']);
 
                 done();
             });
