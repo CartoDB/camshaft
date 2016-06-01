@@ -32,7 +32,7 @@ describe('query-parser', function() {
 
     it('should return a list of columns with name and type for each of them', function(done) {
         var query = 'select cartodb_id, the_geom_webmercator from atm_machines';
-        queryParser.getSchema(query, function(err, columns) {
+        queryParser.getColumns(query, function(err, columns) {
             assert.ok(!err, err);
 
             assert.deepEqual(columns, [

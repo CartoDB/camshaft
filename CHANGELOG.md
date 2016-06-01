@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.11.1
+## 0.12.0
 
 Released 2016-mm-dd
 
+ - Add support to filter dates by range
 
 
 ## 0.11.0
