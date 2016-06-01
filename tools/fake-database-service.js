@@ -19,6 +19,10 @@ FakeDatabaseService.prototype = {
         return callback(null, []);
     },
 
+    getColumns: function(query, callback) {
+        return callback(null, []);
+    },
+
     enqueue: function(query, callback) {
         return callback(null, {status: 'ok'});
     },

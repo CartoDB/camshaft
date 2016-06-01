@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.12.2
+
+Released 2016-mm-dd
+
+
+## 0.12.1
+
+Released 2016-06-01
+
+ - Fix filter-range and filter-category nodes
+
+
+## 0.12.0
+
+Released 2016-06-01
+
+ - Add support to filter dates by range
+
+
 ## 0.11.0
 
 Released 2016-05-30
