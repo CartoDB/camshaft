@@ -2,6 +2,7 @@
 
 var assert = require('assert');
 
+var BatchClient = require('../../lib/postgresql/batch-client');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 var Analysis = require('../../lib/analysis');
 
@@ -20,6 +21,23 @@ describe('node-filter', function() {
             return callback(null, rows);
         });
     }
+
+    var enqueueFn;
+    var enqueueCalled;
+
+    before(function() {
+        enqueueFn = BatchClient.prototype.enqueue;
+        enqueueCalled = 0;
+        BatchClient.prototype.enqueue = function(query, callback) {
+            enqueueCalled += 1;
+            return callback(null, { status: 'ok' });
+        };
+    });
+
+    after(function () {
+        assert.ok(enqueueCalled > 0);
+        BatchClient.prototype.enqueue = enqueueFn;
+    });
 
     describe('range', function() {
         var rangeFilter = {
