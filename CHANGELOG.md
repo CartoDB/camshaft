@@ -2,7 +2,7 @@
 
 ## 0.12.1
 
-Released 2016-mm-dd
+Released 2016-06-01
 
  - Fix filter-range and filter-category nodes
 
