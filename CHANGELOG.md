@@ -2,7 +2,7 @@
 
 ## 0.12.0
 
-Released 2016-mm-dd
+Released 2016-06-01
 
  - Add support to filter dates by range
 
