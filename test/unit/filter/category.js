@@ -8,7 +8,7 @@ describe('category-filter', function () {
     describe('without category filters', function () {
         it('should throw an error', function() {
             var shouldThrow = function () {
-                this.column = 'continent';
+                this.column = { name: 'continent' };
                 this.filterParams = {};
                 this.range = new Category(this.column, this.filterParams);
             }.bind(this);
@@ -24,7 +24,7 @@ describe('category-filter', function () {
     describe('with empty category filters', function () {
         it('should throw an error', function() {
             var shouldThrow = function () {
-                this.column = 'continent';
+                this.column = { name: 'continent' };
                 this.filterParams = {
                     accept: [],
                     reject: []
@@ -48,7 +48,7 @@ describe('category-filter', function () {
         ].join('\n');
 
         beforeEach(function () {
-            this.column = 'continent';
+            this.column = { name: 'continent' };
             this.filterParams = {
                 accept: ['Europe']
             };
@@ -69,7 +69,7 @@ describe('category-filter', function () {
         ].join('\n');
 
         beforeEach(function () {
-            this.column = 'continent';
+            this.column = { name: 'continent' };
             this.filterParams = {
                 reject: ['Europe']
             };
@@ -90,7 +90,7 @@ describe('category-filter', function () {
         ].join('\n');
 
         beforeEach(function () {
-            this.column = 'continent';
+            this.column = { name: 'continent' };
             this.filterParams = {
                 reject: []
             };
@@ -111,7 +111,7 @@ describe('category-filter', function () {
         ].join('\n');
 
         beforeEach(function () {
-            this.column = 'continent';
+            this.column = { name: 'continent' };
             this.filterParams = {
                 accept: []
             };
