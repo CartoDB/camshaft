@@ -566,8 +566,8 @@ var examples = {
 
 	cartocss: ['#layer{',
 		'marker-width: 10;',
-		'  [category=\'dog\']{marker-fill:red;}',
-		'  [category=\'cat\']{marker-fill:blue;}',
+		'  [category=\'dog\']{marker-fill:#A16928;}',
+		'  [category=\'cat\']{marker-fill:#2887a1;}',
 		'}'].join('\n'),
 	center: [0, 0],
         zoom: 15
