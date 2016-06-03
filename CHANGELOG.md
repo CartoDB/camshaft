@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.12.2
+## 0.13.0
 
 Released 2016-mm-dd
+
+ - Export version from package
 
 
 ## 0.12.1
