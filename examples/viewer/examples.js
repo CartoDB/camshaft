@@ -525,6 +525,53 @@ var examples = {
         center: [40.01, -101.16],
         zoom: 4
     },
+
+    dot_density_explicit:{
+	name:'dot density explicit',
+        def:{
+	   'type': 'dot_density',
+           'params': {
+	      'source':{
+	         'type': 'source',
+                 'params':{
+		    'query': 'select ST_BUFFER(CDB_LatLng(0,0)::geography, 2000)::geometry as the_geom',
+		 }
+	       },
+              'points': 2000
+	    }
+	},
+	cartocss: ['#layer{',
+		   'marker-width: 10;',
+		   ' marker-fill:red;',
+		   '}'].join('\n'),
+	center: [0, 0],
+        zoom: 15
+    },
+    dot_density_with_categories:{
+	name:'dot density with categories',
+        def:{
+	  "id": "a0",
+	  "type": "dot_density",
+	  "params": {
+	    "source": {
+	      "type": "source",
+	      "params": {
+		"query": "select ST_BUFFER(CDB_LatLng(0,0)::geography, 2000)::geometry as the_geom, 100 as val, 'dog' as cat UNION ALL  select ST_BUFFER(CDB_LatLng(0,0)::geography, 2000)::geometry as the_geom, 50 as val, 'cat' as cat"
+	      }
+	    },
+	    "points_col_name": "val",
+	    "category_col_name": "cat"
+	  }
+	},
+
+	cartocss: ['#layer{',
+		'marker-width: 10;',
+		'  [category=\'dog\']{marker-fill:#A16928;}',
+		'  [category=\'cat\']{marker-fill:#2887a1;}',
+		'}'].join('\n'),
+	center: [0, 0],
+        zoom: 15
+    },
     phillyProperties: {
         name: 'philly properties',
         def: {
