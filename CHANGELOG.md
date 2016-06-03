@@ -2,7 +2,7 @@
 
 ## 0.13.0
 
-Released 2016-mm-dd
+Released 2016-06-03
 
  - Export version from package
 
