@@ -44,6 +44,14 @@ var sourceLaLatina = {
     }
 };
 
+var SQLDef = {
+    type: 'SQL',
+    params: {
+        query: "select ST_BUFFER(the_geom::geography, 2000)::geometry as the_geom from ({query}) a ",
+        source: sourceAtmDef
+    }
+};
+
 var tradeAreaDefinition = {
     id: 'ta-example',
     type: 'trade-area',
@@ -127,6 +135,18 @@ var tradeAreaAtmMachines = {
 };
 
 var examples = {
+    sql:{
+        name: 'SQL',
+        def: SQLDef,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    }, 
     buffer_radius: {
         name: 'populated places radius',
         def: {
