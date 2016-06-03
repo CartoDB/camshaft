@@ -1,5 +1,46 @@
 # Changelog
 
+## 0.12.2
+
+Released 2016-mm-dd
+
+
+## 0.12.1
+
+Released 2016-06-01
+
+ - Fix filter-range and filter-category nodes
+
+
+## 0.12.0
+
+Released 2016-06-01
+
+ - Add support to filter dates by range
+
+
+## 0.11.0
+
+Released 2016-05-30
+
+ - Fixes for node status: #32 and #33
+ - New public method to retrieve all nodes from an analysis #31
+
+
+## 0.10.0
+
+Released 2016-05-27
+
+ - Add `isolines` and `dissolved` optional params to buffer #26
+
+
+## 0.9.0
+
+Released 2016-05-27
+
+ - NODE param provides a list of accepted geometries for the analysis.
+
+
 ## 0.8.0
 
 Released 2016-05-11

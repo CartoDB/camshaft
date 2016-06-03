@@ -27,15 +27,15 @@ describe('nodes', function() {
 
     describe('source', function() {
 
-        var getColumnNamesFn;
+        var getColumnsFn;
         before(function() {
-            getColumnNamesFn = QueryParser.prototype.getColumnNames;
-            QueryParser.prototype.getColumnNames = function(query, callback) {
+            getColumnsFn = QueryParser.prototype.getColumns;
+            QueryParser.prototype.getColumns = function(query, callback) {
                 return callback(null, []);
             };
         });
         after(function() {
-            QueryParser.prototype.getColumnNames = getColumnNamesFn;
+            QueryParser.prototype.getColumns = getColumnsFn;
         });
 
         it('should have same ids for same queries', function(done) {
@@ -72,10 +72,10 @@ describe('nodes', function() {
 
         it('should have different ids for same query but columns changing', function(done) {
             var called = false;
-            QueryParser.prototype.getColumnNames = function(query, callback) {
-                var columns = ['a', 'b', 'c'];
+            QueryParser.prototype.getColumns = function(query, callback) {
+                var columns = [{name: 'a'}, {name: 'b'}, {name: 'c'}];
                 if (called) {
-                    columns = ['x', 'y', 'z'];
+                    columns = [{name: 'x'}, {name: 'y'}, {name: 'z'}];
                 }
                 if (!called) {
                     called = true;
