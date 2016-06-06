@@ -126,6 +126,20 @@ var tradeAreaAtmMachines = {
     }
 };
 
+var mergeBarrios = {
+    id: 'merge-example',
+    type: 'merge',
+    params: {
+        input_left: sourceBarrios,
+        input_left_column_on: 'cartodb_id',
+        input_left_columns: ['nombre', 'codbarrio'],
+        input_right: sourceBarrios,
+        input_right_column_on: 'cartodb_id',
+        input_right_columns: ['nomdis', 'codbar'],
+        join_type: 'left'
+    }
+};
+
 var examples = {
     buffer_radius: {
         name: 'populated places radius',
@@ -651,6 +665,22 @@ var examples = {
     'aggregate-intersection': {
         name: 'airbnb and districts intersection with max price aggregation',
         def: aggregateIntersectionDefinition,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([max_price], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    merge: {
+        name: 'merge barrios',
+        def: mergeBarrios,
         cartocss: [
             '#layer{',
             '  polygon-fill: ramp([max_price], colorbrewer(Reds));',
