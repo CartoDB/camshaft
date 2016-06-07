@@ -126,14 +126,30 @@ var tradeAreaAtmMachines = {
     }
 };
 
+var sourceMod2IdsBarrios = {
+    id: 'even-barrios-source',
+    type: 'source',
+    params: {
+        query: 'select * from barrios where mod(cartodb_id, 2) = 0'
+    }
+};
+
+var sourceMod4IdsBarrios = {
+    id: 'odd-barrios-source-',
+    type: 'source',
+    params: {
+        query: 'select * from barrios where mod(cartodb_id, 4) = 0'
+    }
+};
+
 var mergeBarrios = {
     id: 'merge-example',
     type: 'merge',
     params: {
-        input_left: sourceBarrios,
+        input_left: sourceMod2IdsBarrios,
         input_left_column_on: 'cartodb_id',
         input_left_columns: ['nombre', 'codbarrio'],
-        input_right: sourceBarrios,
+        input_right: sourceMod4IdsBarrios,
         input_right_column_on: 'cartodb_id',
         input_right_columns: ['nomdis', 'codbar'],
         join_type: 'left'
