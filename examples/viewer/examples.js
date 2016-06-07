@@ -683,7 +683,7 @@ var examples = {
         def: mergeBarrios,
         cartocss: [
             '#layer{',
-            '  polygon-fill: ramp([max_price], colorbrewer(Reds));',
+            '  polygon-fill: #f42220;',
             '  polygon-opacity: 0.6;',
             '  polygon-opacity: 0.7;',
             '  line-color: #FFF;',
