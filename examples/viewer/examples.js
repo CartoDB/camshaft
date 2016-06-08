@@ -44,6 +44,14 @@ var sourceLaLatina = {
     }
 };
 
+var customersSourceDef = {
+    id: 'customersSource',
+    type: 'source',
+    params: {
+        query: "select *, category::integer cat  from customers_3"
+    }
+};
+
 var tradeAreaDefinition = {
     id: 'ta-example',
     type: 'trade-area',
@@ -53,6 +61,25 @@ var tradeAreaDefinition = {
         time: TRADE_AREA_15M,
         isolines: ISOLINES,
         dissolved: false
+    }
+};
+
+var WeightedCentroidDefinition={
+    id: 'weightedCentroid',
+    type: 'weighted_centroid',
+    params:{
+        source: customersSourceDef,
+        weight_col: 'customer_v',
+        category_col:'cat'
+    }
+}
+
+var KMeansDefinition ={
+    id: 'kmeans',
+    type: 'kmeans',
+    params:{
+      source: customersSourceDef,
+      no_clusters : 6
     }
 };
 
@@ -663,5 +690,54 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
+    },
+     kmeans:{
+        name: 'kmeans_clustering',
+        def: KMeansDefinition,
+        cartocss:[
+            "@1: #E58606;",
+            "@2: #5D69B1;",
+            "@3: #52BCA3;",
+            "@4: #99C945;",
+            "@5: #2F8AC4;",
+            "@6: #24796C;",
+            "#layer{",
+            "  [cluster_no =0]{marker-fill:@1;}",
+            "  [cluster_no =1]{marker-fill:@2;}",
+            "  [cluster_no =2]{marker-fill:@3;}",
+            "  [cluster_no =3]{marker-fill:@4;}",
+            "  [cluster_no =4]{marker-fill:@5;}",
+            "  [cluster_no =5]{marker-fill:@6;}",
+            "  marker-fill: red;",
+            "  marker-width: 10.0;",
+            "}"
+            ].join('\n'),  
+            center: [45.5231, -122.6765],
+            zoom: 12
+    },
+     kmeans:{
+        name: 'weighted_centroid',
+        def: WeightedCentroidDefinition,
+        cartocss:[
+            "@1: #E58606;",
+            "@2: #5D69B1;",
+            "@3: #52BCA3;",
+            "@4: #99C945;",
+            "@5: #2F8AC4;",
+            "@6: #24796C;",
+            "#layer{",
+            "  [cluster_no =0]{marker-fill:@1;}",
+            "  [cluster_no =1]{marker-fill:@2;}",
+            "  [cluster_no =2]{marker-fill:@3;}",
+            "  [cluster_no =3]{marker-fill:@4;}",
+            "  [cluster_no =4]{marker-fill:@5;}",
+            "  [cluster_no =5]{marker-fill:@6;}",
+            "  marker-fill: red;",
+            "  marker-width: 10.0;",
+            "}"
+            ].join('\n'),  
+            center: [45.5231, -122.6765],
+            zoom: 12
     }
+
 };
