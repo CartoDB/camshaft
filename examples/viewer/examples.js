@@ -715,7 +715,7 @@ var examples = {
             center: [45.5231, -122.6765],
             zoom: 12
     },
-     kmeans:{
+     weighted_centroid:{
         name: 'weighted_centroid',
         def: WeightedCentroidDefinition,
         cartocss:[
