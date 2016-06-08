@@ -69,8 +69,8 @@ var WeightedCentroidDefinition={
     type: 'weighted_centroid',
     params:{
         source: customersSourceDef,
-        weight_col: 'customer_v',
-        category_col:'cat'
+        weight_column: 'customer_v',
+        category_column:'cat'
     }
 }
 
