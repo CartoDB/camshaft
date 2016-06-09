@@ -51,7 +51,9 @@ function updateMap(example) {
     var dataviews = {};
     var filters = {};
     var sourceId = analysis.id || 'a0';
+    var queryWrap;
     if (example) {
+        queryWrap = example.sql_wrap;
         map.setView(example.center || [30, 0], example.zoom || 3);
         dataviews = example.dataviews || {};
         filters = example.filters || {};
@@ -64,6 +66,7 @@ function updateMap(example) {
                 type: 'cartodb',
                 options: {
                     source: { id: sourceId },
+                    sql_wrap: queryWrap,
                     cartocss: cssEditor.getValue(),
                     cartocss_version: '2.3.0'
                 }
