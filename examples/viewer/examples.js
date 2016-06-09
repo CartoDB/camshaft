@@ -66,7 +66,7 @@ var tradeAreaDefinition = {
 
 var WeightedCentroidDefinition={
     id: 'weightedCentroid',
-    type: 'weighted_centroid',
+    type: 'weighted-centroid',
     params:{
         source: customersSourceDef,
         weight_column: 'customer_v',
@@ -716,7 +716,7 @@ var examples = {
             zoom: 12
     },
      weighted_centroid:{
-        name: 'weighted_centroid',
+        name: 'weighted-centroid',
         def: WeightedCentroidDefinition,
         cartocss:[
             "@1: #E58606;",
