@@ -26,7 +26,7 @@ var sourceExpensiveRentListings = {
     params: {
         query: 'select * from airbnb_madrid_oct_2015_listings where price > 100'
     }
-}
+};
 
 var sourceBarrios = {
     id: 'barrios-source',
@@ -40,7 +40,7 @@ var sourceLaLatina = {
     id: 'barrios-source',
     type: 'source',
     params: {
-        query: "select * from barrios where codbarrio like '10%'"
+        query: 'select * from barrios where codbarrio like \'10%\''
     }
 };
 
@@ -48,7 +48,7 @@ var customersSourceDef = {
     id: 'customersSource',
     type: 'source',
     params: {
-        query: "select *, category::integer cat  from customers_3"
+        query: 'select *, category::integer cat  from customers_3'
     }
 };
 
@@ -72,7 +72,7 @@ var WeightedCentroidDefinition={
         weight_column: 'customer_v',
         category_column:'cat'
     }
-}
+};
 
 var KMeansDefinition ={
     id: 'kmeans',
@@ -695,49 +695,49 @@ var examples = {
         name: 'kmeans_clustering',
         def: KMeansDefinition,
         cartocss:[
-            "@1: #E58606;",
-            "@2: #5D69B1;",
-            "@3: #52BCA3;",
-            "@4: #99C945;",
-            "@5: #2F8AC4;",
-            "@6: #24796C;",
-            "#layer{",
-            "  [cluster_no =0]{marker-fill:@1;}",
-            "  [cluster_no =1]{marker-fill:@2;}",
-            "  [cluster_no =2]{marker-fill:@3;}",
-            "  [cluster_no =3]{marker-fill:@4;}",
-            "  [cluster_no =4]{marker-fill:@5;}",
-            "  [cluster_no =5]{marker-fill:@6;}",
-            "  marker-fill: red;",
-            "  marker-width: 10.0;",
-            "}"
-            ].join('\n'),  
-            center: [45.5231, -122.6765],
-            zoom: 12
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-width: 10.0;',
+            ''
+        ].join('\n'),
+        center: [45.5231, -122.6765],
+        zoom: 12
     },
      weighted_centroid:{
         name: 'weighted-centroid',
         def: WeightedCentroidDefinition,
         cartocss:[
-            "@1: #E58606;",
-            "@2: #5D69B1;",
-            "@3: #52BCA3;",
-            "@4: #99C945;",
-            "@5: #2F8AC4;",
-            "@6: #24796C;",
-            "#layer{",
-            "  [cluster_no =0]{marker-fill:@1;}",
-            "  [cluster_no =1]{marker-fill:@2;}",
-            "  [cluster_no =2]{marker-fill:@3;}",
-            "  [cluster_no =3]{marker-fill:@4;}",
-            "  [cluster_no =4]{marker-fill:@5;}",
-            "  [cluster_no =5]{marker-fill:@6;}",
-            "  marker-fill: red;",
-            "  marker-width: 10.0;",
-            "}"
-            ].join('\n'),  
-            center: [45.5231, -122.6765],
-            zoom: 12
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-width: 10.0;',
+            ''
+        ].join('\n'),
+        center: [45.5231, -122.6765],
+        zoom: 12
     }
 
 };
