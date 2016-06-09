@@ -1,6 +1,6 @@
 CREATE OR REPLACE FUNCTION OBS_GetMeasure(
   geom geometry,
-  time_span text
+  segment_name text
 )
 RETURNS numeric
 AS $$
@@ -11,8 +11,8 @@ $$  LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION OBS_GetMeasure(
   geom geometry,
-  time_span text,
-  arg text
+  segment_name text,
+  denominator text
 )
 RETURNS numeric
 AS $$
