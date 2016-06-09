@@ -154,13 +154,42 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    buffer_radius_dissolved: {
+        name: 'populated places radius dissolved',
+        //sql_wrap: 'select st_envelope(the_geom_webmercator) as the_geom_webmercator from (<%= sql %>) as _q',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radius: 9000,
+                dissolved: true,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from paradas_metro_madrid'
+                    }
+                }
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 0.2;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 10
+    },
     buffer_radius_isolines: {
         name: 'populated places radius isolines',
         def: {
             id: UUID,
             type: 'buffer',
             params: {
-                radius: 1500,
+                radius: 9000,
                 isolines: 3,
                 source: {
                     id: 'a0',
@@ -175,27 +204,28 @@ var examples = {
         filters: {},
         cartocss: [
             '#layer{',
-            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 500, 1000));',
-            '  polygon-opacity: 1.0;',
+            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 3000, 6000));',
+            '  polygon-opacity: 0.2;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
-        zoom: 12
+        zoom: 10
     },
     buffer_radius_isolines_dissolved: {
-        name: 'populated places radius dissolved',
+        name: 'populated places radius isolines dissolved',
+        sql_wrap: 'select data_range, st_envelope(the_geom_webmercator) as the_geom_webmercator from (<%= sql %>) as _q',
         def: {
             id: UUID,
             type: 'buffer',
             params: {
-                radius: 1500,
-                isolines: 5,
+                radius: 15000,
+                isolines: 3,
                 dissolved: true,
                 source: {
                     id: 'a0',
                     type: 'source',
                     params: {
-                        query: 'select * from populated_places_simple'
+                        query: 'select * from paradas_metro_madrid'
                     }
                 }
             }
@@ -204,12 +234,12 @@ var examples = {
         filters: {},
         cartocss: [
             '#layer{',
-            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 500, 1000));',
-            '  polygon-opacity: 1.0;',
+            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 5000, 10000));',
+            '  polygon-opacity: 0.2;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
-        zoom: 12
+        zoom: 10
     },
     population_in_trade_area: {
         name: 'population in trade area',

@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Removes isolines constraint for dissolved option in buffer analysis
+
 
 ## 0.13.0
 
