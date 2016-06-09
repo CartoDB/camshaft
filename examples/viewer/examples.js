@@ -131,9 +131,8 @@ var dataObservatoryMeasureAdultsFirstLevelStudies = {
     type: 'data-observatory-measure',
     params: {
         source: sourceBarrios,
-        new_column_name: 'adults_first_level_studies',
-        segment_name: 'es.ine.t15_8',
-        percent: false
+        final_column: 'adults_first_level_studies',
+        segment_name: 'es.ine.t15_8'
     }
 };
 
@@ -142,7 +141,7 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
     type: 'data-observatory-measure',
     params: {
         source: sourceBarrios,
-        new_column_name: 'adults_first_level_studies_percent',
+        final_column: 'adults_first_level_studies_percent',
         segment_name: 'es.ine.t15_8',
         percent: true
     }
