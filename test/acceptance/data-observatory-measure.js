@@ -30,9 +30,8 @@ describe('data-observatory-measure analysis', function() {
     });
 
     var QUERY = 'select * from atm_machines limit 2';
-    var COLUMN_NAME = 'adults_first_level_studies';
-    var DO_FN = 'es.ine.t15_8';
-    var DO_ARGS = ['denominator'];
+    var NEW_COLUMN_NAME = 'adults_first_level_studies';
+    var SEGMENT_NAME = 'es.ine.t15_8';
 
     var sourceBarrios = {
         type: 'source',
@@ -67,8 +66,9 @@ describe('data-observatory-measure analysis', function() {
             type: 'data-observatory-measure',
             params: {
                 source: sourceBarrios,
-                column_name: COLUMN_NAME,
-                do_fn: DO_FN
+                new_column_name: NEW_COLUMN_NAME,
+                segment_name: SEGMENT_NAME,
+                percent: false
             }
         };
 
@@ -88,9 +88,9 @@ describe('data-observatory-measure analysis', function() {
             type: 'data-observatory-measure',
             params: {
                 source: sourceBarrios,
-                column_name: COLUMN_NAME,
-                do_fn: DO_FN,
-                do_args: DO_ARGS
+                new_column_name: NEW_COLUMN_NAME,
+                segment_name: SEGMENT_NAME,
+                percent: false
             }
         };
 
