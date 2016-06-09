@@ -154,6 +154,78 @@ var tradeAreaAtmMachines = {
 };
 
 var examples = {
+    kmeans_populated:{
+        name: 'kmeans clustering populated',
+        def: {
+            id: 'kmeans',
+            type: 'kmeans',
+            params:{
+                source: populatedPlacesSource,
+                clusters : 5
+            }
+        },
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 10.0;',
+            ''
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    kmeans_phil_properties: {
+        name: 'kmeans clustering phily properties',
+        def: {
+            id: 'kmeans',
+            type: 'kmeans',
+            params:{
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select cartodb_id, the_geom, _market_value from properties where the_geom is not null'
+                    }
+                },
+                clusters : 6
+            }
+        },
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.1;',
+            '  marker-line-color: #ccc;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 4;',
+            ''
+        ].join('\n'),
+        center: [40.009, -75.134],
+        zoom: 12
+    },
     buffer_radius: {
         name: 'populated places radius',
         def: {
