@@ -79,7 +79,7 @@ var KMeansDefinition ={
     type: 'kmeans',
     params:{
       source: customersSourceDef,
-      no_clusters : 6
+      clusters : 6
     }
 };
 
