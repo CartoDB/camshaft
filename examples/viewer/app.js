@@ -97,6 +97,7 @@ function updateMap(example) {
             var analyses = layergroup.metadata.analyses;
             Object.keys(analyses[0].nodes).forEach(function(nodeId) {
                console.log(nodeId, analyses[0].nodes[nodeId].status);
+               console.log(analyses[0].nodes[nodeId].query);
             });
         } else {
             throw 'Error calling server: Error ' + this.status + ' -> ' + this.response;
