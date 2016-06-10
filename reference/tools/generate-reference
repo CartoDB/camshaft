@@ -4,6 +4,7 @@
 
 var fs = require('fs');
 var util = require('util');
+var semver = require('semver');
 
 var argv = require('yargs')
     .help('h')
@@ -27,7 +28,7 @@ var forceUpdate = argv.f;
 
 var existingVersions = fs.readdirSync('./versions').filter(function(path) {
     return fs.statSync('./versions/' + path).isDirectory();
-});
+}).sort(semver.compare);
 if (existingVersions.length > 0) {
     console.info('Existing versions are: %s.', existingVersions.join(', '));
 }
