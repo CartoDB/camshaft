@@ -2,7 +2,7 @@
 
 ## 0.14.0
 
-Released 2016-mm-dd
+Released 2016-06-10
 
  - Removes isolines constraint for dissolved option in buffer analysis
  - Adds analyses: kmeans, weighted-centroid, data-observatory-measure
