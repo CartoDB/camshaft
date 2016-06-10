@@ -52,6 +52,15 @@ var customersSourceDef = {
     }
 };
 
+var customersSourceDef2 = {
+    id: 'customersSource',
+    type: 'source',
+    params: {
+        query: 'select * from customers_3'
+    }
+};
+
+
 var tradeAreaDefinition = {
     id: 'ta-example',
     type: 'trade-area',
@@ -68,9 +77,9 @@ var WeightedCentroidDefinition={
     id: 'weightedCentroid',
     type: 'weighted-centroid',
     params:{
-        source: customersSourceDef,
+        source: customersSourceDef2,
         weight_column: 'customer_v',
-        category_column:'cat'
+        category_column:'category'
     }
 };
 
@@ -798,15 +807,15 @@ var examples = {
             '@5: #2F8AC4;',
             '@6: #24796C;',
             '#layer{',
-            '  [cluster_no =0]{marker-fill:@1;}',
-            '  [cluster_no =1]{marker-fill:@2;}',
-            '  [cluster_no =2]{marker-fill:@3;}',
-            '  [cluster_no =3]{marker-fill:@4;}',
-            '  [cluster_no =4]{marker-fill:@5;}',
-            '  [cluster_no =5]{marker-fill:@6;}',
-            '  marker-fill: red;',
-            '  marker-width: 10.0;',
-            ''
+            '[category =0]{marker-fill:@1;}',
+            '[category =1]{marker-fill:@2;}',
+            '[category =2]{marker-fill:@3;}',
+            '[category =3]{marker-fill:@4;}',
+            '[category =4]{marker-fill:@5;}',
+            '[category =5]{marker-fill:@6;}',
+            'marker-fill: red;',
+            'marker-width: 10.0;',
+            '}'
         ].join('\n'),
         center: [45.5231, -122.6765],
         zoom: 12
