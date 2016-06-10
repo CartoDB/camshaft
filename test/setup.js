@@ -18,7 +18,8 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/cdb_isochrone.sql'),
         fs.realpathSync('./test/fixtures/atm_machines.sql'),
         fs.realpathSync('./test/fixtures/madrid_districts.sql'),
-        fs.realpathSync('./test/fixtures/airbnb_rooms.sql')
+        fs.realpathSync('./test/fixtures/airbnb_rooms.sql'),
+        fs.realpathSync('./test/fixtures/obs_getmeasure.sql')
     ];
 
     async.waterfall(

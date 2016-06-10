@@ -153,6 +153,27 @@ var tradeAreaAtmMachines = {
     }
 };
 
+var dataObservatoryMeasureAdultsFirstLevelStudies = {
+    id: 'data-observatory-measure-adults-first-level-studies',
+    type: 'data-observatory-measure',
+    params: {
+        source: sourceBarrios,
+        final_column: 'adults_first_level_studies',
+        segment_name: 'es.ine.t15_8'
+    }
+};
+
+var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
+    id: 'data-observatory-measure-adults-first-level-studies-percent',
+    type: 'data-observatory-measure',
+    params: {
+        source: sourceBarrios,
+        final_column: 'adults_first_level_studies_percent',
+        segment_name: 'es.ine.t15_8',
+        percent: true
+    }
+};
+
 var examples = {
     buffer_radius: {
         name: 'populated places radius',
@@ -872,6 +893,38 @@ var examples = {
             '}'
         ].join('\n'),
         center: [40.009, -75.134],
+        zoom: 12
+    },
+    'do-measure-adults-first-level-studies': {
+        name: 'number of adults with first level studies',
+        def: dataObservatoryMeasureAdultsFirstLevelStudies,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([adults_first_level_studies], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'do-measure-adults-first-level-studies-percent': {
+        name: 'percent of adults with first level studies',
+        def: dataObservatoryMeasureAdultsFirstLevelStudiesPercent,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([adults_first_level_studies_percent], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
         zoom: 12
     }
 
