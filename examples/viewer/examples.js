@@ -52,6 +52,15 @@ var customersSourceDef = {
     }
 };
 
+var customersSourceDef2 = {
+    id: 'customersSource',
+    type: 'source',
+    params: {
+        query: 'select * from customers_3'
+    }
+};
+
+
 var tradeAreaDefinition = {
     id: 'ta-example',
     type: 'trade-area',
@@ -68,9 +77,9 @@ var WeightedCentroidDefinition = {
     id: 'weightedCentroid',
     type: 'weighted-centroid',
     params:{
-        source: customersSourceDef,
+        source: customersSourceDef2,
         weight_column: 'customer_v',
-        category_column:'cat'
+        category_column:'category'
     }
 };
 
@@ -777,12 +786,12 @@ var examples = {
             '@5: #2F8AC4;',
             '@6: #24796C;',
             '#layer{',
-            '  [class=0]{marker-fill:@1;}',
-            '  [class=1]{marker-fill:@2;}',
-            '  [class=2]{marker-fill:@3;}',
-            '  [class=3]{marker-fill:@4;}',
-            '  [class=4]{marker-fill:@5;}',
-            '  [class=5]{marker-fill:@6;}',
+            '  [category =0]{marker-fill:@1;}',
+            '  [category =1]{marker-fill:@2;}',
+            '  [category =2]{marker-fill:@3;}',
+            '  [category =3]{marker-fill:@4;}',
+            '  [category =4]{marker-fill:@5;}',
+            '  [category =5]{marker-fill:@6;}',
             '  marker-fill: red;',
             '  marker-width: 10.0;',
             '}'
@@ -864,7 +873,7 @@ var examples = {
     },
     weighted_centroid_properties: {
         name: 'weighted-centroid properties',
-        sql_wrap: 'select class::text as class, the_geom_webmercator from (<%= sql %>) q',
+        sql_wrap: 'select category::text as category, the_geom_webmercator from (<%= sql %>) q',
         def: {
             id: 'weightedCentroid',
             type: 'weighted-centroid',
@@ -875,8 +884,7 @@ var examples = {
                     params: {
                         query: [
                             'SELECT cartodb_id, the_geom, _market_value, _year_built::integer',
-                            'FROM properties',
-                            'WHERE the_geom IS NOT NULL AND _market_value != 0'
+                            'FROM properties'
                         ].join(' ')
                     }
                 },
@@ -886,7 +894,7 @@ var examples = {
         },
         cartocss:[
             '#layer{',
-            '  marker-fill: ramp([class], colorbrewer(Paired, 12), category);',
+            '  marker-fill: ramp([category], colorbrewer(Paired, 12), category);',
             '  marker-line-width: 0.5;',
             '  marker-allow-overlap: true;',
             '  marker-width: 10;',
