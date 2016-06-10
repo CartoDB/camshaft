@@ -154,78 +154,6 @@ var tradeAreaAtmMachines = {
 };
 
 var examples = {
-    kmeans_populated:{
-        name: 'kmeans clustering populated',
-        def: {
-            id: 'kmeans',
-            type: 'kmeans',
-            params:{
-                source: populatedPlacesSource,
-                clusters : 5
-            }
-        },
-        cartocss:[
-            '@1: #E58606;',
-            '@2: #5D69B1;',
-            '@3: #52BCA3;',
-            '@4: #99C945;',
-            '@5: #2F8AC4;',
-            '@6: #24796C;',
-            '#layer{',
-            '  [cluster_no =0]{marker-fill:@1;}',
-            '  [cluster_no =1]{marker-fill:@2;}',
-            '  [cluster_no =2]{marker-fill:@3;}',
-            '  [cluster_no =3]{marker-fill:@4;}',
-            '  [cluster_no =4]{marker-fill:@5;}',
-            '  [cluster_no =5]{marker-fill:@6;}',
-            '  marker-fill: red;',
-            '  marker-line-width: 0.5;',
-            '  marker-allow-overlap: true;',
-            '  marker-width: 10.0;',
-            '}'
-        ].join('\n'),
-        center: [40.44, -3.7],
-        zoom: 3
-    },
-    kmeans_phil_properties: {
-        name: 'kmeans clustering phily properties',
-        def: {
-            id: 'kmeans',
-            type: 'kmeans',
-            params:{
-                source: {
-                    type: 'source',
-                    params: {
-                        query: 'select cartodb_id, the_geom, _market_value from properties where the_geom is not null'
-                    }
-                },
-                clusters : 6
-            }
-        },
-        cartocss:[
-            '@1: #E58606;',
-            '@2: #5D69B1;',
-            '@3: #52BCA3;',
-            '@4: #99C945;',
-            '@5: #2F8AC4;',
-            '@6: #24796C;',
-            '#layer{',
-            '  [cluster_no =0]{marker-fill:@1;}',
-            '  [cluster_no =1]{marker-fill:@2;}',
-            '  [cluster_no =2]{marker-fill:@3;}',
-            '  [cluster_no =3]{marker-fill:@4;}',
-            '  [cluster_no =4]{marker-fill:@5;}',
-            '  [cluster_no =5]{marker-fill:@6;}',
-            '  marker-fill: red;',
-            '  marker-line-width: 0.1;',
-            '  marker-line-color: #ccc;',
-            '  marker-allow-overlap: true;',
-            '  marker-width: 4;',
-            '}'
-        ].join('\n'),
-        center: [40.009, -75.134],
-        zoom: 12
-    },
     buffer_radius: {
         name: 'populated places radius',
         def: {
@@ -839,6 +767,111 @@ var examples = {
             '}'
         ].join('\n'),
         center: [45.5231, -122.6765],
+        zoom: 12
+    },
+    kmeans_populated:{
+        name: 'kmeans clustering populated',
+        def: {
+            id: 'kmeans',
+            type: 'kmeans',
+            params:{
+                source: populatedPlacesSource,
+                clusters : 5
+            }
+        },
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 10.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    kmeans_phil_properties: {
+        name: 'kmeans clustering phily properties',
+        def: {
+            id: 'kmeans',
+            type: 'kmeans',
+            params:{
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select cartodb_id, the_geom, _market_value from properties where the_geom is not null'
+                    }
+                },
+                clusters : 6
+            }
+        },
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.1;',
+            '  marker-line-color: #ccc;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 4;',
+            '}'
+        ].join('\n'),
+        center: [40.009, -75.134],
+        zoom: 12
+    },
+    weighted_centroid_properties: {
+        name: 'weighted-centroid properties',
+        sql_wrap: 'select class::text as class, the_geom_webmercator from (<%= sql %>) q',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: UUID,
+                    type: 'source',
+                    params: {
+                        query: [
+                            'SELECT cartodb_id, the_geom, _market_value, _year_built::integer',
+                            'FROM properties',
+                            'WHERE the_geom IS NOT NULL AND _market_value != 0'
+                        ].join(' ')
+                    }
+                },
+                weight_column: '_market_value',
+                category_column:'_year_built'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  marker-fill: ramp([class], colorbrewer(Paired, 12), category);',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 10;',
+            '}'
+        ].join('\n'),
+        center: [40.009, -75.134],
         zoom: 12
     }
 
