@@ -64,7 +64,7 @@ var tradeAreaDefinition = {
     }
 };
 
-var WeightedCentroidDefinition={
+var WeightedCentroidDefinition = {
     id: 'weightedCentroid',
     type: 'weighted-centroid',
     params:{
@@ -182,7 +182,7 @@ var examples = {
             '  marker-line-width: 0.5;',
             '  marker-allow-overlap: true;',
             '  marker-width: 10.0;',
-            ''
+            '}'
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 3
@@ -221,7 +221,7 @@ var examples = {
             '  marker-line-color: #ccc;',
             '  marker-allow-overlap: true;',
             '  marker-width: 4;',
-            ''
+            '}'
         ].join('\n'),
         center: [40.009, -75.134],
         zoom: 12
@@ -312,7 +312,7 @@ var examples = {
     },
     buffer_radius_isolines_dissolved: {
         name: 'populated places radius isolines dissolved',
-        sql_wrap: 'select data_range, st_envelope(the_geom_webmercator) as the_geom_webmercator from (<%= sql %>) as _q',
+        sql_wrap: 'select data_range, st_envelope(the_geom_webmercator) the_geom_webmercator from (<%= sql %>) as _q',
         def: {
             id: UUID,
             type: 'buffer',
@@ -812,7 +812,7 @@ var examples = {
             '  [cluster_no =5]{marker-fill:@6;}',
             '  marker-fill: red;',
             '  marker-width: 10.0;',
-            ''
+            '}'
         ].join('\n'),
         center: [45.5231, -122.6765],
         zoom: 12
@@ -828,15 +828,15 @@ var examples = {
             '@5: #2F8AC4;',
             '@6: #24796C;',
             '#layer{',
-            '  [cluster_no =0]{marker-fill:@1;}',
-            '  [cluster_no =1]{marker-fill:@2;}',
-            '  [cluster_no =2]{marker-fill:@3;}',
-            '  [cluster_no =3]{marker-fill:@4;}',
-            '  [cluster_no =4]{marker-fill:@5;}',
-            '  [cluster_no =5]{marker-fill:@6;}',
+            '  [class=0]{marker-fill:@1;}',
+            '  [class=1]{marker-fill:@2;}',
+            '  [class=2]{marker-fill:@3;}',
+            '  [class=3]{marker-fill:@4;}',
+            '  [class=4]{marker-fill:@5;}',
+            '  [class=5]{marker-fill:@6;}',
             '  marker-fill: red;',
             '  marker-width: 10.0;',
-            ''
+            '}'
         ].join('\n'),
         center: [45.5231, -122.6765],
         zoom: 12
