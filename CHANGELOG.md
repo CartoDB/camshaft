@@ -2,7 +2,7 @@
 
 ## 0.14.1
 
-Released 2016-mm-dd
+Released 2016-06-10
 
  - Use new CDB_WeightedMean aggregate function #49
 
