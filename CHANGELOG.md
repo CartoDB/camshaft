@@ -2,7 +2,7 @@
 
 ## 0.15.0
 
-Released 2016-mm-dd
+Released 2016-06-13
 
  - Adds filter by node column analysis
 
