@@ -5,6 +5,18 @@ var TRADE_AREA_WALK = 'walk';
 var TRADE_AREA_15M = 900;
 var ISOLINES = 4;
 
+var CARTOCSS_POINTS = [
+    '#layer{',
+    '  marker-placement: point;',
+    '  marker-allow-overlap: true;',
+    '  marker-line-opacity: 0.2;',
+    '  marker-line-width: 0.5;',
+    '  marker-opacity: 1;',
+    '  marker-width: 5;',
+    '  marker-fill: red;',
+    '}'
+].join('\n');
+
 var sourceAtmDef = {
     type: 'source',
     params: {
@@ -17,14 +29,6 @@ var sourceRentListings = {
     type: 'source',
     params: {
         query: 'select * from airbnb_madrid_oct_2015_listings'
-    }
-};
-
-var sourceExpensiveRentListings = {
-    id: 'expensive-airbnb-source',
-    type: 'source',
-    params: {
-        query: 'select * from airbnb_madrid_oct_2015_listings where price > 100'
     }
 };
 
@@ -83,7 +87,7 @@ var WeightedCentroidDefinition = {
     }
 };
 
-var KMeansDefinition ={
+var KMeansDefinition = {
     id: 'kmeans',
     type: 'kmeans',
     params:{
@@ -412,17 +416,7 @@ var examples = {
                 }
             }
         },
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 12
     },
@@ -545,17 +539,7 @@ var examples = {
                 }
             }
         },
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 3
     },
@@ -670,34 +654,14 @@ var examples = {
     pointsInPolygon: {
         name: 'airbnb in atm trade areas',
         def: pointsInPolygonDefinition,
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 12
     },
     pointsInPolygonFiltered: {
         name: 'airbnb in atm trade areas (filtered)',
         def: pointsInPolygonDefinition,
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         dataviews: {
             price_histogram: {
                 source: {
