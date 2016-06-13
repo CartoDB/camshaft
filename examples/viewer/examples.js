@@ -26,7 +26,7 @@ var sourceExpensiveRentListings = {
     params: {
         query: 'select * from airbnb_madrid_oct_2015_listings where price > 100'
     }
-}
+};
 
 var sourceBarrios = {
     id: 'barrios-source',
@@ -40,9 +40,26 @@ var sourceLaLatina = {
     id: 'barrios-source',
     type: 'source',
     params: {
-        query: "select * from barrios where codbarrio like '10%'"
+        query: 'select * from barrios where codbarrio like \'10%\''
     }
 };
+
+var customersSourceDef = {
+    id: 'customersSource',
+    type: 'source',
+    params: {
+        query: 'select *, category::integer cat  from customers_3'
+    }
+};
+
+var customersSourceDef2 = {
+    id: 'customersSource',
+    type: 'source',
+    params: {
+        query: 'select * from customers_3'
+    }
+};
+
 
 var tradeAreaDefinition = {
     id: 'ta-example',
@@ -53,6 +70,25 @@ var tradeAreaDefinition = {
         time: TRADE_AREA_15M,
         isolines: ISOLINES,
         dissolved: false
+    }
+};
+
+var WeightedCentroidDefinition = {
+    id: 'weightedCentroid',
+    type: 'weighted-centroid',
+    params:{
+        source: customersSourceDef2,
+        weight_column: 'customer_v',
+        category_column:'category'
+    }
+};
+
+var KMeansDefinition ={
+    id: 'kmeans',
+    type: 'kmeans',
+    params:{
+      source: customersSourceDef,
+      clusters : 6
     }
 };
 
@@ -126,6 +162,27 @@ var tradeAreaAtmMachines = {
     }
 };
 
+var dataObservatoryMeasureAdultsFirstLevelStudies = {
+    id: 'data-observatory-measure-adults-first-level-studies',
+    type: 'data-observatory-measure',
+    params: {
+        source: sourceBarrios,
+        final_column: 'adults_first_level_studies',
+        segment_name: 'es.ine.t15_8'
+    }
+};
+
+var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
+    id: 'data-observatory-measure-adults-first-level-studies-percent',
+    type: 'data-observatory-measure',
+    params: {
+        source: sourceBarrios,
+        final_column: 'adults_first_level_studies_percent',
+        segment_name: 'es.ine.t15_8',
+        percent: true
+    }
+};
+
 var sourceMod2IdsBarrios = {
     id: 'even-barrios-source',
     type: 'source',
@@ -184,13 +241,42 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    buffer_radius_dissolved: {
+        name: 'populated places radius dissolved',
+        //sql_wrap: 'select st_envelope(the_geom_webmercator) as the_geom_webmercator from (<%= sql %>) as _q',
+        def: {
+            id: UUID,
+            type: 'buffer',
+            params: {
+                radius: 9000,
+                dissolved: true,
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from paradas_metro_madrid'
+                    }
+                }
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 0.2;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 10
+    },
     buffer_radius_isolines: {
         name: 'populated places radius isolines',
         def: {
             id: UUID,
             type: 'buffer',
             params: {
-                radius: 1500,
+                radius: 9000,
                 isolines: 3,
                 source: {
                     id: 'a0',
@@ -205,27 +291,28 @@ var examples = {
         filters: {},
         cartocss: [
             '#layer{',
-            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 500, 1000));',
-            '  polygon-opacity: 1.0;',
+            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 3000, 6000));',
+            '  polygon-opacity: 0.2;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
-        zoom: 12
+        zoom: 10
     },
     buffer_radius_isolines_dissolved: {
-        name: 'populated places radius dissolved',
+        name: 'populated places radius isolines dissolved',
+        sql_wrap: 'select data_range, st_envelope(the_geom_webmercator) the_geom_webmercator from (<%= sql %>) as _q',
         def: {
             id: UUID,
             type: 'buffer',
             params: {
-                radius: 1500,
-                isolines: 5,
+                radius: 15000,
+                isolines: 3,
                 dissolved: true,
                 source: {
                     id: 'a0',
                     type: 'source',
                     params: {
-                        query: 'select * from populated_places_simple'
+                        query: 'select * from paradas_metro_madrid'
                     }
                 }
             }
@@ -234,12 +321,12 @@ var examples = {
         filters: {},
         cartocss: [
             '#layer{',
-            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 500, 1000));',
-            '  polygon-opacity: 1.0;',
+            '  polygon-fill: ramp([data_range], (red, green, blue), (0, 5000, 10000));',
+            '  polygon-opacity: 0.2;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
-        zoom: 12
+        zoom: 10
     },
     population_in_trade_area: {
         name: 'population in trade area',
@@ -684,6 +771,190 @@ var examples = {
         cartocss: [
             '#layer{',
             '  polygon-fill: ramp([max_price], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+     kmeans:{
+        name: 'kmeans_clustering',
+        def: KMeansDefinition,
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-width: 10.0;',
+            '}'
+        ].join('\n'),
+        center: [45.5231, -122.6765],
+        zoom: 12
+    },
+     weighted_centroid:{
+        name: 'weighted-centroid',
+        def: WeightedCentroidDefinition,
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [category =0]{marker-fill:@1;}',
+            '  [category =1]{marker-fill:@2;}',
+            '  [category =2]{marker-fill:@3;}',
+            '  [category =3]{marker-fill:@4;}',
+            '  [category =4]{marker-fill:@5;}',
+            '  [category =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-width: 10.0;',
+            '}'
+        ].join('\n'),
+        center: [45.5231, -122.6765],
+        zoom: 12
+    },
+    kmeans_populated:{
+        name: 'kmeans clustering populated',
+        def: {
+            id: 'kmeans',
+            type: 'kmeans',
+            params:{
+                source: populatedPlacesSource,
+                clusters : 5
+            }
+        },
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 10.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    kmeans_phil_properties: {
+        name: 'kmeans clustering phily properties',
+        def: {
+            id: 'kmeans',
+            type: 'kmeans',
+            params:{
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select cartodb_id, the_geom, _market_value from properties where the_geom is not null'
+                    }
+                },
+                clusters : 6
+            }
+        },
+        cartocss:[
+            '@1: #E58606;',
+            '@2: #5D69B1;',
+            '@3: #52BCA3;',
+            '@4: #99C945;',
+            '@5: #2F8AC4;',
+            '@6: #24796C;',
+            '#layer{',
+            '  [cluster_no =0]{marker-fill:@1;}',
+            '  [cluster_no =1]{marker-fill:@2;}',
+            '  [cluster_no =2]{marker-fill:@3;}',
+            '  [cluster_no =3]{marker-fill:@4;}',
+            '  [cluster_no =4]{marker-fill:@5;}',
+            '  [cluster_no =5]{marker-fill:@6;}',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.1;',
+            '  marker-line-color: #ccc;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 4;',
+            '}'
+        ].join('\n'),
+        center: [40.009, -75.134],
+        zoom: 12
+    },
+    weighted_centroid_properties: {
+        name: 'weighted-centroid properties',
+        sql_wrap: 'select category::text as category, the_geom_webmercator from (<%= sql %>) q',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: UUID,
+                    type: 'source',
+                    params: {
+                        query: [
+                            'SELECT cartodb_id, the_geom, _market_value, _year_built::integer',
+                            'FROM properties'
+                        ].join(' ')
+                    }
+                },
+                weight_column: '_market_value',
+                category_column:'_year_built'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  marker-fill: ramp([category], colorbrewer(Paired, 12), category);',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 10;',
+            '}'
+        ].join('\n'),
+        center: [40.009, -75.134],
+        zoom: 12
+    },
+    'do-measure-adults-first-level-studies': {
+        name: 'number of adults with first level studies',
+        def: dataObservatoryMeasureAdultsFirstLevelStudies,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([adults_first_level_studies], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'do-measure-adults-first-level-studies-percent': {
+        name: 'percent of adults with first level studies',
+        def: dataObservatoryMeasureAdultsFirstLevelStudiesPercent,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([adults_first_level_studies_percent], colorbrewer(Reds));',
             '  polygon-opacity: 0.6;',
             '  polygon-opacity: 0.7;',
             '  line-color: #FFF;',

@@ -1,8 +1,30 @@
 # Changelog
 
-## 0.12.2
+## 0.14.2
 
 Released 2016-mm-dd
+
+
+## 0.14.1
+
+Released 2016-06-10
+
+ - Use new CDB_WeightedMean aggregate function #49
+
+
+## 0.14.0
+
+Released 2016-06-10
+
+ - Removes isolines constraint for dissolved option in buffer analysis
+ - Adds analyses: kmeans, weighted-centroid, data-observatory-measure
+
+
+## 0.13.0
+
+Released 2016-06-03
+
+ - Export version from package
 
 
 ## 0.12.1

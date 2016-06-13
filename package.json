@@ -1,6 +1,6 @@
 {
   "name": "camshaft",
-  "version": "0.12.2",
+  "version": "0.14.2",
   "description": "Analysis library to create data views from queries",
   "main": "./lib/analysis.js",
   "scripts": {
@@ -34,6 +34,7 @@
     "istanbul": "^0.4.2",
     "jshint": "^2.9.1",
     "mocha": "^2.4.5",
+    "semver": "^5.1.0",
     "yargs": "^3.32.0"
   }
 }
