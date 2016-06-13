@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Adds filter by node column analysis
+
 
 ## 0.14.1
 
