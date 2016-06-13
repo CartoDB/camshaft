@@ -57,6 +57,7 @@ function updateMap(example) {
         map.setView(example.center || [30, 0], example.zoom || 3);
         dataviews = example.dataviews || {};
         filters = example.filters || {};
+        sourceId = example.sourceId || sourceId;
     }
 
     var config = {
