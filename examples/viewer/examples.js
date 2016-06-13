@@ -17,6 +17,14 @@ var CARTOCSS_POINTS = [
     '}'
 ].join('\n');
 
+var CARTOCSS_LINES = [
+    '#lines {',
+    '  line-color: black;',
+    '  line-width: 1;',
+    '  line-opacity: 1;',
+    '}'
+].join('\n');
+
 var sourceAtmDef = {
     type: 'source',
     params: {
@@ -898,6 +906,63 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
+    },
+    filterByNodeColumn: {
+        name: 'filter by node column',
+        def: {
+            id: 'HEAD',
+            type: 'filter-by-node-column',
+            params: {
+                source: {
+                    id: 'roads-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from roads'
+                    }
+                },
+                column: 'ref',
+                filter_source: {
+                    id: 'radares-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from radares'
+                    }
+                },
+                filter_column: 'road_number'
+            }
+        },
+        dataviews: {
+            road_name: {
+                source: {
+                    id: 'radares-source'
+                },
+                type: 'aggregation',
+                options: {
+                    column: 'road_number',
+                    aggregation: 'count'
+                }
+            }
+        },
+        filters: {
+            dataviews: {
+                road_name: {
+                    accept: [1,2,3,4,5,6].map(function(i) { return 'A-' + i; })
+                }
+            }
+        },
+        sourceId: 'radares-source',
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'HEAD' },
+                    cartocss: CARTOCSS_LINES,
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 6
     }
-
 };
