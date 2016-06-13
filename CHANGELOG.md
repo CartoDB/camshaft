@@ -2,7 +2,9 @@
 
 ## 0.15.1
 
-Released 2016-mm-dd
+Released 2016-06-14
+
+ - Release with latest reference updated
 
 
 ## 0.15.0
