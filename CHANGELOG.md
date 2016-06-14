@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
 
+ - Option to bump version an force analysis recalculation.
  - Optional params are casted to null when not provided.
 
 
