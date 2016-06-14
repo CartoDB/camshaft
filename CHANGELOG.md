@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
 
+ - Replace `validate` with `beforeCreate` option to modify nodes before create/return them
  - Option to bump version an force analysis recalculation.
  - Optional params are casted to null when not provided.
 
