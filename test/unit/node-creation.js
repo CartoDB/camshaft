@@ -273,4 +273,26 @@ describe('node-creation', function() {
         });
     });
 
+    describe('Node ignoreParamForId', function() {
+        var ANode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING });
+        var ABNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING, b: Node.PARAM.STRING });
+        var AIgnoredBNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING, b: Node.PARAM.STRING }, {
+            beforeCreate: function(node) {
+                node.ignoreParamForId('b');
+            }
+        });
+
+        it('should have different id for A and AB nodes', function () {
+            var aNode = new ANode({a: 'a'});
+            var abNode = new ABNode({a: 'a', b: 'b'});
+            assert.notEqual(aNode.id(), abNode.id());
+        });
+
+        it('should have same id for A and AIgnoredB nodes', function () {
+            var aNode = new ANode({a: 'a'});
+            var abNode = new AIgnoredBNode({a: 'a', b: 'b'});
+            assert.equal(aNode.id(), abNode.id());
+        });
+    });
+
 });
