@@ -248,7 +248,7 @@ describe('node-creation', function() {
     describe('Node custom validate', function() {
         var validList = [1, 2, 3, 4];
         var CustomValidationNode = Node.create('test-custom-validation', { list: Node.PARAM.ARRAY() }, {
-            validate: function(node) {
+            beforeCreate: function(node) {
                 assert.deepEqual(node.list, validList, 'Custom validation throws this');
             }
         });
