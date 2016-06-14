@@ -196,6 +196,60 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
 };
 
 var examples = {
+    moran_sids2: {
+        name: 'cluster sids2',
+        def: {
+            id: 'moran-demo',
+            type: 'moran',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from sids2'
+                    }
+                },
+                numerator_column: 'bir79',
+                //denominator_column: 'sid79',
+                w_type: 'queen',
+                //neighbours: 5,
+                //permutations: 999,
+                significance: 0.05
+            }
+        },
+        cartocss: [
+            '@HL: #00695C;//dark teal',
+            '@HH: #4DB6AC;//light teal',
+            '@LL: #FB8C00;//light orange',
+            '@LH: #d84315;//dark orange',
+            '@notsig: transparent;',
+            '@null: transparent;',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HH"] {',
+            '    polygon-fill: @HH;',
+            '}',
+            '#layer[quads="HL"] {',
+            '    polygon-fill: @HL;',
+            '}',
+            '#layer[quads="LH"] {',
+            '    polygon-fill: @LH;',
+            '}',
+            '#layer[quads="LL"] {',
+            '    polygon-fill: @LL;',
+            '}',
+            '#layer[significance >= 0.05] {',
+            '    polygon-fill: transparent;',
+            '}'
+        ].join('\n'),
+        center: [35.853, -79.563],
+        zoom: 7
+    },
     buffer_radius: {
         name: 'populated places radius',
         def: {
