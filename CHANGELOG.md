@@ -5,6 +5,7 @@
 Released 2016-mm-dd
 
  - Fix moran queries:
+   - Use a custom filter for significance param, ignore significance for cache table.
    - Use `Rate` when denominator is provided.
    - Make neighbours and permutations params optional.
  - Add method to ignore param for the node id generation
