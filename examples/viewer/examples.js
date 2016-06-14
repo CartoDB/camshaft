@@ -723,7 +723,7 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
-     kmeans:{
+    kmeans:{
         name: 'kmeans_clustering',
         def: KMeansDefinition,
         cartocss:[
@@ -747,7 +747,7 @@ var examples = {
         center: [45.5231, -122.6765],
         zoom: 12
     },
-     weighted_centroid:{
+    weighted_centroid:{
         name: 'weighted-centroid',
         def: WeightedCentroidDefinition,
         cartocss:[
