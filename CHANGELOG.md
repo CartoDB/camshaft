@@ -2,6 +2,10 @@
 
 ## 0.15.2
 
+Released 2016-mm-dd
+
+ - Optional params are casted to null when not provided.
+
 
 ## 0.15.1
 
