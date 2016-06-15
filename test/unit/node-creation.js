@@ -11,7 +11,7 @@ describe('node-creation', function() {
             var ReservedKeywordNode;
             assert.throws(
                 function() {
-                    ReservedKeywordNode = Node.create('test-reserved-keyword', { type: Node.PARAM.STRING });
+                    ReservedKeywordNode = Node.create('test-reserved-keyword', { type: Node.PARAM.STRING() });
                 },
                 function(err) {
                     assert.equal(
@@ -25,7 +25,7 @@ describe('node-creation', function() {
 
     });
 
-    var TestSource = Node.create('test-source', {query: Node.PARAM.STRING});
+    var TestSource = Node.create('test-source', {query: Node.PARAM.STRING()});
 
     it('should validate params', function() {
         var QUERY = 'select * from table';
@@ -90,8 +90,8 @@ describe('node-creation', function() {
 
     describe('Node.PARAM.NULLABLE', function() {
         var NullableNode = Node.create('test-nullable', {
-            mandatory: Node.PARAM.STRING,
-            optional: Node.PARAM.NULLABLE(Node.PARAM.STRING)
+            mandatory: Node.PARAM.STRING(),
+            optional: Node.PARAM.NULLABLE(Node.PARAM.STRING())
         });
 
         it('should work for valid params', function() {
@@ -163,11 +163,11 @@ describe('node-creation', function() {
 
         describe('typed array', function() {
             var StringTypedListNode = Node.create('test-array-string', {
-                list: Node.PARAM.ARRAY(Node.PARAM.STRING)
+                list: Node.PARAM.ARRAY(Node.PARAM.STRING())
             });
 
             var NumberTypedListNode = Node.create('test-array-string', {
-                list: Node.PARAM.ARRAY(Node.PARAM.NUMBER)
+                list: Node.PARAM.ARRAY(Node.PARAM.NUMBER())
             });
 
             it('should work for string arrays', function() {
@@ -216,7 +216,7 @@ describe('node-creation', function() {
 
             describe('nullable', function() {
                 var NullableStringTypedListNode = Node.create('test-array-string', {
-                    list: Node.PARAM.NULLABLE(Node.PARAM.ARRAY(Node.PARAM.STRING))
+                    list: Node.PARAM.NULLABLE(Node.PARAM.ARRAY(Node.PARAM.STRING()))
                 });
 
                 it('should work for null param', function() {
@@ -274,9 +274,9 @@ describe('node-creation', function() {
     });
 
     describe('Node ignoreParamForId', function() {
-        var ANode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING });
-        var ABNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING, b: Node.PARAM.STRING });
-        var AIgnoredBNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING, b: Node.PARAM.STRING }, {
+        var ANode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING() });
+        var ABNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING(), b: Node.PARAM.STRING() });
+        var AIgnoredBNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING(), b: Node.PARAM.STRING() }, {
             beforeCreate: function(node) {
                 node.ignoreParamForId('b');
             }
