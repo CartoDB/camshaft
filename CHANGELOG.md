@@ -2,7 +2,7 @@
 
 ## 0.17.0
 
-Released 2016-mm-dd
+Released 2016-06-15
 
  - Adds aggregation options in weighted-centroid.
 
