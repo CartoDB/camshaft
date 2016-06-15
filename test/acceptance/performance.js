@@ -88,8 +88,8 @@ describe('performance', function() {
                 explain(analysis.getQuery(), function(err, queryPlan) {
                     assert.ok(!err, err);
 
-                    queryPlan.Plans.forEach(function(plan) {
-                        assert.notEqual(plan['Node Type'], 'CTE Scan', 'Found CTE Scan in query explain');
+                    getNodeTypes(queryPlan).forEach(function(nodeType) {
+                        assert.notEqual(nodeType, 'CTE Scan', 'Found CTE Scan in query explain');
                     });
 
                     done();
@@ -97,5 +97,16 @@ describe('performance', function() {
             });
         });
     });
+
+    function getNodeTypes(queryPlan, nodeTypes) {
+        nodeTypes = nodeTypes || [];
+        nodeTypes.push(queryPlan['Node Type']);
+        if (Array.isArray(queryPlan.Plans)) {
+            queryPlan.Plans.forEach(function(plan) {
+                getNodeTypes(plan, nodeTypes);
+            });
+        }
+        return nodeTypes;
+    }
 
 });
