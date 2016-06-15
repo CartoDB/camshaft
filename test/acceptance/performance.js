@@ -75,6 +75,25 @@ describe('performance', function() {
                     }
                 }
             }
+        },
+        {
+            type: 'aggregate-intersection',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: SOURCE_AIRBNB
+                    }
+                },
+                target: {
+                    type: 'source',
+                    params: {
+                        query: SOURCE_DISTRICTS
+                    }
+                },
+                aggregate_function: 'count',
+                aggregate_column: 'cartodb_id'
+            }
         }
     ];
 
