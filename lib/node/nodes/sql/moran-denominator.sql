@@ -4,9 +4,10 @@ input_query as (
 ),
 moran as (
   SELECT * FROM
-  cdb_crankshaft.CDB_AreasOfInterestLocal(
+  cdb_crankshaft.CDB_AreasOfInterestLocalRate(
     '{{=it._query}}',
     '{{=it._numeratorColumn}}',
+    '{{=it._denominatorColumn}}',
     '{{=it._wType}}',
     {{=it._neighbours}},
     {{=it._permutations}},
