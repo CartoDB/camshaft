@@ -20,6 +20,9 @@ test:
 test-unit:
 	./node_modules/.bin/mocha -u bdd -t $(MOCHA_TIMEOUT) $(TEST_SUITE_UNIT) ${MOCHA_ARGS}
 
+test-performance:
+	./node_modules/.bin/mocha -u bdd -t $(MOCHA_TIMEOUT) test/setup.js test/acceptance/performance.js ${MOCHA_ARGS}
+
 test-all: test jshint
 
 coverage:
