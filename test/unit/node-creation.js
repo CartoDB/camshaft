@@ -295,4 +295,27 @@ describe('node-creation', function() {
         });
     });
 
+    describe('Node validator defaultValue', function() {
+        var nullableParamTypes = Object.keys(Node.PARAM)
+            .filter(function(paramType) { return paramType !== 'NULLABLE' && paramType !== 'NODE'; });
+
+        nullableParamTypes.forEach(function(paramType) {
+            it('should default to null for non provided "' + paramType + '" param', function () {
+                var ANode = Node.create('test-default-value-' + paramType, {
+                    a: Node.PARAM.NULLABLE(Node.PARAM[paramType]())
+                });
+                var aNode = new ANode({});
+                assert.equal(aNode.a, null);
+            });
+        });
+
+        it('should default to first value for non provided ENUM value', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM('a', 'b', 'c'))
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, 'a');
+        });
+    });
+
 });
