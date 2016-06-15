@@ -324,6 +324,22 @@ describe('node-creation', function() {
             var aNode = new ANode({});
             assert.equal(aNode.a, 'b');
         });
+
+        it('can use boolean false values', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM(false, true))
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, false);
+        });
+
+        it('can override with false false value', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM(true, false), false)
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, false);
+        });
     });
 
 });
