@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.16.1
+## 0.17.0
 
 Released 2016-mm-dd
+
+ - Adds aggregation options in weighted-centroid.
 
 
 ## 0.16.0
