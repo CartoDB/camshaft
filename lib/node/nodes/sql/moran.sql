@@ -1,8 +1,5 @@
-WITH
-input_query as (
-  {{=it._query}}
-),
-moran as (
+SELECT input_query.*, moran.*
+FROM ({{=it._query}}) input_query, (
   SELECT * FROM
   cdb_crankshaft.CDB_AreasOfInterestLocal(
     '{{=it._query}}',
@@ -13,7 +10,5 @@ moran as (
     'the_geom',
     'cartodb_id'
   )
-)
-SELECT input_query.*, moran.*
-FROM input_query JOIN moran
-ON moran.rowid = input_query.cartodb_id
+) moran
+WHERE moran.rowid = input_query.cartodb_id
