@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Improves some queries avoiding CTE usages.
+
 
 ## 0.17.0
 
