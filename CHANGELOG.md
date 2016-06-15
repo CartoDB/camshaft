@@ -2,7 +2,7 @@
 
 ## 0.16.0
 
-Released 2016-mm-dd
+Released 2016-06-15
 
  - Fix moran queries:
    - Use a custom filter for significance param, ignore significance for cache table.
