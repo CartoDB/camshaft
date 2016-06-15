@@ -1,8 +1,36 @@
 # Changelog
 
-## 0.14.2
+## 0.16.1
 
 Released 2016-mm-dd
+
+
+## 0.16.0
+
+Released 2016-06-15
+
+ - Fix moran queries:
+   - Use a custom filter for significance param, ignore significance for cache table.
+   - Use `Rate` when denominator is provided.
+   - Make neighbours and permutations params optional.
+ - Add method to ignore param for the node id generation
+ - Replace `validate` with `beforeCreate` option to modify nodes before create/return them
+ - Option to bump version an force analysis recalculation.
+ - Optional params are casted to null when not provided.
+
+
+## 0.15.1
+
+Released 2016-06-14
+
+ - Release with latest reference updated
+
+
+## 0.15.0
+
+Released 2016-06-13
+
+ - Adds filter by node column analysis
 
 
 ## 0.14.1

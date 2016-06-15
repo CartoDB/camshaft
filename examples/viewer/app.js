@@ -51,17 +51,20 @@ function updateMap(example) {
     var dataviews = {};
     var filters = {};
     var sourceId = analysis.id || 'a0';
+    var debugLayers = [];
     var queryWrap;
     if (example) {
         queryWrap = example.sql_wrap;
         map.setView(example.center || [30, 0], example.zoom || 3);
         dataviews = example.dataviews || {};
         filters = example.filters || {};
+        sourceId = example.sourceId || sourceId;
+        debugLayers = example.debugLayers || [];
     }
 
     var config = {
         version: '1.5.0',
-        layers: [
+        layers: debugLayers.concat([
             {
                 type: 'cartodb',
                 options: {
@@ -71,7 +74,7 @@ function updateMap(example) {
                     cartocss_version: '2.3.0'
                 }
             }
-        ],
+        ]),
         dataviews: dataviews,
         analyses: [
             analysis

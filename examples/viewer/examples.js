@@ -5,6 +5,26 @@ var TRADE_AREA_WALK = 'walk';
 var TRADE_AREA_15M = 900;
 var ISOLINES = 4;
 
+var CARTOCSS_POINTS = [
+    '#layer{',
+    '  marker-placement: point;',
+    '  marker-allow-overlap: true;',
+    '  marker-line-opacity: 0.2;',
+    '  marker-line-width: 0.5;',
+    '  marker-opacity: 1;',
+    '  marker-width: 5;',
+    '  marker-fill: red;',
+    '}'
+].join('\n');
+
+var CARTOCSS_LINES = [
+    '#lines {',
+    '  line-color: black;',
+    '  line-width: 1;',
+    '  line-opacity: 1;',
+    '}'
+].join('\n');
+
 var sourceAtmDef = {
     type: 'source',
     params: {
@@ -17,14 +37,6 @@ var sourceRentListings = {
     type: 'source',
     params: {
         query: 'select * from airbnb_madrid_oct_2015_listings'
-    }
-};
-
-var sourceExpensiveRentListings = {
-    id: 'expensive-airbnb-source',
-    type: 'source',
-    params: {
-        query: 'select * from airbnb_madrid_oct_2015_listings where price > 100'
     }
 };
 
@@ -83,7 +95,7 @@ var WeightedCentroidDefinition = {
     }
 };
 
-var KMeansDefinition ={
+var KMeansDefinition = {
     id: 'kmeans',
     type: 'kmeans',
     params:{
@@ -214,6 +226,60 @@ var mergeBarrios = {
 };
 
 var examples = {
+    moran_sids2: {
+        name: 'cluster sids2',
+        def: {
+            id: 'moran-demo',
+            type: 'moran',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from sids2'
+                    }
+                },
+                numerator_column: 'bir79',
+                //denominator_column: 'sid79',
+                w_type: 'queen',
+                //neighbours: 5,
+                //permutations: 999,
+                significance: 0.05
+            }
+        },
+        cartocss: [
+            '@HL: #00695C;//dark teal',
+            '@HH: #4DB6AC;//light teal',
+            '@LL: #FB8C00;//light orange',
+            '@LH: #d84315;//dark orange',
+            '@notsig: transparent;',
+            '@null: transparent;',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HH"] {',
+            '    polygon-fill: @HH;',
+            '}',
+            '#layer[quads="HL"] {',
+            '    polygon-fill: @HL;',
+            '}',
+            '#layer[quads="LH"] {',
+            '    polygon-fill: @LH;',
+            '}',
+            '#layer[quads="LL"] {',
+            '    polygon-fill: @LL;',
+            '}',
+            '#layer[significance >= 0.05] {',
+            '    polygon-fill: transparent;',
+            '}'
+        ].join('\n'),
+        center: [35.853, -79.563],
+        zoom: 7
+    },
     buffer_radius: {
         name: 'populated places radius',
         def: {
@@ -442,17 +508,7 @@ var examples = {
                 }
             }
         },
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 12
     },
@@ -575,17 +631,7 @@ var examples = {
                 }
             }
         },
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 3
     },
@@ -700,34 +746,14 @@ var examples = {
     pointsInPolygon: {
         name: 'airbnb in atm trade areas',
         def: pointsInPolygonDefinition,
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 12
     },
     pointsInPolygonFiltered: {
         name: 'airbnb in atm trade areas (filtered)',
         def: pointsInPolygonDefinition,
-        cartocss: [
-            '#layer{',
-            '  marker-placement: point;',
-            '  marker-allow-overlap: true;',
-            '  marker-line-opacity: 0.2;',
-            '  marker-line-width: 0.5;',
-            '  marker-opacity: 1;',
-            '  marker-width: 5;',
-            '  marker-fill: red;',
-            '}'
-        ].join('\n'),
+        cartocss: CARTOCSS_POINTS,
         dataviews: {
             price_histogram: {
                 source: {
@@ -781,7 +807,65 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
-     kmeans:{
+    weighted_centroid_populated_builder: {
+        name: 'weighted-centroid populated places',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: 'kmeans',
+                    type: 'kmeans',
+                    params:{
+                        source: populatedPlacesSource,
+                        clusters : 10
+                    }
+                },
+                weight_column: 'pop_max',
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 20;',
+            '}'
+        ].join('\n'),
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'kmeans' },
+                    cartocss: [
+                        '@1: #E58606;',
+                        '@2: #5D69B1;',
+                        '@3: #52BCA3;',
+                        '@4: #99C945;',
+                        '@5: #2F8AC4;',
+                        '@6: #24796C;',
+                        '#layer{',
+                        '  [cluster_no =0]{marker-fill:@1;}',
+                        '  [cluster_no =1]{marker-fill:@2;}',
+                        '  [cluster_no =2]{marker-fill:@3;}',
+                        '  [cluster_no =3]{marker-fill:@4;}',
+                        '  [cluster_no =4]{marker-fill:@5;}',
+                        '  [cluster_no =5]{marker-fill:@6;}',
+                        '  marker-fill: grey;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 10.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    kmeans:{
         name: 'kmeans_clustering',
         def: KMeansDefinition,
         cartocss:[
@@ -805,7 +889,7 @@ var examples = {
         center: [45.5231, -122.6765],
         zoom: 12
     },
-     weighted_centroid:{
+    weighted_centroid:{
         name: 'weighted-centroid',
         def: WeightedCentroidDefinition,
         cartocss:[
@@ -964,6 +1048,64 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
+    },
+    filterByNodeColumn: {
+        name: 'filter by node column',
+        def: {
+            id: 'HEAD',
+            type: 'filter-by-node-column',
+            params: {
+                source: {
+                    id: 'roads-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from roads'
+                    }
+                },
+                column: 'ref',
+                filter_source: {
+                    id: 'radares-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from radares'
+                    }
+                },
+                filter_column: 'road_number'
+            }
+        },
+        dataviews: {
+            road_name: {
+                source: {
+                    id: 'radares-source'
+                },
+                type: 'aggregation',
+                options: {
+                    column: 'road_number',
+                    aggregation: 'count'
+                }
+            }
+        },
+        filters: {
+            dataviews: {
+                road_name: {
+                    accept: [1,2,3,4,5,6].map(function(i) { return 'A-' + i; })
+                }
+            }
+        },
+        sourceId: 'radares-source',
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'HEAD' },
+                    cartocss: CARTOCSS_LINES,
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 6
     },
     merge: {
         name: 'merge barrios',
