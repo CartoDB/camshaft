@@ -6,7 +6,7 @@ RETURNS Geometry AS $$
   BEGIN
   SELECT the_geom INTO ret
   FROM (
-      SELECT * FROM populated_places_simple WHERE name = city_name AND admin1_name = admin1_name AND adm0name = adm0name LIMIT 1
+      SELECT * FROM populated_places_simple WHERE name = city_name AND adm1name = admin1_name AND adm0name = adm0name LIMIT 1
     ) v;
     RETURN ret;
   END
