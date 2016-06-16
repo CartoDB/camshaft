@@ -195,6 +195,24 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
     }
 };
 
+var postalCodesFromPopulatedPlacesSimpleSource = {
+    id: 'postal-codes-from-populated-places-simple-source',
+    type: 'source',
+    params: {
+        query: 'select cartodb_id::text as postal_code, adm0name as country from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferencePostalCodeDefinition = {
+    id: 'georeference-postal-code-definition',
+    type: 'georeference-postal-code',
+    params: {
+        source: postalCodesFromPopulatedPlacesSimpleSource,
+        postal_code: 'postal_code',
+        country: 'country'
+    }
+};
+
 var examples = {
     moran_sids2: {
         name: 'cluster sids2',
@@ -1146,5 +1164,21 @@ var examples = {
         cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 6
-    }
+    },
+    'georeference-postal-code': {
+       name: 'georeferencing postal codes',
+       def: georeferencePostalCodeDefinition,
+       cartocss: [
+           '#layer{',
+           '  polygon-fill: #FABADA;',
+           '  polygon-opacity: 0.6;',
+           '  polygon-opacity: 0.7;',
+           '  line-color: #FFF;',
+           '  line-width: 0.5;',
+           '  line-opacity: 1;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 6
+   }
 };
