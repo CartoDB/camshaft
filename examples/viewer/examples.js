@@ -195,6 +195,25 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
     }
 };
 
+var citiesFromPopulatedPlacesSimpleSource = {
+    id: 'cities-from-populated-places-simple-source',
+    type: 'source',
+    params: {
+        query: 'select name as city, adm1name as admin_region, adm0name as country from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceCityDefinition = {
+    id: 'georeference-city-definition',
+    type: 'georeference-city',
+    params: {
+        source: citiesFromPopulatedPlacesSimpleSource,
+        city: 'city',
+        admin_region: 'admin_region',
+        country: 'country'
+    }
+};
+
 var examples = {
     moran_sids2: {
         name: 'cluster sids2',
@@ -1144,6 +1163,25 @@ var examples = {
             }
         ],
         cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 6
+    },
+    'georeference-city': {
+        name: 'georeferencing cities',
+        def: georeferenceCityDefinition,
+        cartocss: [
+            '#layer{',
+            '   marker-fill-opacity: 0.9;',
+            '   marker-line-color: #FFF;',
+            '   marker-line-width: 1;',
+            '   marker-line-opacity: 1;',
+            '   marker-placement: point;',
+            '   marker-type: ellipse;',
+            '   marker-width: 10;',
+            '   marker-fill: #FF6600;',
+            '   marker-allow-overlap: true;',
+            '}'
+        ].join('\n'),
         center: [40.44, -3.7],
         zoom: 6
     }
