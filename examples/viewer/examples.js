@@ -195,6 +195,24 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
     }
 };
 
+var georeferenceLongLatSource = {
+    id: 'georeference-long-lat-source',
+    type: 'source',
+    params: {
+        query: 'select st_x(the_geom) as longitude, st_y(the_geom) as latitude from atm_madrid'
+    }
+}
+
+var georeferenceLongLatDefinition = {
+    id: 'georeference-long-lat-definition',
+    type: 'georeference-long-lat',
+    params: {
+        source: georeferenceLongLatSource,
+        longitude: 'longitude',
+        latitude: 'latitude'
+    }
+};
+
 var examples = {
     moran_sids2: {
         name: 'cluster sids2',
@@ -1146,5 +1164,24 @@ var examples = {
         cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 6
-    }
+    },
+    'georeference-long-lat': {
+        name: 'georeferencing longitude latitude coordinates',
+        def: georeferenceLongLatDefinition,
+        cartocss: [
+            '#layer{',
+            '   marker-fill-opacity: 0.9;',
+            '   marker-line-color: #FFF;',
+            '   marker-line-width: 1;',
+            '   marker-line-opacity: 1;',
+            '   marker-placement: point;',
+            '   marker-type: ellipse;',
+            '   marker-width: 10;',
+            '   marker-fill: #FF6600;',
+            '   marker-allow-overlap: true;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
 };
