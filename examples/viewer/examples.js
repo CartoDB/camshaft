@@ -195,6 +195,23 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
     }
 };
 
+var georeferenceIpAddressSource = {
+    id: 'georeference-ip-address-source',
+    type: 'source',
+    params: {
+        query: 'select adm0name as ip_address from populated_places_simple where adm0name = \'Spain\''
+    }
+}
+
+var georeferenceIpAddressDefinition = {
+    id: 'georeference-ip-address-definition',
+    type: 'georeference-ip-address',
+    params: {
+        source: georeferenceIpAddressSource,
+        ip_address: 'ip_address'
+    }
+};
+
 var examples = {
     moran_sids2: {
         name: 'cluster sids2',
@@ -1144,6 +1161,25 @@ var examples = {
             }
         ],
         cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 6
+    },
+    'georeference-ip-address': {
+        name: 'georeferencing ip addresses',
+        def: georeferenceIpAddressDefinition,
+        cartocss: [
+            '#layer{',
+            '   marker-fill-opacity: 0.9;',
+            '   marker-line-color: #FFF;',
+            '   marker-line-width: 1;',
+            '   marker-line-opacity: 1;',
+            '   marker-placement: point;',
+            '   marker-type: ellipse;',
+            '   marker-width: 10;',
+            '   marker-fill: #FF6600;',
+            '   marker-allow-overlap: true;',
+            '}'
+        ].join('\n'),
         center: [40.44, -3.7],
         zoom: 6
     }
