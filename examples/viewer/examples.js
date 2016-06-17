@@ -285,6 +285,24 @@ var georeferencePostalCodeDefinition = {
     }
 };
 
+var georeferenceStreetAddressSource = {
+    id: 'georeference-street-address-source',
+    type: 'source',
+    params: {
+        query: 'select cartodb_id::text as street_address from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceStreetAddressDefinition = {
+    id: 'georeference-street-address-definition',
+    type: 'georeference-street-address',
+    params: {
+        source: georeferenceStreetAddressSource,
+        street_address: 'street_address'
+    }
+};
+
+
 var examples = {
     moran_sids2: {
         name: 'cluster sids2',
@@ -1325,5 +1343,24 @@ var examples = {
        ].join('\n'),
        center: [40.44, -3.7],
        zoom: 6
-    }
+   },
+   'georeference-street-address': {
+       name: 'georeferencing street addresses',
+       def: georeferenceStreetAddressDefinition,
+       cartocss: [
+           '#layer{',
+           '   marker-fill-opacity: 0.9;',
+           '   marker-line-color: #FFF;',
+           '   marker-line-width: 1;',
+           '   marker-line-opacity: 1;',
+           '   marker-placement: point;',
+           '   marker-type: ellipse;',
+           '   marker-width: 10;',
+           '   marker-fill: #FF6600;',
+           '   marker-allow-overlap: true;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 6
+   }
 };
