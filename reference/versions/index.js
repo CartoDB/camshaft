@@ -10,8 +10,9 @@ var versions = {
     "0.14.0": require("./0.14.0/reference.json"),
     "0.15.0": require("./0.15.0/reference.json"),
     "0.16.0": require("./0.16.0/reference.json"),
-    "0.17.0": require("./0.17.0/reference.json")
+    "0.17.0": require("./0.17.0/reference.json"),
+    "0.18.0": require("./0.18.0/reference.json")
 };
 
-versions.latest = versions["0.17.0"];
+versions.latest = versions["0.18.0"];
 module.exports = versions;
