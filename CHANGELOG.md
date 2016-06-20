@@ -2,7 +2,7 @@
 
 ## 0.18.0
 
-Released 2016-mm-dd
+Released 2016-06-20
 
  - Add support for points in moran.
 
