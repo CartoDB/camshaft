@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.17.2
+## 0.18.0
 
 Released 2016-mm-dd
+
+ - Add support for points in moran.
 
 
 ## 0.17.1
