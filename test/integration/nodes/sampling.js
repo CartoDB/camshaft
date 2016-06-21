@@ -3,7 +3,7 @@
 var assert = require('assert');
 var nodes = require('../../../lib/node');
 
-describe('rampling', function() {
+describe('sampling', function() {
 
     var source = new nodes.Source({ query: 'select * from table' });
 
