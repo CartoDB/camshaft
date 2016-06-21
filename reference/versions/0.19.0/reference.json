@@ -136,6 +136,111 @@
                 }
             }
         },
+        "georeference-admin-region": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "admin_region": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-city": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "city": {
+                    "type": "string"
+                },
+                "admin_region": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-ip-address": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "ip_address": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-long-lat": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "longitude": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-postal-code": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-street-address": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "street_address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string",
+                    "optional": true
+                },
+                "state": {
+                    "type": "string",
+                    "optional": true
+                },
+                "country": {
+                    "type": "string",
+                    "optional": true
+                }
+            }
+        },
         "intersection": {
             "params": {
                 "source": {
