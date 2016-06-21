@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.19.0
+
+Released 2016-06-21
+
+ - Adds georeference analyses:
+  - Longitude latitude
+  - Admin region
+  - City
+  - Street address
+  - Postal code
+  - IP address
+
+
 ## 0.18.0
 
 Released 2016-06-20
