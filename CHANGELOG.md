@@ -1,8 +1,28 @@
 # Changelog
 
-## 0.17.2
+## 0.19.1
 
 Released 2016-mm-dd
+
+
+## 0.19.0
+
+Released 2016-06-21
+
+ - Adds georeference analyses:
+  - Longitude latitude
+  - Admin region
+  - City
+  - Street address
+  - Postal code
+  - IP address
+
+
+## 0.18.0
+
+Released 2016-06-20
+
+ - Add support for points in moran.
 
 
 ## 0.17.1

@@ -1,0 +1,399 @@
+{
+    "version": "0.19.0",
+    "analyses": {
+        "aggregate-intersection": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "target": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "aggregate_function": {
+                    "type": "enum",
+                    "values": [
+                        "avg",
+                        "count",
+                        "max",
+                        "min",
+                        "sum"
+                    ]
+                },
+                "aggregate_column": {
+                    "type": "string"
+                }
+            }
+        },
+        "buffer": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "radius": {
+                    "type": "number"
+                },
+                "isolines": {
+                    "type": "number",
+                    "optional": true
+                },
+                "dissolved": {
+                    "type": "boolean",
+                    "optional": true
+                }
+            }
+        },
+        "data-observatory-measure": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point",
+                        "polygon"
+                    ]
+                },
+                "final_column": {
+                    "type": "string"
+                },
+                "segment_name": {
+                    "type": "string"
+                },
+                "percent": {
+                    "type": "boolean",
+                    "optional": true
+                }
+            }
+        },
+        "filter-by-node-column": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "column": {
+                    "type": "string"
+                },
+                "filter_source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "filter_column": {
+                    "type": "string"
+                }
+            }
+        },
+        "filter-category": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "column": {
+                    "type": "string"
+                },
+                "accept": {
+                    "type": "array",
+                    "optional": true
+                },
+                "reject": {
+                    "type": "array",
+                    "optional": true
+                }
+            }
+        },
+        "filter-range": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "column": {
+                    "type": "string"
+                },
+                "min": {
+                    "type": "number",
+                    "optional": true
+                },
+                "max": {
+                    "type": "number",
+                    "optional": true
+                }
+            }
+        },
+        "georeference-admin-region": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "admin_region": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-city": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "city": {
+                    "type": "string"
+                },
+                "admin_region": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-ip-address": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "ip_address": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-long-lat": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "longitude": {
+                    "type": "string"
+                },
+                "latitude": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-postal-code": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "postal_code": {
+                    "type": "string"
+                },
+                "country": {
+                    "type": "string"
+                }
+            }
+        },
+        "georeference-street-address": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "street_address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string",
+                    "optional": true
+                },
+                "state": {
+                    "type": "string",
+                    "optional": true
+                },
+                "country": {
+                    "type": "string",
+                    "optional": true
+                }
+            }
+        },
+        "intersection": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                },
+                "target": {
+                    "type": "node",
+                    "geometry": [
+                        "*"
+                    ]
+                }
+            }
+        },
+        "kmeans": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "clusters": {
+                    "type": "number"
+                }
+            }
+        },
+        "moran": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "polygon",
+                        "point"
+                    ]
+                },
+                "numerator_column": {
+                    "type": "string"
+                },
+                "denominator_column": {
+                    "type": "string",
+                    "optional": true
+                },
+                "significance": {
+                    "type": "number"
+                },
+                "neighbours": {
+                    "type": "number",
+                    "optional": true
+                },
+                "permutations": {
+                    "type": "number",
+                    "optional": true
+                },
+                "w_type": {
+                    "type": "enum",
+                    "values": [
+                        "knn",
+                        "queen"
+                    ],
+                    "optional": true,
+                    "default-value": "knn"
+                }
+            }
+        },
+        "point-in-polygon": {
+            "params": {
+                "points_source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "polygons_source": {
+                    "type": "node",
+                    "geometry": [
+                        "polygon"
+                    ]
+                }
+            }
+        },
+        "population-in-area": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "polygon"
+                    ]
+                },
+                "final_column": {
+                    "type": "string"
+                }
+            }
+        },
+        "source": {
+            "params": {
+                "query": {
+                    "type": "string"
+                }
+            }
+        },
+        "trade-area": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "kind": {
+                    "type": "enum",
+                    "values": [
+                        "walk",
+                        "car"
+                    ]
+                },
+                "time": {
+                    "type": "number"
+                },
+                "isolines": {
+                    "type": "number"
+                },
+                "dissolved": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "weighted-centroid": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "weight_column": {
+                    "type": "string"
+                },
+                "category_column": {
+                    "type": "string"
+                },
+                "aggregation": {
+                    "type": "string",
+                    "optional": true,
+                    "default-value": "count"
+                },
+                "aggregation_column": {
+                    "type": "string",
+                    "optional": true
+                }
+            }
+        }
+    }
+}
