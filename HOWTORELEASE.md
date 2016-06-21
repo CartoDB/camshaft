@@ -3,7 +3,7 @@
 1. Test (make clean all check), fix if broken before proceeding.
 1. Merge patch, feature to master.
 1. Ensure proper version in package.json.
-1. Ensure NEWS.md section exists for the new version, review it, and update release date.
+1. Ensure CHANGELOG.md section exists for the new version, review it, and update release date.
 1. Go to `reference/`, update package.json version, and run `tools/generate-reference`.
 1. Ensure new reference version is generated, package.json is updated.
 1. Commit package.json, NEWS.md, and reference files.
