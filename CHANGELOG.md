@@ -2,7 +2,7 @@
 
 ## 0.20.0
 
-Released 2016-mm-dd
+Released 2016-06-22
 
  - Link by line analysis #67.
  - Fix regression on incorrect cycles for dag #74.
