@@ -4,6 +4,9 @@
 
 Released 2016-mm-dd
 
+ - Link by line analysis #67.
+ - Fix regression on incorrect cycles for dag #74.
+
 
 ## 0.19.0
 
