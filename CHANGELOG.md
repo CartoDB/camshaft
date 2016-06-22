@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.19.1
+## 0.20.0
 
 Released 2016-mm-dd
 
