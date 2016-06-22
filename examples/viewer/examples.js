@@ -221,7 +221,8 @@ var mergeBarrios = {
         input_right: sourceMod4IdsBarrios,
         input_right_column_on: 'cartodb_id',
         input_right_columns: ['nomdis', 'codbar'],
-        join_type: 'left'
+        join_type: 'left',
+        geom_from: 'input_left'
     }
 };
 
