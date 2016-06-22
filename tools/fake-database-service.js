@@ -15,6 +15,26 @@ FakeDatabaseService.prototype = {
         return callback(null, {});
     },
 
+    createTableIfNotExists: function(targetTableName, outputQuery, callback) {
+        return callback(null, true);
+    },
+
+    setUpdatedAtForSources: function(analysis, callback) {
+        return callback(null);
+    },
+
+    registerAnalysisInCatalog: function(analysis, callback) {
+        return callback(null);
+    },
+
+    queueAnalysisOperations: function(analysis, callback) {
+        return callback(null);
+    },
+
+    trackAnalysis: function(analysis, callback) {
+        return callback(null);
+    },
+
     getColumnNames: function(query, callback) {
         return callback(null, []);
     },
