@@ -110,4 +110,44 @@ describe('dag-toposort', function() {
         });
     });
 
+    describe('regressions', function() {
+        it('should work for double dep', function() {
+            // B --> C
+            // ^     ^
+            // |     |
+            // A --> B
+
+            var aNode = new MockNode('A');
+            var b1Node = new MockNode('B', [aNode]);
+            var b2Node = new MockNode('B', [aNode]);
+            var cNode = new MockNode('C', [b1Node, b2Node]);
+
+            var sorted = toposort(cNode);
+            assert.equal(sorted.length, 3);
+            assert.equal(sorted[0].id(), 'A');
+            assert.equal(sorted[1].id(), 'B');
+            assert.equal(sorted[2].id(), 'C');
+        });
+
+        it('should work for double dep hiding behind another node', function() {
+            // B --------> D
+            // ^           ^
+            // |           |
+            // A --> B --> C
+
+            var aNode = new MockNode('A');
+            var b1Node = new MockNode('B', [aNode]);
+            var b2Node = new MockNode('B', [aNode]);
+            var cNode = new MockNode('C', [b2Node]);
+            var dNode = new MockNode('D', [b1Node, cNode]);
+
+            var sorted = toposort(dNode);
+            assert.equal(sorted.length, 4);
+            assert.equal(sorted[0].id(), 'A');
+            assert.equal(sorted[1].id(), 'B');
+            assert.equal(sorted[2].id(), 'C');
+            assert.equal(sorted[3].id(), 'D');
+        });
+    });
+
 });
