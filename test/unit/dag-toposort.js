@@ -81,7 +81,7 @@ describe('dag-toposort', function() {
                     toposort(aNode);
                 },
                 function(err) {
-                    assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(aNode));
+                    assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(bNode));
                     return true;
                 }
             );
@@ -103,7 +103,7 @@ describe('dag-toposort', function() {
                     toposort(aNode);
                 },
                 function(err) {
-                    assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(dNode));
+                    assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(bNode));
                     return true;
                 }
             );
