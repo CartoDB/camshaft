@@ -211,9 +211,9 @@ var sourceMod4IdsBarrios = {
     }
 };
 
-var mergeBarrios = {
-    id: 'merge-example',
-    type: 'merge',
+var joinBarrios = {
+    id: 'join-example',
+    type: 'join',
     params: {
         input_left: sourceMod2IdsBarrios,
         input_left_column_on: 'cartodb_id',
@@ -1394,9 +1394,9 @@ var examples = {
        center: [40.44, -3.7],
        zoom: 6
    },
-   merge: {
-       name: 'merge barrios',
-       def: mergeBarrios,
+   join: {
+       name: 'join barrios',
+       def: joinBarrios,
        cartocss: [
            '#layer{',
            '  polygon-fill: #f42220;',
