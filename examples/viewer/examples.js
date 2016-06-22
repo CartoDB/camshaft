@@ -225,6 +225,114 @@ var mergeBarrios = {
     }
 };
 
+var adminRegionsFromPopulatedPlacesSimpleSource = {
+    id: 'adminRegions-from-populated-places-simple-source',
+    type: 'source',
+    params: {
+        query: 'select adm1name as admin_region, adm0name as country from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceAdminRegionDefinition = {
+    id: 'georeference-admin-region-definition',
+    type: 'georeference-admin-region',
+    params: {
+        source: adminRegionsFromPopulatedPlacesSimpleSource,
+        admin_region: 'admin_region',
+        country: 'country'
+    }
+};
+
+var citiesFromPopulatedPlacesSimpleSource = {
+    id: 'cities-from-populated-places-simple-source',
+    type: 'source',
+    params: {
+        query: 'select name as city, adm1name as admin_region, adm0name as country from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceCityDefinition = {
+    id: 'georeference-city-definition',
+    type: 'georeference-city',
+    params: {
+        source: citiesFromPopulatedPlacesSimpleSource,
+        city: 'city',
+        admin_region: 'admin_region',
+        country: 'country'
+    }
+};
+
+var georeferenceIpAddressSource = {
+    id: 'georeference-ip-address-source',
+    type: 'source',
+    params: {
+        query: 'select adm0name as ip_address from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceIpAddressDefinition = {
+    id: 'georeference-ip-address-definition',
+    type: 'georeference-ip-address',
+    params: {
+        source: georeferenceIpAddressSource,
+        ip_address: 'ip_address'
+    }
+};
+
+var georeferenceLongLatSource = {
+    id: 'georeference-long-lat-source',
+    type: 'source',
+    params: {
+        query: 'select st_x(the_geom) as longitude, st_y(the_geom) as latitude from atm_madrid'
+    }
+};
+
+var georeferenceLongLatDefinition = {
+    id: 'georeference-long-lat-definition',
+    type: 'georeference-long-lat',
+    params: {
+        source: georeferenceLongLatSource,
+        longitude: 'longitude',
+        latitude: 'latitude'
+    }
+};
+
+var postalCodesFromPopulatedPlacesSimpleSource = {
+    id: 'postal-codes-from-populated-places-simple-source',
+    type: 'source',
+    params: {
+        query: 'select cartodb_id::text as postal_code, adm0name as country from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferencePostalCodeDefinition = {
+    id: 'georeference-postal-code-definition',
+    type: 'georeference-postal-code',
+    params: {
+        source: postalCodesFromPopulatedPlacesSimpleSource,
+        postal_code: 'postal_code',
+        country: 'country'
+    }
+};
+
+var georeferenceStreetAddressSource = {
+    id: 'georeference-street-address-source',
+    type: 'source',
+    params: {
+        query: 'select cartodb_id::text as street_address from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceStreetAddressDefinition = {
+    id: 'georeference-street-address-definition',
+    type: 'georeference-street-address',
+    params: {
+        source: georeferenceStreetAddressSource,
+        street_address: 'street_address'
+    }
+};
+
+
 var examples = {
     moran_sids2: {
         name: 'cluster sids2',
@@ -865,6 +973,76 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 3
     },
+    weighted_centroid_aggregation_function: {
+        name: 'weighted-centroid populated places aggregation',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: 'kmeans',
+                    type: 'kmeans',
+                    params:{
+                        source: populatedPlacesSource,
+                        clusters : 5
+                    }
+                },
+                weight_column: 'pop_max',
+                category_column: 'cluster_no',
+                aggregation: 'sum',
+                aggregation_column: 'pop_max'
+            }
+        },
+        cartocss:[
+            '#layer {',
+            '  marker-fill: red;',
+            '  marker-line-width: 0.5;',
+            '  marker-allow-overlap: true;',
+            '  marker-width: 48;',
+            '}',
+            '#layer::labels {',
+            '    text-size: 12;',
+            '    text-fill: #fff;',
+            '    text-opacity: 0.8;',
+            '    text-name: [value];',
+            '    text-face-name: \'DejaVu Sans Book\';',
+            '    text-halo-fill: #FFF;',
+            '    text-halo-radius: 0.5;',
+            '    text-allow-overlap: true;',
+            '}'
+        ].join('\n'),
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'kmeans' },
+                    cartocss: [
+                        '@1: #E58606;',
+                        '@2: #5D69B1;',
+                        '@3: #52BCA3;',
+                        '@4: #99C945;',
+                        '@5: #2F8AC4;',
+                        '@6: #24796C;',
+                        '#layer{',
+                        '  [cluster_no =0]{marker-fill:@1;}',
+                        '  [cluster_no =1]{marker-fill:@2;}',
+                        '  [cluster_no =2]{marker-fill:@3;}',
+                        '  [cluster_no =3]{marker-fill:@4;}',
+                        '  [cluster_no =4]{marker-fill:@5;}',
+                        '  [cluster_no =5]{marker-fill:@6;}',
+                        '  marker-fill: grey;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 10.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     kmeans:{
         name: 'kmeans_clustering',
         def: KMeansDefinition,
@@ -1107,20 +1285,128 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 6
     },
-    merge: {
-        name: 'merge barrios',
-        def: mergeBarrios,
+    'georeference-admin_region': {
+       name: 'georeferencing admin regions',
+       def: georeferenceAdminRegionDefinition,
+       cartocss: [
+           '#layer{',
+           '  polygon-fill: #FABADA;',
+           '  polygon-opacity: 0.6;',
+           '  polygon-opacity: 0.7;',
+           '  line-color: #FFF;',
+           '  line-width: 0.5;',
+           '  line-opacity: 1;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 6
+    },
+    'georeference-city': {
+        name: 'georeferencing cities',
+        def: georeferenceCityDefinition,
         cartocss: [
             '#layer{',
-            '  polygon-fill: #f42220;',
-            '  polygon-opacity: 0.6;',
-            '  polygon-opacity: 0.7;',
-            '  line-color: #FFF;',
-            '  line-width: 0.5;',
-            '  line-opacity: 1;',
+            '   marker-fill-opacity: 0.9;',
+            '   marker-line-color: #FFF;',
+            '   marker-line-width: 1;',
+            '   marker-line-opacity: 1;',
+            '   marker-placement: point;',
+            '   marker-type: ellipse;',
+            '   marker-width: 10;',
+            '   marker-fill: #FF6600;',
+            '   marker-allow-overlap: true;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 6
+    },
+    'georeference-ip-address': {
+        name: 'georeferencing ip addresses',
+        def: georeferenceIpAddressDefinition,
+        cartocss: [
+            '#layer{',
+            '   marker-fill-opacity: 0.9;',
+            '   marker-line-color: #FFF;',
+            '   marker-line-width: 1;',
+            '   marker-line-opacity: 1;',
+            '   marker-placement: point;',
+            '   marker-type: ellipse;',
+            '   marker-width: 10;',
+            '   marker-fill: #FF6600;',
+            '   marker-allow-overlap: true;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 6
+    },
+    'georeference-long-lat': {
+        name: 'georeferencing longitude latitude coordinates',
+        def: georeferenceLongLatDefinition,
+        cartocss: [
+            '#layer{',
+            '   marker-fill-opacity: 0.9;',
+            '   marker-line-color: #FFF;',
+            '   marker-line-width: 1;',
+            '   marker-line-opacity: 1;',
+            '   marker-placement: point;',
+            '   marker-type: ellipse;',
+            '   marker-width: 10;',
+            '   marker-fill: #FF6600;',
+            '   marker-allow-overlap: true;',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
-    }
+    },
+    'georeference-postal-code': {
+       name: 'georeferencing postal codes',
+       def: georeferencePostalCodeDefinition,
+       cartocss: [
+           '#layer{',
+           '  polygon-fill: #FABADA;',
+           '  polygon-opacity: 0.6;',
+           '  polygon-opacity: 0.7;',
+           '  line-color: #FFF;',
+           '  line-width: 0.5;',
+           '  line-opacity: 1;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 6
+   },
+   'georeference-street-address': {
+       name: 'georeferencing street addresses',
+       def: georeferenceStreetAddressDefinition,
+       cartocss: [
+           '#layer{',
+           '   marker-fill-opacity: 0.9;',
+           '   marker-line-color: #FFF;',
+           '   marker-line-width: 1;',
+           '   marker-line-opacity: 1;',
+           '   marker-placement: point;',
+           '   marker-type: ellipse;',
+           '   marker-width: 10;',
+           '   marker-fill: #FF6600;',
+           '   marker-allow-overlap: true;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 6
+   },
+   merge: {
+       name: 'merge barrios',
+       def: mergeBarrios,
+       cartocss: [
+           '#layer{',
+           '  polygon-fill: #f42220;',
+           '  polygon-opacity: 0.6;',
+           '  polygon-opacity: 0.7;',
+           '  line-color: #FFF;',
+           '  line-width: 0.5;',
+           '  line-opacity: 1;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 12
+   }
 };

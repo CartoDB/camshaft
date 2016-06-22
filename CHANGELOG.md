@@ -1,8 +1,42 @@
 # Changelog
 
-## 0.16.1
+## 0.19.1
 
 Released 2016-mm-dd
+
+
+## 0.19.0
+
+Released 2016-06-21
+
+ - Adds georeference analyses:
+  - Longitude latitude
+  - Admin region
+  - City
+  - Street address
+  - Postal code
+  - IP address
+
+
+## 0.18.0
+
+Released 2016-06-20
+
+ - Add support for points in moran.
+
+
+## 0.17.1
+
+Released 2016-06-15
+
+ - Improves some queries avoiding CTE usages.
+
+
+## 0.17.0
+
+Released 2016-06-15
+
+ - Adds aggregation options in weighted-centroid.
 
 
 ## 0.16.0

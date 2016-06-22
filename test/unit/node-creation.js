@@ -295,4 +295,51 @@ describe('node-creation', function() {
         });
     });
 
+    describe('Node validator defaultValue', function() {
+        var nullableParamTypes = Object.keys(Node.PARAM)
+            .filter(function(paramType) { return paramType !== 'NULLABLE' && paramType !== 'NODE'; });
+
+        nullableParamTypes.forEach(function(paramType) {
+            it('should default to null for non provided "' + paramType + '" param', function () {
+                var ANode = Node.create('test-default-value-' + paramType, {
+                    a: Node.PARAM.NULLABLE(Node.PARAM[paramType]())
+                });
+                var aNode = new ANode({});
+                assert.equal(aNode.a, null);
+            });
+        });
+
+        it('should default to first value for non provided ENUM value', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM('a', 'b', 'c'))
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, 'a');
+        });
+
+        it('can override default value with nullable param', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM('a', 'b', 'c'), 'b')
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, 'b');
+        });
+
+        it('can use boolean false values', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM(false, true))
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, false);
+        });
+
+        it('can override with false false value', function () {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.ENUM(true, false), false)
+            });
+            var aNode = new ANode({});
+            assert.equal(aNode.a, false);
+        });
+    });
+
 });
