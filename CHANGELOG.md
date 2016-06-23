@@ -2,7 +2,7 @@
 
 ## 0.21.0
 
-Released 2016-mm-dd
+Released 2016-06-23
 
  - Add Filter rank analysis #75.
  - Generate cartodb_id in weighted-centroid analysis #72.
