@@ -6,3 +6,4 @@ For new analysis use the following checklist:
 - [ ] Uses `{cache: true}` if it access external services.
 - [ ] Naming uses a-z lowercase and hyphens.
 - [ ] All mandatory params cannot be made optional.
+- [ ] Avoids using CTEs for join operations when result is not cached.
