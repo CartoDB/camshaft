@@ -216,11 +216,11 @@ var joinBarrios = {
     type: 'join',
     params: {
         input_left: sourceMod2IdsBarrios,
-        input_left_column_on: 'cartodb_id',
-        input_left_columns: ['nombre', 'codbarrio'],
+        input_left_column_join_on: 'cartodb_id',
+        input_left_final_columns: ['nombre', 'codbarrio'],
         input_right: sourceMod4IdsBarrios,
-        input_right_column_on: 'cartodb_id',
-        input_right_columns: ['nomdis', 'codbar'],
+        input_right_column_join_on: 'cartodb_id',
+        input_right_final_columns: ['nomdis', 'codbar'],
         join_type: 'left',
         geom_from: 'input_left'
     }
