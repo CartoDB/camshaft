@@ -885,6 +885,61 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    convex_hull: {
+        name: 'convex hull for kmeans',
+        def: {
+            id: 'convexHull',
+            type: 'convex-hull',
+            params: {
+                source: {
+                    id: 'kmeans',
+                    type: 'kmeans',
+                    params:{
+                        source: populatedPlacesSource,
+                        clusters : 10
+                    }
+                },
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 0.4;',
+            '}'
+        ].join('\n'),
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'kmeans' },
+                    cartocss: [
+                        '@1: #E58606;',
+                        '@2: #5D69B1;',
+                        '@3: #52BCA3;',
+                        '@4: #99C945;',
+                        '@5: #2F8AC4;',
+                        '@6: #24796C;',
+                        '#layer{',
+                        '  [cluster_no =0]{marker-fill:@1;}',
+                        '  [cluster_no =1]{marker-fill:@2;}',
+                        '  [cluster_no =2]{marker-fill:@3;}',
+                        '  [cluster_no =3]{marker-fill:@4;}',
+                        '  [cluster_no =4]{marker-fill:@5;}',
+                        '  [cluster_no =5]{marker-fill:@6;}',
+                        '  marker-fill: grey;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 10.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     weighted_centroid_populated_builder: {
         name: 'weighted-centroid populated places',
         def: {
