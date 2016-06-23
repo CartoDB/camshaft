@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.20.1
+## 0.21.0
 
 Released 2016-mm-dd
+
  - Add Filter rank analysis #75.
  - Generate cartodb_id in weighted-centroid analysis #72.
  - Add Convex hull analysis #76.
