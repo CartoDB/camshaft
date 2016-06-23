@@ -1334,6 +1334,30 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    filter_rank: {
+        name: 'populated places filter rank',
+        def: {
+            id: UUID,
+            type: 'filter-rank',
+            params: {
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                },
+                column: 'pop_max',
+                rank: 'top',
+                limit: 100
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     filterByNodeColumn: {
         name: 'filter by node column',
         def: {
