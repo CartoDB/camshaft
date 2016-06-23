@@ -3,6 +3,7 @@
 ## 0.20.1
 
 Released 2016-mm-dd
+ - Generate cartodb_id in weighted-centroid analysis #72.
 
 
 ## 0.20.0
