@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
  - Generate cartodb_id in weighted-centroid analysis #72.
+ - Add Convex hull analysis #76.
 
 
 ## 0.20.0
