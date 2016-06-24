@@ -4,6 +4,9 @@
 
 Released 2016-mm-dd
 
+ - Adds centroid analysis #87.
+ - Make weighted-centroid's category_column param optional #88.
+
 
 ## 0.21.0
 
