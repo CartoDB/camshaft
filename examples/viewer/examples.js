@@ -25,6 +25,22 @@ var CARTOCSS_LINES = [
     '}'
 ].join('\n');
 
+var CARTOCSS_LABELS = [
+    '#layer::labels {',
+    '    text-name: [category];',
+    '    text-face-name: \'DejaVu Sans Book\';',
+    '    text-size: 10;',
+    '    text-label-position-tolerance: 10;',
+    '    text-fill: #000;',
+    '    text-halo-fill: #FFF;',
+    '    text-halo-radius: 1;',
+    '    text-dy: -10;',
+    '    text-allow-overlap: true;',
+    '    text-placement: point;',
+    '    text-placement-type: simple;',
+    '}',
+].join('\n');
+
 var sourceAtmDef = {
     type: 'source',
     params: {
@@ -304,6 +320,28 @@ var georeferenceStreetAddressDefinition = {
 
 
 var examples = {
+    centroid: {
+        name: 'populated places centroids adm0name',
+        def: {
+            id: UUID,
+            type: 'centroid',
+            params: {
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                },
+                category_column: 'adm0name'
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: CARTOCSS_POINTS + CARTOCSS_LABELS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     moran_sids2: {
         name: 'cluster sids2',
         def: {
