@@ -302,6 +302,17 @@ var georeferenceStreetAddressDefinition = {
     }
 };
 
+var routingToSinglePointDefinition = {
+    id: 'routing-to-single-point-example',
+    type: 'routing-to-single-point',
+    params: {
+        source: sourceAtmDef,
+        mode: 'car',
+        destination_longitude: -3.70237112,
+        destination_latitude: 40.41706163,
+        units: 'kilometers'
+    }
+};
 
 var examples = {
     moran_sids2: {
@@ -1523,5 +1534,18 @@ var examples = {
        ].join('\n'),
        center: [40.44, -3.7],
        zoom: 6
-   }
+   },
+   'routing-to-single-point': {
+       name: 'routing to a single point',
+       def: routingToSinglePointDefinition,
+       cartocss: [
+           '#layer{',
+           '  line-color: #FABADA;',
+           '  line-width: 2;',
+           '  line-opacity: 0.7;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 12
+   },
 };
