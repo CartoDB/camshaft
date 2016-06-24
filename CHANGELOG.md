@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.22.1
+
+Released 2016-mm-dd
+
+ - Automatically populate nodes from nodes directory, no need to add them manually.
+
+
+## 0.22.0
+
+Released 2016-06-24
+
+ - Adds centroid analysis #87.
+ - Make weighted-centroid's category_column param optional #88.
+
+
 ## 0.21.0
 
 Released 2016-06-23

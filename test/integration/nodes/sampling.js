@@ -1,20 +1,21 @@
 'use strict';
 
 var assert = require('assert');
-var nodes = require('../../../lib/node');
+var Source = require('../../../lib/node/nodes/source');
+var Sampling = require('../../../lib/node/nodes/sampling');
 
 describe('sampling', function() {
 
-    var source = new nodes.Source({ query: 'select * from table' });
+    var source = new Source({ query: 'select * from table' });
 
     it('should set random sampling', function() {
-        var sampling = new nodes.Sampling({ source: source, sampling: 0.4 });
+        var sampling = new Sampling({ source: source, sampling: 0.4 });
 
         assert.equal(sampling.sampling, 0.4);
     });
 
     it('should set seed', function() {
-        var sampling = new nodes.Sampling({ source: source, sampling: 0.4, seed: 0.1 });
+        var sampling = new Sampling({ source: source, sampling: 0.4, seed: 0.1 });
 
         assert.equal(sampling.seed, 0.1);
         assert.equal(sampling.sql(), [
