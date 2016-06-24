@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Automatically populate nodes from nodes directory, no need to add them manually.
+
 
 ## 0.22.0
 
