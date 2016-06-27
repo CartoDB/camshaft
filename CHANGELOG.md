@@ -2,7 +2,7 @@
 
 ## 0.22.1
 
-Released 2016-mm-dd
+Released 2016-06-28
 
  - Intersection nodes gets augmented with columns from target node #95.
  - Automatically populate nodes from nodes directory, no need to add them manually.
