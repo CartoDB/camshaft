@@ -1,8 +1,9 @@
-WITH
-_cdb_analysis_source_points AS (
-  {{=it.source}}
-),
-_cdb_analysis_routing AS (
+SELECT
+  (route).duration,
+  (route).length,
+  (route).the_geom,
+  {{=it.columns}}
+FROM (
   SELECT
     cdb_route_point_to_point(
       the_geom,
@@ -18,11 +19,5 @@ _cdb_analysis_routing AS (
       '{{=it.units}}'
     ) as route,
     {{=it.columns}}
-  FROM _cdb_analysis_source_points
-)
-SELECT
-  (route).duration,
-  (route).length,
-  (route).the_geom,
-  {{=it.columns}}
-FROM _cdb_analysis_routing
+  FROM ({{=it.source}}) _cdb_analysis_source_points
+) _cdb_analysis_routing
