@@ -318,6 +318,17 @@ var georeferenceStreetAddressDefinition = {
     }
 };
 
+var routingWaypointsDefinition = {
+    id: 'routing-waypoints-example',
+    type: 'routing-waypoints',
+    params: {
+        source: sourceAtmDef,
+        mode: 'car',
+        column_target: 'the_geom',
+        units: 'kilometers'
+    }
+};
+
 
 var examples = {
     centroid: {
@@ -1561,5 +1572,18 @@ var examples = {
        ].join('\n'),
        center: [40.44, -3.7],
        zoom: 6
-   }
+   },
+   'routing-waypointst': {
+       name: 'routing with waypoints',
+       def: routingWaypointsDefinition,
+       cartocss: [
+           '#layer{',
+           '  line-color: #F42220;',
+           '  line-width: 2;',
+           '  line-opacity: 0.7;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 12
+    }
 };
