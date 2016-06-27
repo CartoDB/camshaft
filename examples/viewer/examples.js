@@ -318,9 +318,9 @@ var georeferenceStreetAddressDefinition = {
     }
 };
 
-var routingWaypointsDefinition = {
-    id: 'routing-waypoints-example',
-    type: 'routing-waypoints',
+var routingSequentialDefinition = {
+    id: 'routing-sequential-example',
+    type: 'routing-sequential',
     params: {
         source: sourceAtmDef,
         mode: 'car',
@@ -328,7 +328,6 @@ var routingWaypointsDefinition = {
         units: 'kilometers'
     }
 };
-
 
 var examples = {
     centroid: {
@@ -1573,9 +1572,9 @@ var examples = {
        center: [40.44, -3.7],
        zoom: 6
    },
-   'routing-waypointst': {
-       name: 'routing with waypoints',
-       def: routingWaypointsDefinition,
+   'routing-sequentialt': {
+       name: 'routing with sequential',
+       def: routingSequentialDefinition,
        cartocss: [
            '#layer{',
            '  line-color: #F42220;',
