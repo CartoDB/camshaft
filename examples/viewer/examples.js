@@ -318,6 +318,18 @@ var georeferenceStreetAddressDefinition = {
     }
 };
 
+var routingToLayerAllToAllDefinition = {
+    id: 'routing-to-layer-all-to-all-example',
+    type: 'routing-to-layer-all-to-all',
+    params: {
+        source: sourceAtmDef,
+        source_column: 'bank',
+        target: sourceAtmDef,
+        target_column: 'bank',
+        mode: 'car',
+        units: 'kilometers'
+    }
+};
 
 var examples = {
     centroid: {
@@ -1561,5 +1573,18 @@ var examples = {
        ].join('\n'),
        center: [40.44, -3.7],
        zoom: 6
-   }
+   },
+   'routing-to-layer-all-to-all': {
+        name: 'routing to layer all to all',
+        def: routingToLayerAllToAllDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    }
 };
