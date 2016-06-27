@@ -25,6 +25,17 @@ var CARTOCSS_LINES = [
     '}'
 ].join('\n');
 
+var CARTOCSS_POLYGONS = [
+    '#layer {',
+    '  polygon-fill: red;',
+    '  polygon-opacity: 0.6;',
+    '  polygon-opacity: 0.7;',
+    '  line-color: #FFF;',
+    '  line-width: 0.5;',
+    '  line-opacity: 1;',
+    '}'
+].join('\n');
+
 var CARTOCSS_LABELS = [
     '#layer::labels {',
     '    text-name: [category];',
@@ -1224,6 +1235,68 @@ var examples = {
             '}'
         ].join('\n'),
         center: [40.009, -75.134],
+        zoom: 12
+    },
+    builder_intersection: {
+        name: '[builder] airbnb and districts intersection',
+        def: {
+            id: 'intersection-example-1',
+            type: 'intersection',
+            params: {
+                source: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
+                    }
+                },
+                target: {
+                    id: 'barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from barrios'
+                    }
+                }
+            }
+        },
+        cartocss: CARTOCSS_POINTS + '\n' + [
+            '#categories {',
+            '  marker-fill: ramp([target_nombre], colorbrewer(Paired, 7), category);',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    builder_aggregate_intersection: {
+        name: '[builder] airbnb and districts intersection with avg price aggregation',
+        def: {
+            id: 'aggregate-intersection-example-1',
+            type: 'aggregate-intersection',
+            params: {
+                source: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
+                    }
+                },
+                target: {
+                    id: 'barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from barrios'
+                    }
+                },
+                aggregate_function: 'avg',
+                aggregate_column: 'price'
+            }
+        },
+        cartocss: CARTOCSS_POLYGONS + '\n' + [
+            '#polygon {',
+            '  polygon-fill: ramp([avg_price], colorbrewer(Reds));',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
         zoom: 12
     },
     weighted_centroid_properties: {
