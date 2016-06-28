@@ -2,7 +2,7 @@
 
 ## 0.22.2
 
-Released 2016-mm-dd
+Released 2016-06-28
 
  - Use a transaction to delete/insert into cache tables.
 
