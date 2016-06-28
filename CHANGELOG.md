@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Reverse intersection and aggregate-intersection st_intersects geometry intersection.
+
 
 ## 0.22.2
 

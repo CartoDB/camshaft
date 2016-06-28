@@ -40,14 +40,14 @@ describe('aggregate-intersection analysis', function() {
     var sourceAirbnbRooms = {
         type: 'source',
         params: {
-            query: SOURCE_AIRBNB
+            query: SOURCE_DISTRICTS
         }
     };
 
     var sourceMadridDistrict = {
         type: 'source',
         params: {
-            query: SOURCE_DISTRICTS
+            query: SOURCE_AIRBNB
         }
     };
 

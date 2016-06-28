@@ -1244,24 +1244,24 @@ var examples = {
             type: 'intersection',
             params: {
                 source: {
-                    id: 'airbnb-source',
-                    type: 'source',
-                    params: {
-                        query: 'select * from airbnb_madrid_oct_2015_listings'
-                    }
-                },
-                target: {
                     id: 'barrios-source',
                     type: 'source',
                     params: {
                         query: 'select * from barrios'
+                    }
+                },
+                target: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
                     }
                 }
             }
         },
         cartocss: CARTOCSS_POINTS + '\n' + [
             '#categories {',
-            '  marker-fill: ramp([target_nombre], colorbrewer(Paired, 7), category);',
+            '  marker-fill: ramp([source_nombre], colorbrewer(Paired, 7), category);',
             '}'
         ].join('\n'),
         center: [40.44, -3.7],
@@ -1274,17 +1274,17 @@ var examples = {
             type: 'aggregate-intersection',
             params: {
                 source: {
-                    id: 'airbnb-source',
-                    type: 'source',
-                    params: {
-                        query: 'select * from airbnb_madrid_oct_2015_listings'
-                    }
-                },
-                target: {
                     id: 'barrios-source',
                     type: 'source',
                     params: {
                         query: 'select * from barrios'
+                    }
+                },
+                target: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
                     }
                 },
                 aggregate_function: 'avg',
