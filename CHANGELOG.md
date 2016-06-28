@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Ignore unique_violation error (23505) on table creation.
+
 
 ## 0.22.3
 
