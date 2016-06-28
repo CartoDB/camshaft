@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Use a transaction to delete/insert into cache tables.
+
 
 ## 0.22.1
 
