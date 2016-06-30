@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.22.5
+## 0.23.0
 
 Released 2016-mm-dd
+
+ - Allow any geometry in weighted-centroid #100.
 
 
 ## 0.22.4
