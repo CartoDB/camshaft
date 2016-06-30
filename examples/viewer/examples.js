@@ -1047,6 +1047,35 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 3
     },
+    weighted_centroid_polygons_builder: {
+        name: 'weighted-centroid populated places buffer',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: 'BUFFER',
+                    type: 'buffer',
+                    params:{
+                        source: {
+                            id: 'kmeans',
+                            type: 'kmeans',
+                            params:{
+                                source: populatedPlacesSource,
+                                clusters: 10
+                            }
+                        },
+                        radius: 100000
+                    }
+                },
+                weight_column: 'pop_max',
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     weighted_centroid_aggregation_function: {
         name: 'weighted-centroid populated places aggregation',
         def: {
