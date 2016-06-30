@@ -2,7 +2,7 @@
 
 ## 0.23.0
 
-Released 2016-mm-dd
+Released 2016-06-30
 
  - Allow any geometry in weighted-centroid #100.
 
