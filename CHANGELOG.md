@@ -1,9 +1,43 @@
 # Changelog
 
-## 0.22.1
+## 0.23.1
 
 Released 2016-mm-dd
 
+
+## 0.23.0
+
+Released 2016-06-30
+
+ - Allow any geometry in weighted-centroid #100.
+
+
+## 0.22.4
+
+Released 2016-06-28
+
+ - Ignore unique_violation error (23505) on table creation.
+
+
+## 0.22.3
+
+Released 2016-06-28
+
+ - Reverse intersection and aggregate-intersection st_intersects geometry intersection.
+
+
+## 0.22.2
+
+Released 2016-06-28
+
+ - Use a transaction to delete/insert into cache tables.
+
+
+## 0.22.1
+
+Released 2016-06-28
+
+ - Intersection nodes gets augmented with columns from target node #95.
  - Automatically populate nodes from nodes directory, no need to add them manually.
 
 

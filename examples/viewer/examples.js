@@ -25,6 +25,17 @@ var CARTOCSS_LINES = [
     '}'
 ].join('\n');
 
+var CARTOCSS_POLYGONS = [
+    '#layer {',
+    '  polygon-fill: red;',
+    '  polygon-opacity: 0.6;',
+    '  polygon-opacity: 0.7;',
+    '  line-color: #FFF;',
+    '  line-width: 0.5;',
+    '  line-opacity: 1;',
+    '}'
+].join('\n');
+
 var CARTOCSS_LABELS = [
     '#layer::labels {',
     '    text-name: [category];',
@@ -1048,6 +1059,35 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 3
     },
+    weighted_centroid_polygons_builder: {
+        name: 'weighted-centroid populated places buffer',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: 'BUFFER',
+                    type: 'buffer',
+                    params:{
+                        source: {
+                            id: 'kmeans',
+                            type: 'kmeans',
+                            params:{
+                                source: populatedPlacesSource,
+                                clusters: 10
+                            }
+                        },
+                        radius: 100000
+                    }
+                },
+                weight_column: 'pop_max',
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     weighted_centroid_aggregation_function: {
         name: 'weighted-centroid populated places aggregation',
         def: {
@@ -1238,6 +1278,68 @@ var examples = {
         center: [40.009, -75.134],
         zoom: 12
     },
+    builder_intersection: {
+        name: '[builder] airbnb and districts intersection',
+        def: {
+            id: 'intersection-example-1',
+            type: 'intersection',
+            params: {
+                source: {
+                    id: 'barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from barrios'
+                    }
+                },
+                target: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
+                    }
+                }
+            }
+        },
+        cartocss: CARTOCSS_POINTS + '\n' + [
+            '#categories {',
+            '  marker-fill: ramp([source_nombre], colorbrewer(Paired, 7), category);',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    builder_aggregate_intersection: {
+        name: '[builder] airbnb and districts intersection with avg price aggregation',
+        def: {
+            id: 'aggregate-intersection-example-1',
+            type: 'aggregate-intersection',
+            params: {
+                source: {
+                    id: 'barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from barrios'
+                    }
+                },
+                target: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
+                    }
+                },
+                aggregate_function: 'avg',
+                aggregate_column: 'price'
+            }
+        },
+        cartocss: CARTOCSS_POLYGONS + '\n' + [
+            '#polygon {',
+            '  polygon-fill: ramp([avg_price], colorbrewer(Reds));',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
     weighted_centroid_properties: {
         name: 'weighted-centroid properties',
         sql_wrap: 'select category::text as category, the_geom_webmercator from (<%= sql %>) q',
@@ -1399,7 +1501,7 @@ var examples = {
                 },
                 column: 'pop_max',
                 rank: 'top',
-                limit: 100
+                limit: 10
             }
         },
         dataviews: {},
