@@ -3,6 +3,7 @@
 ## 0.23.1
 
 Released 2016-mm-dd
+ - Allow to have attributes that modifies node.id() without getting into json #103.
 
 
 ## 0.23.0
