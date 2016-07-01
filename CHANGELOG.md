@@ -3,6 +3,8 @@
 ## 0.23.1
 
 Released 2016-mm-dd
+ - Ignore duplicated node ids when registering them, allowing several clients to run in parallel.
+ - Allow to have attributes that modifies node.id() without getting into json #103.
 
 
 ## 0.23.0
