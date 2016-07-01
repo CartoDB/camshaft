@@ -1,4 +1,4 @@
-before_script:
+before_install:
   - lsb_release -a
   - sudo mv /etc/apt/sources.list.d/pgdg-source.list* /tmp
   - sudo apt-get -qq purge postgis* postgresql*
@@ -9,6 +9,9 @@ before_script:
   - sudo apt-get install -q postgresql-9.5-postgis-2.2
   - echo -e "local\tall\tall\ttrust\nhost\tall\tall\t127.0.0.1/32\ttrust\nhost\tall\tall\t::1/128\ttrust" |sudo tee /etc/postgresql/9.5/main/pg_hba.conf
   - sudo service postgresql restart
+
+env:
+  - PGUSER=postgres
 
 language: node_js
 node_js:
