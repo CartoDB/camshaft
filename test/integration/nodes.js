@@ -37,18 +37,14 @@ describe('nodes', function() {
     describe('source', function() {
 
         var getColumnsFn;
-        var getLastUpdatedTimeFromAffectedTablesFn;
         beforeEach(function() {
             getColumnsFn = QueryParser.prototype.getColumns;
             QueryParser.prototype.getColumns = function(query, callback) {
                 return callback(null, []);
             };
-
-            getLastUpdatedTimeFromAffectedTablesFn = DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables;
         });
         afterEach(function() {
             QueryParser.prototype.getColumns = getColumnsFn;
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = getLastUpdatedTimeFromAffectedTablesFn;
         });
 
         it('should have same ids for same queries', function(done) {
@@ -106,6 +102,27 @@ describe('nodes', function() {
             });
         });
 
+    });
+
+    describe('source last updated at affecting node.id', function() {
+
+        var enqueueCalled = 0;
+        var enqueueFn;
+        var getLastUpdatedTimeFromAffectedTablesFn;
+        beforeEach(function() {
+            enqueueFn = BatchClient.prototype.enqueue;
+            BatchClient.prototype.enqueue = function(query, callback) {
+                enqueueCalled += 1;
+                return callback(null, {status: 'ok'});
+            };
+            getLastUpdatedTimeFromAffectedTablesFn = DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables;
+        });
+        afterEach(function() {
+            assert.ok(enqueueCalled > 0);
+            BatchClient.prototype.enqueue = enqueueFn;
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = getLastUpdatedTimeFromAffectedTablesFn;
+        });
+
         it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
             var called = false;
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(query, callback) {
@@ -128,12 +145,12 @@ describe('nodes', function() {
                 var bufferB = results[1].rootNode;
 
                 assert.notEqual(bufferA.source.id(), bufferB.source.id(),
-                    'Sources for buffer should have different id(): "' +
+                        'Sources for buffer should have different id(): "' +
                         bufferA.source.id() + '" != "' + bufferB.source.id() + '"'
                 );
 
                 assert.notEqual(bufferA.id(), bufferB.id(),
-                    'Buffers, as dependant nodes, should also have a different id(): "' +
+                        'Buffers, as dependant nodes, should also have a different id(): "' +
                         bufferA.id() + '" != "' + bufferB.id() + '"'
                 );
 
