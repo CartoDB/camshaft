@@ -6,16 +6,17 @@ var Sampling = require('../../../lib/node/nodes/sampling');
 
 describe('sampling', function() {
 
-    var source = new Source({ query: 'select * from table' });
+    var owner = 'localhost';
+    var source = new Source(owner, { query: 'select * from table' });
 
     it('should set random sampling', function() {
-        var sampling = new Sampling({ source: source, sampling: 0.4 });
+        var sampling = new Sampling(owner, { source: source, sampling: 0.4 });
 
         assert.equal(sampling.sampling, 0.4);
     });
 
     it('should set seed', function() {
-        var sampling = new Sampling({ source: source, sampling: 0.4, seed: 0.1 });
+        var sampling = new Sampling(owner, { source: source, sampling: 0.4, seed: 0.1 });
 
         assert.equal(sampling.seed, 0.1);
         assert.equal(sampling.sql(), [
