@@ -184,5 +184,43 @@ describe('nodes', function() {
             });
         });
 
+        it('should have different ids for same params but different owner', function(done) {
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: SOURCE_ATM_MACHINES_DEF,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            async.parallel(
+                [
+                    function(callback) {
+                        var clonedTestConfig = JSON.parse(JSON.stringify(testConfig));
+                        clonedTestConfig.user = 'user1';
+                        Analysis.create(clonedTestConfig, tradeArea15m, callback);
+                    },
+                    function(callback) {
+                        var clonedTestConfig = JSON.parse(JSON.stringify(testConfig));
+                        clonedTestConfig.user = 'user2';
+                        Analysis.create(clonedTestConfig, tradeArea15m, callback);
+                    }
+                ],
+                function(err, results) {
+                    assert.ok(!err, err);
+
+                    assert.equal(results.length, 2);
+                    assert.notEqual(results[0].id(), results[1].id());
+                    assert.notEqual(results[0].getQuery(), results[1].getQuery());
+
+                    done();
+                }
+            );
+
+        });
+
     });
 });

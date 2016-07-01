@@ -10,6 +10,7 @@ function create (override) {
     override.db = override.db || {};
     override.batch = override.batch || {};
     return {
+        user: override.user || 'localhost',
         db: defaults(override.db, {
             host: 'localhost',
             port: 5432,

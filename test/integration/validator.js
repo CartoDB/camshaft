@@ -51,11 +51,22 @@ describe('workflow-validator', function() {
     };
 
     it('should validate graph', function(done) {
-        var factory = new Factory(DatabaseServiceStub);
+        var factory = new Factory('foo-user', DatabaseServiceStub);
         factory.create(tradeAreaAnalysisDefinition, function(err, node) {
             assert.ok(!err, err);
 
             assert.ok(validator.isValid(node));
+
+            done();
+        });
+    });
+
+    it('should have user from factory as owner', function(done) {
+        var factory = new Factory('foo-user', DatabaseServiceStub);
+        factory.create(tradeAreaAnalysisDefinition, function(err, node) {
+            assert.ok(!err, err);
+
+            assert.equal(node.getOwner(), 'foo-user');
 
             done();
         });
