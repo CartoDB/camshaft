@@ -338,7 +338,8 @@ var routingToLayerAllToAllDefinition = {
         target: sourceAtmDef,
         target_column: 'bank',
         mode: 'car',
-        units: 'kilometers'
+        units: 'kilometers',
+        closest: true
     }
 };
 
