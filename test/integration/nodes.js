@@ -6,6 +6,7 @@ var async = require('async');
 var Analysis = require('../../lib/analysis');
 var BatchClient = require('../../lib/postgresql/batch-client');
 var QueryParser = require('../../lib/postgresql/query-parser');
+var DatabaseService = require('../../lib/service/database');
 
 var testConfig = require('../test-config');
 
@@ -25,17 +26,29 @@ describe('nodes', function() {
         }
     };
 
+    var BUFFER_OVER_SOURCE = {
+        type: 'buffer',
+        params: {
+            source: SOURCE_ATM_MACHINES_DEF,
+            radius: 10000
+        }
+    };
+
     describe('source', function() {
 
         var getColumnsFn;
-        before(function() {
+        var getLastUpdatedTimeFromAffectedTablesFn;
+        beforeEach(function() {
             getColumnsFn = QueryParser.prototype.getColumns;
             QueryParser.prototype.getColumns = function(query, callback) {
                 return callback(null, []);
             };
+
+            getLastUpdatedTimeFromAffectedTablesFn = DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables;
         });
-        after(function() {
+        afterEach(function() {
             QueryParser.prototype.getColumns = getColumnsFn;
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = getLastUpdatedTimeFromAffectedTablesFn;
         });
 
         it('should have same ids for same queries', function(done) {
@@ -88,6 +101,68 @@ describe('nodes', function() {
 
                 assert.equal(results.length, 2);
                 assert.notEqual(results[0].id(), results[1].id());
+
+                done();
+            });
+        });
+
+        it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
+            var called = false;
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(query, callback) {
+                var lastUpdatedTimeFromAffectedTables = new Date('2016-07-01');
+                if (called) {
+                    lastUpdatedTimeFromAffectedTables = new Date();
+                }
+                if (!called) {
+                    called = true;
+                }
+                return callback(null, lastUpdatedTimeFromAffectedTables);
+            };
+
+            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
+                assert.ok(!err, err);
+
+                assert.equal(results.length, 2);
+
+                var bufferA = results[0].rootNode;
+                var bufferB = results[1].rootNode;
+
+                assert.notEqual(bufferA.source.id(), bufferB.source.id(),
+                    'Sources for buffer should have different id(): "' +
+                        bufferA.source.id() + '" != "' + bufferB.source.id() + '"'
+                );
+
+                assert.notEqual(bufferA.id(), bufferB.id(),
+                    'Buffers, as dependant nodes, should also have a different id(): "' +
+                        bufferA.id() + '" != "' + bufferB.id() + '"'
+                );
+
+                done();
+            });
+        });
+
+        it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(query, callback) {
+                return callback(null, new Date('2016-07-01'));
+            };
+
+            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
+                assert.ok(!err, err);
+
+                assert.equal(results.length, 2);
+
+                var bufferA = results[0].rootNode;
+                var bufferB = results[1].rootNode;
+
+                assert.equal(bufferA.source.id(), bufferB.source.id(),
+                        'Sources for buffer should have same id(): "' +
+                        bufferA.source.id() + '" == "' + bufferB.source.id() + '"'
+                );
+
+                assert.equal(bufferA.id(), bufferB.id(),
+                        'Buffers, as dependant nodes, should also have same id(): "' +
+                        bufferA.id() + '" == "' + bufferB.id() + '"'
+                );
 
                 done();
             });
