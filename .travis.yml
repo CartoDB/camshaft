@@ -1,7 +1,13 @@
-sudo: false
-
-addons:
-  postgresql: "9.3"
+before_script:
+  - lsb_release -a
+  - sudo mv /etc/apt/sources.list.d/pgdg-source.list* /tmp
+  - sudo apt-get -qq purge postgis* postgresql*
+  - sudo rm -Rf /var/lib/postgresql /etc/postgresql
+  - sudo apt-add-repository --yes ppa:cartodb/postgresql-9.5
+  - sudo apt-get update
+  - sudo apt-get install -q postgresql-9.5-postgis-2.2
+  - echo -e "local\tall\tall\ttrust\nhost\tall\tall\t127.0.0.1/32\ttrust\nhost\tall\tall\t::1/128\ttrust" |sudo tee /etc/postgresql/9.5/main/pg_hba.conf
+  - sudo service postgresql restart
 
 language: node_js
 node_js:
