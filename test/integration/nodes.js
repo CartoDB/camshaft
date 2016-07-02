@@ -125,7 +125,7 @@ describe('nodes', function() {
 
         it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
             var called = false;
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, callback) {
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
                 if (node.type !== 'source' || node.getUpdatedAt() !== null) {
                     return callback(null, node.getUpdatedAt());
                 }
@@ -162,7 +162,7 @@ describe('nodes', function() {
         });
 
         it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, callback) {
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
                 return callback(null, new Date('2016-07-01'));
             };
 
