@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.23.1
+## 0.24.0
 
 Released 2016-mm-dd
+ - Nodes now has owners, the owner modifies the node.id.
+   - This is a BREAKING CHANGE: clients need to provide a user in configuration.
  - Ignore duplicated node ids when registering them, allowing several clients to run in parallel.
  - Allow to have attributes that modifies node.id() without getting into json #103.
 
