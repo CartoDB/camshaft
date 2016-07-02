@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.24.1
+## 0.25.0
 
-Released 2016-mm-dd
+Released 2016-07-02
 
  - Skip retrieval of last update time for root source nodes.
  - Allow to skip retrieval of last update in database service.
