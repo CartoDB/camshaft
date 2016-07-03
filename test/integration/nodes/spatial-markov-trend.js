@@ -21,7 +21,7 @@ describe('spatial-markov-trend', function() {
         '  m.volatility',
         /*jshint multistr: true */
         'FROM cdb_crankshaft.CDB_SpatialMarkovTrend(\'select * from table\', Array[\'year0\',\'year1\'], \
-5, \'knn\', 5, 1, \'the_geom\', \'cartodb_id\') As m',
+5, \'knn\', 5, 0, \'the_geom\', \'cartodb_id\') As m',
         'JOIN (select * from table) input_query',
         'ON input_query.cartodb_id = m.rowid\n'
         ].join('\n'));
