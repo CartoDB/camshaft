@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
 
+ - Make the aggregation_column param of the aggreagation-intersection optional when the operation is `count` #102.
  - Improves cached nodes and filters inner working: cache table target name independent from filters #114.
  - Adds markov analysis #112.
  - Skips retrieval of last update time for root source nodes #110
