@@ -231,8 +231,7 @@ describe('cached nodes', function() {
             });
         });
 
-        it.skip
-        ('should use same table as rank unfiltered but with the filter applied over unfiltered version', function() {
+        it('should use same table as rank unfiltered but with the filter applied over unfiltered version', function() {
             var rawRankNode = rawAnalysis.getRoot();
             var filteredRankNode = filteredAnalysis.getRoot();
             assert.equal(rawRankNode.getTargetTable(), filteredRankNode.getTargetTable());
