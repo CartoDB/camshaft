@@ -2,7 +2,7 @@
 
 ## 0.26.0
 
-Released 2016-mm-dd
+Released 2016-07-04
 
  - Make the aggregation_column param of the aggreagation-intersection optional when the operation is `count` #102.
  - Improves cached nodes and filters inner working: cache table target name independent from filters #114.
