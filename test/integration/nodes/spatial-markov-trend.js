@@ -19,6 +19,7 @@ describe('spatial-markov-trend', function() {
         '  m.trend_up,',
         '  m.trend_down,',
         '  m.volatility',
+        /*jshint multistr: true */
         'FROM cdb_crankshaft.CDB_SpatialMarkovTrend(\'select * from table\', Array[\'year0\',\'year1\'], \
 5, \'knn\', 5, 2, \'the_geom\', \'cartodb_id\') As m',
         'JOIN (select * from table) input_query',
@@ -27,7 +28,13 @@ describe('spatial-markov-trend', function() {
     });
 
     it('should generate sql with optional params', function() {
-        var spatialMarkov = new SpatialMarkovTrend(owner, { source: source, time_columns: ['year0', 'year1'], permutations: 21, weight_type: 'queen', geom_col: 'geom' });
+        var spatialMarkov = new SpatialMarkovTrend(owner, {
+          source: source,
+          time_columns: ['year0', 'year1'],
+          permutations: 21,
+          weight_type: 'queen',
+          geom_col: 'geom'
+        });
 
         assert.equal(spatialMarkov.sql(), [
         'SELECT',
@@ -36,6 +43,7 @@ describe('spatial-markov-trend', function() {
         '  m.trend_up,',
         '  m.trend_down,',
         '  m.volatility',
+        /*jshint multistr: true */
         'FROM cdb_crankshaft.CDB_SpatialMarkovTrend(\'select * from table\', Array[\'year0\',\'year1\'], \
 5, \'queen\', 5, 21, \'geom\', \'cartodb_id\') As m',
         'JOIN (select * from table) input_query',
