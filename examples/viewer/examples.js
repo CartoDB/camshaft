@@ -25,6 +25,33 @@ var CARTOCSS_LINES = [
     '}'
 ].join('\n');
 
+var CARTOCSS_POLYGONS = [
+    '#layer {',
+    '  polygon-fill: red;',
+    '  polygon-opacity: 0.6;',
+    '  polygon-opacity: 0.7;',
+    '  line-color: #FFF;',
+    '  line-width: 0.5;',
+    '  line-opacity: 1;',
+    '}'
+].join('\n');
+
+var CARTOCSS_LABELS = [
+    '#layer::labels {',
+    '    text-name: [category];',
+    '    text-face-name: \'DejaVu Sans Book\';',
+    '    text-size: 10;',
+    '    text-label-position-tolerance: 10;',
+    '    text-fill: #000;',
+    '    text-halo-fill: #FFF;',
+    '    text-halo-radius: 1;',
+    '    text-dy: -10;',
+    '    text-allow-overlap: true;',
+    '    text-placement: point;',
+    '    text-placement-type: simple;',
+    '}',
+].join('\n');
+
 var sourceAtmDef = {
     type: 'source',
     params: {
@@ -333,8 +360,66 @@ var georeferenceStreetAddressDefinition = {
     }
 };
 
+var routingToSinglePointDefinition = {
+    id: 'routing-to-single-point-example',
+    type: 'routing-to-single-point',
+    params: {
+        source: sourceAtmDef,
+        mode: 'car',
+        destination_longitude: -3.70237112,
+        destination_latitude: 40.41706163,
+        units: 'kilometers'
+    }
+};
+
+var routingSequentialDefinition = {
+    id: 'routing-sequential-example',
+    type: 'routing-sequential',
+    params: {
+        source: sourceAtmDef,
+        mode: 'car',
+        column_target: 'the_geom',
+        units: 'kilometers'
+    }
+};
+
+var routingToLayerAllToAllDefinition = {
+    id: 'routing-to-layer-all-to-all-example',
+    type: 'routing-to-layer-all-to-all',
+    params: {
+        source: sourceAtmDef,
+        source_column: 'bank',
+        target: sourceAtmDef,
+        target_column: 'bank',
+        mode: 'car',
+        units: 'kilometers',
+        closest: true
+    }
+};
 
 var examples = {
+    centroid: {
+        name: 'populated places centroids adm0name',
+        def: {
+            id: UUID,
+            type: 'centroid',
+            params: {
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                },
+                category_column: 'adm0name'
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: CARTOCSS_POINTS + CARTOCSS_LABELS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     moran_sids2: {
         name: 'cluster sids2',
         def: {
@@ -916,6 +1001,61 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    convex_hull: {
+        name: 'convex hull for kmeans',
+        def: {
+            id: 'convexHull',
+            type: 'convex-hull',
+            params: {
+                source: {
+                    id: 'kmeans',
+                    type: 'kmeans',
+                    params:{
+                        source: populatedPlacesSource,
+                        clusters : 10
+                    }
+                },
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  polygon-fill: red;',
+            '  polygon-opacity: 0.4;',
+            '}'
+        ].join('\n'),
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'kmeans' },
+                    cartocss: [
+                        '@1: #E58606;',
+                        '@2: #5D69B1;',
+                        '@3: #52BCA3;',
+                        '@4: #99C945;',
+                        '@5: #2F8AC4;',
+                        '@6: #24796C;',
+                        '#layer{',
+                        '  [cluster_no =0]{marker-fill:@1;}',
+                        '  [cluster_no =1]{marker-fill:@2;}',
+                        '  [cluster_no =2]{marker-fill:@3;}',
+                        '  [cluster_no =3]{marker-fill:@4;}',
+                        '  [cluster_no =4]{marker-fill:@5;}',
+                        '  [cluster_no =5]{marker-fill:@6;}',
+                        '  marker-fill: grey;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 10.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     weighted_centroid_populated_builder: {
         name: 'weighted-centroid populated places',
         def: {
@@ -971,6 +1111,35 @@ var examples = {
                 }
             }
         ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    weighted_centroid_polygons_builder: {
+        name: 'weighted-centroid populated places buffer',
+        def: {
+            id: 'weightedCentroid',
+            type: 'weighted-centroid',
+            params:{
+                source: {
+                    id: 'BUFFER',
+                    type: 'buffer',
+                    params:{
+                        source: {
+                            id: 'kmeans',
+                            type: 'kmeans',
+                            params:{
+                                source: populatedPlacesSource,
+                                clusters: 10
+                            }
+                        },
+                        radius: 100000
+                    }
+                },
+                weight_column: 'pop_max',
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss: CARTOCSS_POINTS,
         center: [40.44, -3.7],
         zoom: 3
     },
@@ -1164,6 +1333,68 @@ var examples = {
         center: [40.009, -75.134],
         zoom: 12
     },
+    builder_intersection: {
+        name: '[builder] airbnb and districts intersection',
+        def: {
+            id: 'intersection-example-1',
+            type: 'intersection',
+            params: {
+                source: {
+                    id: 'barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from barrios'
+                    }
+                },
+                target: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
+                    }
+                }
+            }
+        },
+        cartocss: CARTOCSS_POINTS + '\n' + [
+            '#categories {',
+            '  marker-fill: ramp([source_nombre], colorbrewer(Paired, 7), category);',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    builder_aggregate_intersection: {
+        name: '[builder] airbnb and districts intersection with avg price aggregation',
+        def: {
+            id: 'aggregate-intersection-example-1',
+            type: 'aggregate-intersection',
+            params: {
+                source: {
+                    id: 'barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from barrios'
+                    }
+                },
+                target: {
+                    id: 'airbnb-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from airbnb_madrid_oct_2015_listings'
+                    }
+                },
+                aggregate_function: 'avg',
+                aggregate_column: 'price'
+            }
+        },
+        cartocss: CARTOCSS_POLYGONS + '\n' + [
+            '#polygon {',
+            '  polygon-fill: ramp([avg_price], colorbrewer(Reds));',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
     weighted_centroid_properties: {
         name: 'weighted-centroid properties',
         sql_wrap: 'select category::text as category, the_geom_webmercator from (<%= sql %>) q',
@@ -1196,6 +1427,88 @@ var examples = {
         center: [40.009, -75.134],
         zoom: 12
     },
+    weighted_centroid_populated_builder_linked_by_lines: {
+        name: 'populated places clusters linked by lines',
+        def: {
+            id: 'linkedByLines',
+            type: 'link-by-line',
+            params: {
+                source_points: {
+                    id: 'kmeans-s',
+                    type: 'kmeans',
+                    params: {
+                        source: populatedPlacesSource,
+                        clusters : 5
+                    }
+                },
+                destination_points: {
+                    id: 'weightedCentroid',
+                    type: 'weighted-centroid',
+                    params:{
+                        source: {
+                            id: 'kmeans',
+                            type: 'kmeans',
+                            params:{
+                                source: populatedPlacesSource,
+                                clusters : 5
+                            }
+                        },
+                        weight_column: 'pop_max',
+                        category_column: 'cluster_no'
+                    }
+                },
+                source_column: 'cluster_no',
+                destination_column: 'category'
+            }
+        },
+        cartocss: CARTOCSS_LINES,
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'kmeans' },
+                    cartocss: [
+                        '@1: #E58606;',
+                        '@2: #5D69B1;',
+                        '@3: #52BCA3;',
+                        '@4: #99C945;',
+                        '@5: #2F8AC4;',
+                        '@6: #24796C;',
+                        '#layer{',
+                        '  [cluster_no =0]{marker-fill:@1;}',
+                        '  [cluster_no =1]{marker-fill:@2;}',
+                        '  [cluster_no =2]{marker-fill:@3;}',
+                        '  [cluster_no =3]{marker-fill:@4;}',
+                        '  [cluster_no =4]{marker-fill:@5;}',
+                        '  [cluster_no =5]{marker-fill:@6;}',
+                        '  marker-fill: grey;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 10.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            },
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'weightedCentroid' },
+                    cartocss: [
+                        '#layer{',
+                        '  marker-fill: red;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 96.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     'do-measure-adults-first-level-studies': {
         name: 'number of adults with first level studies',
         def: dataObservatoryMeasureAdultsFirstLevelStudies,
@@ -1227,6 +1540,55 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
+    },
+    filter_rank: {
+        name: 'populated places filter rank',
+        def: {
+            id: UUID,
+            type: 'filter-rank',
+            params: {
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                },
+                column: 'pop_max',
+                rank: 'top',
+                limit: 10
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    filter_grouped_rank: {
+        name: 'city most populated by country (filter grouped rank)',
+        def: {
+            id: UUID,
+            type: 'filter-grouped-rank',
+            params: {
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                },
+                column: 'pop_max',
+                rank: 'top',
+                group: 'iso_a2',
+                max: 1
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
     },
     filterByNodeColumn: {
         name: 'filter by node column',
@@ -1409,5 +1771,44 @@ var examples = {
        ].join('\n'),
        center: [40.44, -3.7],
        zoom: 12
-   }
+    },
+   'routing-to-single-point': {
+       name: 'routing to a single point',
+       def: routingToSinglePointDefinition,
+       cartocss: [
+           '#layer{',
+           '  line-color: #FABADA;',
+           '  line-width: 2;',
+           '  line-opacity: 0.7;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 12
+   },
+   'routing-sequential': {
+       name: 'routing with sequential',
+       def: routingSequentialDefinition,
+       cartocss: [
+           '#layer{',
+           '  line-color: #F42220;',
+           '  line-width: 2;',
+           '  line-opacity: 0.7;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 12
+   },
+   'routing-to-layer-all-to-all': {
+        name: 'routing to layer all to all',
+        def: routingToLayerAllToAllDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    }
 };

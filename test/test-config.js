@@ -1,6 +1,6 @@
 'use strict';
 
-var BATCH_API_ENDPOINT = 'http://127.0.0.1:8080/api/v1/sql/job';
+var BATCH_API_ENDPOINT = 'http://127.0.0.1:8989/api/v1/sql/job';
 
 function create (override) {
     override = override || {
@@ -10,6 +10,7 @@ function create (override) {
     override.db = override.db || {};
     override.batch = override.batch || {};
     return {
+        user: override.user || 'localhost',
         db: defaults(override.db, {
             host: 'localhost',
             port: 5432,

@@ -1,15 +1,17 @@
 'use strict';
 
 var assert = require('assert');
-var nodes = require('../../../lib/node');
+var Source = require('../../../lib/node/nodes/source');
+var FilterCategory = require('../../../lib/node/nodes/filter-category');
 
 describe('filter-category', function() {
 
+    var owner = 'localhost';
     var column = 'wadus_column';
-    var source = new nodes.Source({query: 'select * from table'});
+    var source = new Source(owner, {query: 'select * from table'});
 
     it('should work with accept array param', function() {
-        var filterCategory = new nodes.FilterCategory({ source: source, column: column, accept: ['accept_val'] });
+        var filterCategory = new FilterCategory(owner, { source: source, column: column, accept: ['accept_val'] });
 
         assert.equal(filterCategory.column, column);
         assert.deepEqual(filterCategory.accept, ['accept_val']);
@@ -17,7 +19,7 @@ describe('filter-category', function() {
     });
 
     it('should work with reject array param', function() {
-        var filterCategory = new nodes.FilterCategory({ source: source, column: column, reject: ['reject_val'] });
+        var filterCategory = new FilterCategory(owner, { source: source, column: column, reject: ['reject_val'] });
 
         assert.equal(filterCategory.column, column);
         assert.deepEqual(filterCategory.reject, ['reject_val']);
@@ -29,7 +31,7 @@ describe('filter-category', function() {
 
         assert.throws(
             function() {
-                filterCategory = new nodes.FilterCategory({ source: source, column: column });
+                filterCategory = new FilterCategory(owner, { source: source, column: column });
             },
             function(err) {
                 assert.equal(err.message, 'Category filter expects at least one array in accept or reject params');

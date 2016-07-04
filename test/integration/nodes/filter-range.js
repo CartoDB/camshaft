@@ -1,15 +1,17 @@
 'use strict';
 
 var assert = require('assert');
-var nodes = require('../../../lib/node');
+var Source = require('../../../lib/node/nodes/source');
+var FilterRange = require('../../../lib/node/nodes/filter-range');
 
 describe('filter-range', function() {
 
+    var owner = 'localhost';
     var column = 'wadus_column';
-    var source = new nodes.Source({query: 'select * from table'});
+    var source = new Source(owner, {query: 'select * from table'});
 
     it('should work with min param', function() {
-        var filterRange = new nodes.FilterRange({ source: source, column: column, min: 100 });
+        var filterRange = new FilterRange(owner, { source: source, column: column, min: 100 });
 
         assert.equal(filterRange.column, column);
         assert.equal(filterRange.min, 100);
@@ -17,7 +19,7 @@ describe('filter-range', function() {
     });
 
     it('should work with max param', function() {
-        var filterRange = new nodes.FilterRange({ source: source, column: column, max: 10000 });
+        var filterRange = new FilterRange(owner, { source: source, column: column, max: 10000 });
 
         assert.equal(filterRange.column, column);
         assert.equal(filterRange.min, null);
@@ -29,7 +31,7 @@ describe('filter-range', function() {
 
         assert.throws(
             function() {
-                filterRange = new nodes.FilterRange({ source: source, column: column });
+                filterRange = new FilterRange(owner, { source: source, column: column });
             },
             function(err) {
                 assert.equal(

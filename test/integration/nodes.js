@@ -6,6 +6,7 @@ var async = require('async');
 var Analysis = require('../../lib/analysis');
 var BatchClient = require('../../lib/postgresql/batch-client');
 var QueryParser = require('../../lib/postgresql/query-parser');
+var DatabaseService = require('../../lib/service/database');
 
 var testConfig = require('../test-config');
 
@@ -25,16 +26,24 @@ describe('nodes', function() {
         }
     };
 
+    var BUFFER_OVER_SOURCE = {
+        type: 'buffer',
+        params: {
+            source: SOURCE_ATM_MACHINES_DEF,
+            radius: 10000
+        }
+    };
+
     describe('source', function() {
 
         var getColumnsFn;
-        before(function() {
+        beforeEach(function() {
             getColumnsFn = QueryParser.prototype.getColumns;
             QueryParser.prototype.getColumns = function(query, callback) {
                 return callback(null, []);
             };
         });
-        after(function() {
+        afterEach(function() {
             QueryParser.prototype.getColumns = getColumnsFn;
         });
 
@@ -88,6 +97,92 @@ describe('nodes', function() {
 
                 assert.equal(results.length, 2);
                 assert.notEqual(results[0].id(), results[1].id());
+
+                done();
+            });
+        });
+
+    });
+
+    describe('source last updated at affecting node.id', function() {
+
+        var enqueueCalled = 0;
+        var enqueueFn;
+        var getLastUpdatedTimeFromAffectedTablesFn;
+        beforeEach(function() {
+            enqueueFn = BatchClient.prototype.enqueue;
+            BatchClient.prototype.enqueue = function(query, callback) {
+                enqueueCalled += 1;
+                return callback(null, {status: 'ok'});
+            };
+            getLastUpdatedTimeFromAffectedTablesFn = DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables;
+        });
+        afterEach(function() {
+            assert.ok(enqueueCalled > 0);
+            BatchClient.prototype.enqueue = enqueueFn;
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = getLastUpdatedTimeFromAffectedTablesFn;
+        });
+
+        it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
+            var called = false;
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+                if (node.type !== 'source' || node.getUpdatedAt() !== null) {
+                    return callback(null, node.getUpdatedAt());
+                }
+                var lastUpdatedTimeFromAffectedTables = new Date('2016-07-01');
+                if (called) {
+                    lastUpdatedTimeFromAffectedTables = new Date();
+                }
+                if (!called) {
+                    called = true;
+                }
+                return callback(null, lastUpdatedTimeFromAffectedTables);
+            };
+
+            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
+                assert.ok(!err, err);
+
+                assert.equal(results.length, 2);
+
+                var bufferA = results[0].rootNode;
+                var bufferB = results[1].rootNode;
+
+                assert.notEqual(bufferA.source.id(), bufferB.source.id(),
+                        'Sources for buffer should have different id(): "' +
+                        bufferA.source.id() + '" != "' + bufferB.source.id() + '"'
+                );
+
+                assert.notEqual(bufferA.id(), bufferB.id(),
+                        'Buffers, as dependant nodes, should also have a different id(): "' +
+                        bufferA.id() + '" != "' + bufferB.id() + '"'
+                );
+
+                done();
+            });
+        });
+
+        it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+                return callback(null, new Date('2016-07-01'));
+            };
+
+            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
+                assert.ok(!err, err);
+
+                assert.equal(results.length, 2);
+
+                var bufferA = results[0].rootNode;
+                var bufferB = results[1].rootNode;
+
+                assert.equal(bufferA.source.id(), bufferB.source.id(),
+                        'Sources for buffer should have same id(): "' +
+                        bufferA.source.id() + '" == "' + bufferB.source.id() + '"'
+                );
+
+                assert.equal(bufferA.id(), bufferB.id(),
+                        'Buffers, as dependant nodes, should also have same id(): "' +
+                        bufferA.id() + '" == "' + bufferB.id() + '"'
+                );
 
                 done();
             });
@@ -182,6 +277,44 @@ describe('nodes', function() {
 
                 done();
             });
+        });
+
+        it('should have different ids for same params but different owner', function(done) {
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: SOURCE_ATM_MACHINES_DEF,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            async.parallel(
+                [
+                    function(callback) {
+                        var clonedTestConfig = JSON.parse(JSON.stringify(testConfig));
+                        clonedTestConfig.user = 'user1';
+                        Analysis.create(clonedTestConfig, tradeArea15m, callback);
+                    },
+                    function(callback) {
+                        var clonedTestConfig = JSON.parse(JSON.stringify(testConfig));
+                        clonedTestConfig.user = 'user2';
+                        Analysis.create(clonedTestConfig, tradeArea15m, callback);
+                    }
+                ],
+                function(err, results) {
+                    assert.ok(!err, err);
+
+                    assert.equal(results.length, 2);
+                    assert.notEqual(results[0].id(), results[1].id());
+                    assert.notEqual(results[0].getQuery(), results[1].getQuery());
+
+                    done();
+                }
+            );
+
         });
 
     });
