@@ -222,37 +222,6 @@ var dataObservatoryMeasureAdultsFirstLevelStudiesPercent = {
     }
 };
 
-var sourceMod2IdsBarrios = {
-    id: 'even-barrios-source',
-    type: 'source',
-    params: {
-        query: 'select * from barrios where mod(cartodb_id, 2) = 0'
-    }
-};
-
-var sourceMod4IdsBarrios = {
-    id: 'odd-barrios-source-',
-    type: 'source',
-    params: {
-        query: 'select * from barrios where mod(cartodb_id, 4) = 0'
-    }
-};
-
-var joinBarrios = {
-    id: 'join-example',
-    type: 'join',
-    params: {
-        input_left: sourceMod2IdsBarrios,
-        input_left_column_join_on: 'cartodb_id',
-        input_left_final_columns: ['nombre', 'codbarrio'],
-        input_right: sourceMod4IdsBarrios,
-        input_right_column_join_on: 'cartodb_id',
-        input_right_final_columns: ['nomdis', 'codbar'],
-        join_type: 'left',
-        geom_from: 'input_left'
-    }
-};
-
 var adminRegionsFromPopulatedPlacesSimpleSource = {
     id: 'adminRegions-from-populated-places-simple-source',
     type: 'source',
@@ -1590,6 +1559,37 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 3
     },
+    merge: {
+        name: 'merge populated + world borders',
+        def: {
+            id: 'merge-example',
+            type: 'merge',
+            params: {
+                left_source: {
+                    id: 'even-barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple_reduced'
+                    }
+                },
+                right_source: {
+                    id: 'world-borders',
+                    type: 'source',
+                    params: {
+                        query: 'select * from world_borders_hd where admin != \'Antarctica\''
+                    }
+                },
+                left_source_column: 'adm0_a3',
+                right_source_column: 'adm0_a3',
+                join_operator: 'inner',
+                source_geometry: 'left_source',
+                right_source_columns: ['pop_est', 'gdp_md_est']
+            }
+        },
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     filterByNodeColumn: {
         name: 'filter by node column',
         def: {
@@ -1756,22 +1756,6 @@ var examples = {
        center: [40.44, -3.7],
        zoom: 6
    },
-   join: {
-       name: 'join barrios',
-       def: joinBarrios,
-       cartocss: [
-           '#layer{',
-           '  polygon-fill: #f42220;',
-           '  polygon-opacity: 0.6;',
-           '  polygon-opacity: 0.7;',
-           '  line-color: #FFF;',
-           '  line-width: 0.5;',
-           '  line-opacity: 1;',
-           '}'
-       ].join('\n'),
-       center: [40.44, -3.7],
-       zoom: 12
-    },
    'routing-to-single-point': {
        name: 'routing to a single point',
        def: routingToSinglePointDefinition,
