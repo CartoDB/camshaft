@@ -240,4 +240,52 @@ describe('cached nodes', function() {
         });
     });
 
+    describe('cached tables should not get recreated', function() {
+
+        // TODO: clean analysis catalog after each test.
+        // Use a different source to rest state.
+        var source = {
+            type: 'source',
+            params: {
+                query: 'select * from atm_machines limit 1000'
+            }
+        };
+
+        var rawRank = rankDefinition(source);
+        var filteredRank = filteredNodeDefinition(rankDefinition(source), rankFilters);
+
+        before(function(done) {
+            this.createAnalysis(rawRank, function(err, rankResult) {
+                if (err) {
+                    return done(err);
+                }
+                assert.equal(rankResult.getRoot().getStatus(), 'pending');
+                return done();
+            });
+        });
+
+        it('should skip table creation for filtered cache table', function(done) {
+            var self = this;
+
+            this.createAnalysis(rawRank, function(err, rawRankResult) {
+                if (err) {
+                    return done(err);
+                }
+
+                self.createAnalysis(filteredRank, function(err, filteredRankResult) {
+                    if (err) {
+                        return done(err);
+                    }
+                    var rawRankNode = rawRankResult.getRoot();
+                    var filteredRankNode = filteredRankResult.getRoot();
+
+                    assert.equal(rawRankNode.getStatus(), 'ready');
+                    assert.equal(filteredRankNode.getStatus(), 'ready');
+
+                    return done();
+                });
+            });
+        });
+    });
+
 });
