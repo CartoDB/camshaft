@@ -1,8 +1,11 @@
 # Changelog
 
-## 0.26.1
+## 0.27.0
 
-Released 2016-mm-dd
+Released 2016-07-04
+
+- Adds routing analyses
+- Adds rank filters (all and grouped rankings)
 
 
 ## 0.26.0
