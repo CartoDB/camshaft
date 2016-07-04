@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.27.1
+## 0.28.0
 
 Released 2016-mm-dd
  - Store errors in new analysis catalog table #109.
