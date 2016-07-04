@@ -2,7 +2,7 @@
 
 ## 0.29.0
 
-Released 2016-mm-dd
+Released 2016-07-04
 
  - Adds merge analysis.
 
