@@ -37,6 +37,10 @@ before(function setupTestDatabase(done) {
             function createPostgisExtension(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -c "CREATE EXTENSION postgis;"', callback);
             },
+            function createDataServicesClientSchema(stdout, stderr, callback) {
+                var command = 'psql -d ' + DATABASE_NAME + ' -c "CREATE SCHEMA IF NOT EXISTS cdb_dataservices_client;"';
+                exec(command, callback);
+            },
             function applyFixtures(stdout, stderr, callback) {
                 async.map(fixturePaths, function (path, callback) {
                     exec('psql -d ' + DATABASE_NAME + ' -f ' + path, callback);
