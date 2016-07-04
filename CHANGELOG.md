@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
 
+ - Cached tables don't get recreated when applying a filter #535.
  - Cache filter-rank analysis as it needs full knowledge of the table it.
 
 
