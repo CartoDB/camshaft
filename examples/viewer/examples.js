@@ -1511,6 +1511,31 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 3
     },
+    filter_grouped_rank: {
+        name: 'city most populated by country (filter grouped rank)',
+        def: {
+            id: UUID,
+            type: 'filter-grouped-rank',
+            params: {
+                source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple'
+                    }
+                },
+                column: 'pop_max',
+                rank: 'top',
+                group: 'iso_a2',
+                max: 1
+            }
+        },
+        dataviews: {},
+        filters: {},
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     filterByNodeColumn: {
         name: 'filter by node column',
         def: {
