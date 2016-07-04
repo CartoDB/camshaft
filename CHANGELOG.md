@@ -2,7 +2,7 @@
 
 ## 0.28.0
 
-Released 2016-mm-dd
+Released 2016-07-04
  - Store errors in new analysis catalog table #109.
 
 
