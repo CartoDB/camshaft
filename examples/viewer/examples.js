@@ -1511,7 +1511,7 @@ var examples = {
                 },
                 column: 'pop_max',
                 rank: 'top',
-                limit: 100
+                limit: 10
             }
         },
         dataviews: {},
