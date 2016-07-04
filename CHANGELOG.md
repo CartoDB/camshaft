@@ -1,8 +1,36 @@
 # Changelog
 
-## 0.23.1
+## 0.26.1
 
 Released 2016-mm-dd
+
+
+## 0.26.0
+
+Released 2016-07-04
+
+ - Make the aggregation_column param of the aggreagation-intersection optional when the operation is `count` #102.
+ - Improves cached nodes and filters inner working: cache table target name independent from filters #114.
+ - Adds markov analysis #112.
+ - Skips retrieval of last update time for root source nodes #110
+
+
+## 0.25.0
+
+Released 2016-07-02
+
+ - Skip retrieval of last update time for root source nodes.
+ - Allow to skip retrieval of last update in database service.
+
+
+## 0.24.0
+
+Released 2016-07-02
+
+ - Nodes now has owners, the owner modifies the node.id.
+   - This is a BREAKING CHANGE: clients need to provide a user in configuration.
+ - Ignore duplicated node ids when registering them, allowing several clients to run in parallel.
+ - Allow to have attributes that modifies node.id() without getting into json #103.
 
 
 ## 0.23.0

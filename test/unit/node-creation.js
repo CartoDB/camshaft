@@ -6,6 +6,8 @@ var Node = require('../../lib/node/node');
 
 describe('node-creation', function() {
 
+    var owner = 'localhost';
+
     describe('reserved keywords', function() {
         it('should fail for reserved param names', function() {
             var ReservedKeywordNode;
@@ -29,7 +31,7 @@ describe('node-creation', function() {
 
     it('should validate params', function() {
         var QUERY = 'select * from table';
-        var source = new TestSource({ query: QUERY });
+        var source = new TestSource(owner, { query: QUERY });
         assert.equal(source.query, QUERY);
     });
 
@@ -37,7 +39,7 @@ describe('node-creation', function() {
         var source;
         assert.throws(
             function() {
-                 source = new TestSource({});
+                 source = new TestSource(owner, {});
             },
             function(err) {
                 assert.equal(err.message, 'Missing required param "query"');
@@ -50,7 +52,7 @@ describe('node-creation', function() {
         var source;
         assert.throws(
             function() {
-                source = new TestSource({ query: 2 });
+                source = new TestSource(owner, { query: 2 });
             },
             function(err) {
                 assert.equal(err.message, 'Invalid type for param "query", expects "string" type, got `2`');
@@ -65,7 +67,7 @@ describe('node-creation', function() {
         it('should check ENUM uses one of the values', function() {
             var CLASSIFICATIONS = ['knn', 'queen'];
             CLASSIFICATIONS.forEach(function(classification) {
-                var enumSource = new EnumSource({ classification: classification });
+                var enumSource = new EnumSource(owner, { classification: classification });
                 assert.equal(enumSource.classification, classification);
             });
         });
@@ -74,7 +76,7 @@ describe('node-creation', function() {
             var enumSource;
             assert.throws(
                 function() {
-                    enumSource = new EnumSource({ classification: 'wadus' });
+                    enumSource = new EnumSource(owner, { classification: 'wadus' });
                 },
                 function(err) {
                     assert.equal(
@@ -95,7 +97,7 @@ describe('node-creation', function() {
         });
 
         it('should work for valid params', function() {
-            var nullableNode = new NullableNode({ mandatory: 'wadus_mandatory', optional: 'wadus_optional' });
+            var nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 'wadus_optional' });
             assert.equal(nullableNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableNode.optional, 'wadus_optional');
         });
@@ -104,7 +106,7 @@ describe('node-creation', function() {
             var nullableNode;
             assert.throws(
                 function() {
-                    nullableNode = new NullableNode({ mandatory: 'wadus_mandatory', optional: 1 });
+                    nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 1 });
                 },
                 function(err) {
                     assert.equal(
@@ -120,7 +122,7 @@ describe('node-creation', function() {
             var nullableNode;
             assert.throws(
                 function() {
-                    nullableNode = new NullableNode({ mandatory: 'wadus_mandatory', optional: 0 });
+                    nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 0 });
                 },
                 function(err) {
                     assert.equal(
@@ -133,13 +135,13 @@ describe('node-creation', function() {
         });
 
         it('should allow to use null values for NULLABLE params', function() {
-            var nullableNode = new NullableNode({ mandatory: 'wadus_mandatory', optional: null });
+            var nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: null });
             assert.equal(nullableNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableNode.optional, null);
         });
 
         it('should allow to use undefined values for NULLABLE params', function() {
-            var nullableNode = new NullableNode({ mandatory: 'wadus_mandatory' });
+            var nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory' });
             assert.equal(nullableNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableNode.optional, null);
         });
@@ -152,12 +154,12 @@ describe('node-creation', function() {
         });
 
         it('should work for mixed arrays', function() {
-            var listNode = new ListNode({ list: [ 1, 'wadus' ] });
+            var listNode = new ListNode(owner, { list: [ 1, 'wadus' ] });
             assert.deepEqual(listNode.list, [ 1, 'wadus' ]);
         });
 
         it('should work for empty arrays', function() {
-            var listNode = new ListNode({ list: [] });
+            var listNode = new ListNode(owner, { list: [] });
             assert.deepEqual(listNode.list, []);
         });
 
@@ -171,12 +173,12 @@ describe('node-creation', function() {
             });
 
             it('should work for string arrays', function() {
-                var listNode = new StringTypedListNode({ list: [ 'wadus', 'wadus' ] });
+                var listNode = new StringTypedListNode(owner, { list: [ 'wadus', 'wadus' ] });
                 assert.deepEqual(listNode.list, [ 'wadus', 'wadus' ]);
             });
 
             it('should work for number arrays', function() {
-                var listNode = new NumberTypedListNode({ list: [ 1, 2, 3, 4 ] });
+                var listNode = new NumberTypedListNode(owner, { list: [ 1, 2, 3, 4 ] });
                 assert.deepEqual(listNode.list, [ 1, 2, 3, 4 ]);
             });
 
@@ -185,7 +187,7 @@ describe('node-creation', function() {
 
                 assert.throws(
                     function() {
-                        listNode = new StringTypedListNode({ list: [ 1, 'wadus' ] });
+                        listNode = new StringTypedListNode(owner, { list: [ 1, 'wadus' ] });
                     },
                     function(err) {
                         assert.equal(
@@ -202,7 +204,7 @@ describe('node-creation', function() {
 
                 assert.throws(
                     function() {
-                        listNode = new NumberTypedListNode({ list: [ 1, 'wadus' ] });
+                        listNode = new NumberTypedListNode(owner, { list: [ 1, 'wadus' ] });
                     },
                     function(err) {
                         assert.equal(
@@ -220,7 +222,7 @@ describe('node-creation', function() {
                 });
 
                 it('should work for null param', function() {
-                    var listNode = new NullableStringTypedListNode({});
+                    var listNode = new NullableStringTypedListNode(owner, {});
                     assert.equal(listNode.list, null);
                 });
 
@@ -229,7 +231,7 @@ describe('node-creation', function() {
 
                     assert.throws(
                         function() {
-                            listNode = new NullableStringTypedListNode({ list: [ 1, 'wadus' ] });
+                            listNode = new NullableStringTypedListNode(owner, { list: [ 1, 'wadus' ] });
                         },
                         function(err) {
                             assert.equal(
@@ -254,7 +256,7 @@ describe('node-creation', function() {
         });
 
         it('should work for expected array list', function () {
-            var customValidationNode = new CustomValidationNode({ list: validList });
+            var customValidationNode = new CustomValidationNode(owner, { list: validList });
             assert.deepEqual(customValidationNode.list, validList);
         });
 
@@ -263,7 +265,7 @@ describe('node-creation', function() {
 
             assert.throws(
                 function() {
-                    customValidationNode = new CustomValidationNode({ list: [1] });
+                    customValidationNode = new CustomValidationNode(owner, { list: [1] });
                 },
                 function(err) {
                     assert.equal(err.message, 'Custom validation throws this');
@@ -283,14 +285,14 @@ describe('node-creation', function() {
         });
 
         it('should have different id for A and AB nodes', function () {
-            var aNode = new ANode({a: 'a'});
-            var abNode = new ABNode({a: 'a', b: 'b'});
+            var aNode = new ANode(owner, {a: 'a'});
+            var abNode = new ABNode(owner, {a: 'a', b: 'b'});
             assert.notEqual(aNode.id(), abNode.id());
         });
 
         it('should have same id for A and AIgnoredB nodes', function () {
-            var aNode = new ANode({a: 'a'});
-            var abNode = new AIgnoredBNode({a: 'a', b: 'b'});
+            var aNode = new ANode(owner, {a: 'a'});
+            var abNode = new AIgnoredBNode(owner, {a: 'a', b: 'b'});
             assert.equal(aNode.id(), abNode.id());
         });
     });
@@ -304,7 +306,7 @@ describe('node-creation', function() {
                 var ANode = Node.create('test-default-value-' + paramType, {
                     a: Node.PARAM.NULLABLE(Node.PARAM[paramType]())
                 });
-                var aNode = new ANode({});
+                var aNode = new ANode(owner, {});
                 assert.equal(aNode.a, null);
             });
         });
@@ -313,7 +315,7 @@ describe('node-creation', function() {
             var ANode = Node.create('test-default-value', {
                 a: Node.PARAM.NULLABLE(Node.PARAM.ENUM('a', 'b', 'c'))
             });
-            var aNode = new ANode({});
+            var aNode = new ANode(owner, {});
             assert.equal(aNode.a, 'a');
         });
 
@@ -321,7 +323,7 @@ describe('node-creation', function() {
             var ANode = Node.create('test-default-value', {
                 a: Node.PARAM.NULLABLE(Node.PARAM.ENUM('a', 'b', 'c'), 'b')
             });
-            var aNode = new ANode({});
+            var aNode = new ANode(owner, {});
             assert.equal(aNode.a, 'b');
         });
 
@@ -329,7 +331,7 @@ describe('node-creation', function() {
             var ANode = Node.create('test-default-value', {
                 a: Node.PARAM.NULLABLE(Node.PARAM.ENUM(false, true))
             });
-            var aNode = new ANode({});
+            var aNode = new ANode(owner, {});
             assert.equal(aNode.a, false);
         });
 
@@ -337,7 +339,7 @@ describe('node-creation', function() {
             var ANode = Node.create('test-default-value', {
                 a: Node.PARAM.NULLABLE(Node.PARAM.ENUM(true, false), false)
             });
-            var aNode = new ANode({});
+            var aNode = new ANode(owner, {});
             assert.equal(aNode.a, false);
         });
     });

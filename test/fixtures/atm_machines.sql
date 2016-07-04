@@ -24,10 +24,3 @@ CREATE INDEX atm_machines_the_geom_idx ON atm_machines USING gist (the_geom);
 
 
 CREATE INDEX atm_machines_the_geom_webmercator_idx ON atm_machines USING gist (the_geom_webmercator);
-
-
-CREATE OR REPLACE FUNCTION CDB_QueryTables_Updated_At(query text)
-    RETURNS TABLE(dbname text, schema_name text, table_name text, updated_at timestamptz)
-AS $$
-    SELECT 'analysis_api_test_db'::text, 'public'::text, 'atm_machines'::text, now()
-$$ LANGUAGE SQL;
