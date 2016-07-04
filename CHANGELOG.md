@@ -3,14 +3,15 @@
 ## 0.27.1
 
 Released 2016-mm-dd
+ - Store errors in new analysis catalog table #109.
 
 
 ## 0.27.0
 
 Released 2016-07-04
 
-- Adds routing analyses
-- Adds rank filters (all and grouped rankings)
+ - Adds routing analyses
+ - Adds rank filters (all and grouped rankings)
 
 
 ## 0.26.0
