@@ -2,7 +2,7 @@
 
 ## 0.28.1
 
-Released 2016-mm-dd
+Released 2016-07-04
 
  - Make kmeans analysis consistent between runs #116.
 
