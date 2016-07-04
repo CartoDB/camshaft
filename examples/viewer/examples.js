@@ -341,6 +341,17 @@ var routingToSinglePointDefinition = {
     }
 };
 
+var routingSequentialDefinition = {
+    id: 'routing-sequential-example',
+    type: 'routing-sequential',
+    params: {
+        source: sourceAtmDef,
+        mode: 'car',
+        column_target: 'the_geom',
+        units: 'kilometers'
+    }
+};
+
 var examples = {
     centroid: {
         name: 'populated places centroids adm0name',
@@ -1688,4 +1699,17 @@ var examples = {
        center: [40.44, -3.7],
        zoom: 12
    },
+   'routing-sequential': {
+       name: 'routing with sequential',
+       def: routingSequentialDefinition,
+       cartocss: [
+           '#layer{',
+           '  line-color: #F42220;',
+           '  line-width: 2;',
+           '  line-opacity: 0.7;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 12
+    }
 };
