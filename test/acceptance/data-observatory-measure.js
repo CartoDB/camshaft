@@ -15,11 +15,6 @@ describe('data-observatory-measure analysis', function() {
         queryRunner = new QueryRunner(testConfig.db);
     });
 
-    after(function () {
-        // assert.ok(enqueueCalled > 0);
-        // BatchClient.prototype.enqueue = enqueueFn;
-    });
-
     var QUERY = 'select * from atm_machines limit 2';
     var FINAL_COLUMN = 'adults_first_level_studies';
     var SEGMENT_NAME = 'es.ine.t15_8';

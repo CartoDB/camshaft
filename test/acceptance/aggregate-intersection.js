@@ -15,11 +15,6 @@ describe('aggregate-intersection analysis', function() {
         queryRunner = new QueryRunner(testConfig.db);
     });
 
-    after(function () {
-        // assert.ok(enqueueCalled > 0);
-        // BatchClient.prototype.enqueue = enqueueFn;
-    });
-
     var SOURCE_AIRBNB = 'select * from airbnb_rooms';
     var SOURCE_DISTRICTS = 'select * from madrid_districts';
     var AGGREGATE_COLUMN = 'price';

@@ -15,9 +15,6 @@ describe('trade-area analysis', function() {
         queryRunner = new QueryRunner(testConfig.db);
     });
 
-    after(function () {
-    });
-
     var QUERY = 'select * from atm_machines limit 2';
     var KIND = 'car';
     var TIME = 600;
