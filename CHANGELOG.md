@@ -2,7 +2,7 @@
 
 ## 0.29.2
 
-Released 2016-mm-dd
+Released 2016-07-05
 
  - Cache filter-grouped-rank analysis as it needs full knowledge of the table it.
 
