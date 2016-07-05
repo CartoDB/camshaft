@@ -344,4 +344,26 @@ describe('node-creation', function() {
         });
     });
 
+    describe('Cached table names', function() {
+
+        it('should be 60 chars at max for long type names', function() {
+            var ANode = Node.create('test-default-value', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.STRING())
+            });
+
+            var aNode = new ANode(owner, {});
+            assert.equal(aNode.getTargetTable().length, 60);
+        });
+
+        it('should be 60 chars also for short type names', function() {
+            var ANode = Node.create('t', {
+                a: Node.PARAM.NULLABLE(Node.PARAM.STRING())
+            });
+
+            var aNode = new ANode(owner, {});
+            assert.equal(aNode.getTargetTable().length, 60);
+        });
+
+    });
+
 });
