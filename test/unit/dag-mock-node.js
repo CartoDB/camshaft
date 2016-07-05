@@ -19,10 +19,6 @@ MockNode.prototype.getInputNodes = function() {
     return this._inputNodes;
 };
 
-MockNode.prototype.getCacheTables = function() {
-    return [];
-};
-
 MockNode.prototype.toJSON = function() {
     return {
         id: this._id,
