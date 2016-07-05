@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.30.1
+## 0.31.0
 
 Released 2016-mm-dd
+
+ - Use internal version for backwards incompatible releases.
 
 
 ## 0.30.0
