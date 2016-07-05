@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Added column density in aggregate intersection analysis.
+
 
 ## 0.31.0
 
