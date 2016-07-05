@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.31.1
+## 0.32.0
 
-Released 2016-mm-dd
+Released 2016-07-05
 
  - Added column density in aggregate intersection analysis.
 
