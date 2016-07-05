@@ -2,7 +2,7 @@
 
 ## 0.30.0
 
-Released 2016-mm-dd
+Released 2016-07-05
 
  - Limit cached table names to 60 chars #122.
 
