@@ -2,7 +2,7 @@
 
 ## 0.31.0
 
-Released 2016-mm-dd
+Released 2016-07-05
 
  - Use internal version for backwards incompatible releases.
 
