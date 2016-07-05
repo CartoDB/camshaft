@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.29.2
+
+Released 2016-mm-dd
+
+
+## 0.29.1
+
+Released 2016-07-05
+
+ - Cached tables don't get recreated when applying a filter #535.
+ - Cache filter-rank analysis as it needs full knowledge of the table it.
+
+
+## 0.29.0
+
+Released 2016-07-04
+
+ - Adds merge analysis.
+
+
 ## 0.28.1
 
 Released 2016-07-04

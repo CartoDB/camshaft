@@ -1559,6 +1559,37 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 3
     },
+    merge: {
+        name: 'merge populated + world borders',
+        def: {
+            id: 'merge-example',
+            type: 'merge',
+            params: {
+                left_source: {
+                    id: 'even-barrios-source',
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple_reduced'
+                    }
+                },
+                right_source: {
+                    id: 'world-borders',
+                    type: 'source',
+                    params: {
+                        query: 'select * from world_borders_hd where admin != \'Antarctica\''
+                    }
+                },
+                left_source_column: 'adm0_a3',
+                right_source_column: 'adm0_a3',
+                join_operator: 'inner',
+                source_geometry: 'left_source',
+                right_source_columns: ['pop_est', 'gdp_md_est']
+            }
+        },
+        cartocss: CARTOCSS_POINTS,
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     filterByNodeColumn: {
         name: 'filter by node column',
         def: {
