@@ -146,10 +146,21 @@ var aggregateIntersectionDefinition = {
     id: 'aggregate-intersection-example-1',
     type: 'aggregate-intersection',
     params: {
-        source: sourceRentListings,
-        target: sourceBarrios,
+        source: sourceBarrios,
+        target: sourceRentListings,
         aggregate_function: 'max',
         aggregate_column: 'price'
+    }
+};
+
+var aggregateIntersectionDensityDefinition = {
+    id: 'aggregate-intersection-density-example-1',
+    type: 'aggregate-intersection',
+    params: {
+        source: sourceBarrios,
+        target: sourceRentListings,
+        aggregate_function: 'count',
+        aggregate_column: 'cartodb_id'
     }
 };
 
@@ -960,6 +971,22 @@ var examples = {
         cartocss: [
             '#layer{',
             '  polygon-fill: ramp([max_price], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'aggregate-intersection-density': {
+        name: 'airbnb and districts aggregate intersection with density',
+        def: aggregateIntersectionDensityDefinition,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: ramp([aggregate_density], colorbrewer(Reds));',
             '  polygon-opacity: 0.6;',
             '  polygon-opacity: 0.7;',
             '  line-color: #FFF;',
