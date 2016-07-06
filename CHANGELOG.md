@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Avoid creating the same table from factory.
+
 
 ## 0.33.2
 
