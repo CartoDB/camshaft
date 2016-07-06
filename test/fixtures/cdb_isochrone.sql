@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION cdb_isochrone(center GEOMETRY, kind TEXT, range INTEGER[], OUT center geometry, OUT data_range integer, OUT the_geom geometry)
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_isochrone(center GEOMETRY, kind TEXT, range INTEGER[], OUT center geometry, OUT data_range integer, OUT the_geom geometry)
 AS $$
   SELECT
     $1 center,

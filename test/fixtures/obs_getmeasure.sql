@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION OBS_GetMeasure(
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetMeasure(
   geom geometry,
   segment_name text
 )

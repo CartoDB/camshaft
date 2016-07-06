@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Now SQL functions are fully qualified #113
+
 
 ## 0.32.0
 
