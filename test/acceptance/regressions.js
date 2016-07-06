@@ -62,4 +62,25 @@ describe('regressions', function() {
             done();
         });
     });
+
+    it('should fail properly when a node param is missing', function (done) {
+        var samplingSource = {
+            id: 'a1',
+            type: 'sampling',
+            params: {
+                missing_source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'SELECT * FROM airbnb_rooms'
+                    }
+                }
+            }
+        };
+        Analysis.create(this.testConfig, samplingSource, function (err) {
+            assert.ok(err);
+            assert.equal(err.message, 'Invalid type for param "source", expects "node" type, got `undefined`');
+            return done();
+        });
+    });
 });
