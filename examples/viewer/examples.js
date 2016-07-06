@@ -986,7 +986,7 @@ var examples = {
         def: aggregateIntersectionDensityDefinition,
         cartocss: [
             '#layer{',
-            '  polygon-fill: ramp([aggregate_density], colorbrewer(Reds));',
+            '  polygon-fill: ramp([count_vals_density], colorbrewer(Reds));',
             '  polygon-opacity: 0.6;',
             '  polygon-opacity: 0.7;',
             '  line-color: #FFF;',

@@ -66,9 +66,17 @@ describe('aggregate-intersection analysis', function() {
                         definition.params.aggregate_column
                     ].join('_');
 
-                    assert.ok(district[aggregateProperty]);
+                    if (definition.params.aggregate_function === 'count') {
+                        assert.ok(district.count_vals);
+                        assert.ok(district.count_vals_density);
 
-                    return district[aggregateProperty];
+                        return district.count_vals;
+                    } else {
+                        assert.ok(district[aggregateProperty]);
+
+                        return district[aggregateProperty];
+                    }
+
                 });
 
                 callback(null, aggregatedValues);
