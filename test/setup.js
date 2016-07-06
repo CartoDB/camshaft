@@ -14,6 +14,7 @@ var DATABASE_NAME = testConfig.db.dbname;
 
 before(function setupTestDatabase(done) {
     var fixturePaths = [
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client.sql'),
         fs.realpathSync('./test/fixtures/cdb_querytables_updated_at.sql'),
         fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql'),
         fs.realpathSync('./test/fixtures/cdb_isochrone.sql'),
@@ -36,10 +37,6 @@ before(function setupTestDatabase(done) {
             },
             function createPostgisExtension(stdout, stderr, callback) {
                 exec('psql -d ' + DATABASE_NAME + ' -c "CREATE EXTENSION postgis;"', callback);
-            },
-            function createDataServicesClientSchema(stdout, stderr, callback) {
-                var command = 'psql -d ' + DATABASE_NAME + ' -c "CREATE SCHEMA IF NOT EXISTS cdb_dataservices_client;"';
-                exec(command, callback);
             },
             function applyFixtures(stdout, stderr, callback) {
                 async.map(fixturePaths, function (path, callback) {
