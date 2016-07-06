@@ -1,10 +1,11 @@
 # Changelog
 
-## 0.32.1
+## 0.33.0
 
-Released 2016-mm-dd
+Released 2016-07-06
 
  - Now SQL functions are fully qualified #113
+ - Georeference Street Address has a param to choose the 3rd party service to look up
 
 
 ## 0.32.0
