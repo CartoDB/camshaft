@@ -2,7 +2,7 @@
 
 ## 0.33.2
 
-Released 2016-mm-dd
+Released 2016-07-06
 
  - Fixes validation for nodes: it was failing when a node was missing from the definition.
 
