@@ -2,7 +2,7 @@
 
 ## 0.33.3
 
-Released 2016-mm-dd
+Released 2016-07-06
 
  - Avoid creating the same table from factory.
 
