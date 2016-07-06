@@ -2,7 +2,7 @@
 
 ## 0.33.1
 
-Released 2016-mm-dd
+Released 2016-07-07
 
  - Cache `intersection` and `aggregate-intersection` analyses.
  - Fixed column naming in aggregate intersection analysis.
