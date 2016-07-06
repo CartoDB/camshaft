@@ -1,10 +1,38 @@
 # Changelog
 
-## 0.29.2
+## 0.32.1
 
 Released 2016-mm-dd
 
  - Now SQL functions are fully qualified #113
+
+
+## 0.32.0
+
+Released 2016-07-05
+
+ - Added column density in aggregate intersection analysis.
+
+
+## 0.31.0
+
+Released 2016-07-05
+
+ - Use internal version for backwards incompatible releases.
+
+
+## 0.30.0
+
+Released 2016-07-05
+
+ - Limit cached table names to 60 chars #122.
+
+
+## 0.29.2
+
+Released 2016-07-05
+
+ - Cache filter-grouped-rank analysis as it needs full knowledge of the table it.
 
 
 ## 0.29.1

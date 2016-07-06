@@ -61,7 +61,8 @@ describe('workflow', function() {
                 assert.ok(enqueueCalled);
 
                 assert.ok(!err, err);
-                assert.ok(analysis.getQuery().match(/select\s\*\sfrom analysis_trade_area/));
+                var rootNode = analysis.getRoot();
+                assert.ok(analysis.getQuery().match(new RegExp('select\\s\\*\\sfrom ' + rootNode.getTargetTable())));
 
                 var nodesList = analysis.getNodes();
                 assert.equal(nodesList.length, 2);

@@ -101,7 +101,43 @@ RETURNS Geometry AS $$
   END
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_mapzen_geocode_street_point(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
+RETURNS Geometry AS $$
+  DECLARE
+    ret Geometry;
+  BEGIN
+    SELECT the_geom INTO ret FROM populated_places_simple WHERE cartodb_id = searchtext::integer LIMIT 1;
+
+    RETURN ret;
+  END
+$$ LANGUAGE plpgsql;
+
+
 CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_geocode_street_point(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
+RETURNS Geometry AS $$
+  DECLARE
+    ret Geometry;
+  BEGIN
+    SELECT the_geom INTO ret FROM populated_places_simple WHERE cartodb_id = searchtext::integer LIMIT 1;
+
+    RETURN ret;
+  END
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_here_geocode_street_point(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
+RETURNS Geometry AS $$
+  DECLARE
+    ret Geometry;
+  BEGIN
+    SELECT the_geom INTO ret FROM populated_places_simple WHERE cartodb_id = searchtext::integer LIMIT 1;
+
+    RETURN ret;
+  END
+$$ LANGUAGE plpgsql;
+
+
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_google_geocode_street_point(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
 RETURNS Geometry AS $$
   DECLARE
     ret Geometry;
