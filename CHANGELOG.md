@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.33.4
+## 0.34.0
 
-Released 2016-mm-dd
+Released 2016-07-07
+
+ - Trade Area accepts provider service as input param
 
 
 ## 0.33.3
