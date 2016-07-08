@@ -14,14 +14,20 @@ var DATABASE_NAME = testConfig.db.dbname;
 
 before(function setupTestDatabase(done) {
     var fixturePaths = [
+        fs.realpathSync('./test/fixtures/postgis_extension.sql'),
         fs.realpathSync('./test/fixtures/cdb_querytables_updated_at.sql'),
         fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql'),
-        fs.realpathSync('./test/fixtures/cdb_isochrone.sql'),
-        fs.realpathSync('./test/fixtures/atm_machines.sql'),
-        fs.realpathSync('./test/fixtures/madrid_districts.sql'),
-        fs.realpathSync('./test/fixtures/airbnb_rooms.sql'),
-        fs.realpathSync('./test/fixtures/obs_getmeasure.sql'),
-        fs.realpathSync('./test/fixtures/cdb_route_point_to_point.sql')
+
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client/schema.sql'),
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_geocoder.sql'),
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_isochrone.sql'),
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_route_point_to_point.sql'),
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_route_with_waypoints.sql'),
+        fs.realpathSync('./test/fixtures/cdb_dataservices_client/obs_getmeasure.sql'),
+
+        fs.realpathSync('./test/fixtures/table/madrid_districts.sql'),
+        fs.realpathSync('./test/fixtures/table/atm_machines.sql'),
+        fs.realpathSync('./test/fixtures/table/airbnb_rooms.sql')
     ];
 
     async.waterfall(
@@ -34,17 +40,8 @@ before(function setupTestDatabase(done) {
             function createDatabase(callback) {
                 exec('createdb -EUTF8 ' + DATABASE_NAME, callback);
             },
-            function createPostgisExtension(stdout, stderr, callback) {
-                exec('psql -d ' + DATABASE_NAME + ' -c "CREATE EXTENSION postgis;"', callback);
-            },
-            function createSchema(stdout, stderr, callback) {
-                exec(
-                    'psql -d ' + DATABASE_NAME + ' -c "CREATE SCHEMA IF NOT EXISTS cdb_dataservices_client;"',
-                    callback
-                );
-            },
             function applyFixtures(stdout, stderr, callback) {
-                async.map(fixturePaths, function (path, callback) {
+                async.eachSeries(fixturePaths, function (path, callback) {
                     exec('psql -d ' + DATABASE_NAME + ' -f ' + path, callback);
                 }, callback);
             }
