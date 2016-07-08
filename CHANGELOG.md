@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
 
+ - Node gets last error message from analysis catalog database.
 
 ## 0.34.0
 
