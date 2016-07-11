@@ -1,8 +1,8 @@
 # Changelog
 
-## 0.35.1
+## 0.36.0
 
-Released 2016-mm-dd
+Released 2016-07-11
 
  - Added `node_id` param to errors in node creation to specify the exact node where the error happened
 
