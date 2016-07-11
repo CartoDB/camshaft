@@ -43,6 +43,9 @@ describe('node-creation', function() {
             },
             function(err) {
                 assert.equal(err.message, 'Missing required param "query"');
+                assert.ok(err.node_id);
+                assert.equal(err.node_id.length, 40);
+
                 return true;
             }
         );
@@ -56,6 +59,9 @@ describe('node-creation', function() {
             },
             function(err) {
                 assert.equal(err.message, 'Invalid type for param "query", expects "string" type, got `2`');
+                assert.ok(err.node_id);
+                assert.equal(err.node_id.length, 40);
+
                 return true;
             }
         );
