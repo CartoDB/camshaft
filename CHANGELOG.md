@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Added `node_id` param to errors in node creation to specify the exact node where the error happened
+
 
 ## 0.35.0
 
