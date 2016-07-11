@@ -30,6 +30,23 @@ describe('workflow-validator', function() {
         }
     };
 
+    var missedParamTradeAreaAnalysisDefinition = {
+        type: 'trade-area',
+        id: 'HEAD',
+        params: {
+            source: {
+                type: 'source',
+                params: {
+                    query: QUERY_ATM_MACHINES
+                }
+            },
+            time: TRADE_AREA_15M,
+            isolines: ISOLINES,
+            dissolved: DISSOLVED
+        }
+    };
+
+
     function createServiceStub(result) {
         return function(query, callback) {
             return callback(null, result);
@@ -70,6 +87,27 @@ describe('workflow-validator', function() {
 
             assert.equal(node.getOwner(), 'foo-user');
 
+            done();
+        });
+    });
+
+    it('should return error with missing param and the provided node id', function(done) {
+        var factory = new Factory('foo-user', DatabaseServiceStub);
+        factory.create(missedParamTradeAreaAnalysisDefinition, function(err) {
+            assert.ok(err, err);
+            assert.equal(err.message, 'Missing required param "kind"');
+            assert.equal(err.node_id, 'HEAD');
+            done();
+        });
+    });
+
+    it('should return error with missing param w/o node id', function(done) {
+        var factory = new Factory('foo-user', DatabaseServiceStub);
+        delete missedParamTradeAreaAnalysisDefinition.id;
+        factory.create(missedParamTradeAreaAnalysisDefinition, function(err) {
+            assert.ok(err, err);
+            assert.equal(err.message, 'Missing required param "kind"');
+            assert.ok(!err.node_id, err.node_id);
             done();
         });
     });
