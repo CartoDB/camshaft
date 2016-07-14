@@ -246,8 +246,8 @@ var georeferenceAdminRegionDefinition = {
     type: 'georeference-admin-region',
     params: {
         source: adminRegionsFromPopulatedPlacesSimpleSource,
-        admin_region: 'admin_region',
-        country: 'country'
+        admin_region_column: 'admin_region',
+        country_column: 'country'
     }
 };
 
@@ -264,9 +264,9 @@ var georeferenceCityDefinition = {
     type: 'georeference-city',
     params: {
         source: citiesFromPopulatedPlacesSimpleSource,
-        city: 'city',
-        admin_region: 'admin_region',
-        country: 'country'
+        city_column: 'city',
+        admin_region_column: 'admin_region',
+        country_column: 'country'
     }
 };
 
@@ -318,8 +318,8 @@ var georeferencePostalCodeDefinition = {
     type: 'georeference-postal-code',
     params: {
         source: postalCodesFromPopulatedPlacesSimpleSource,
-        postal_code: 'postal_code',
-        country: 'country'
+        postal_code_column: 'postal_code',
+        country_column: 'country'
     }
 };
 
@@ -336,9 +336,27 @@ var georeferenceStreetAddressDefinition = {
     type: 'georeference-street-address',
     params: {
         source: georeferenceStreetAddressSource,
-        street_address: 'street_address'
+        street_address_column: 'street_address'
     }
 };
+
+var countriesFromPopulatedPlacesSimpleSource = {
+    id: 'countries-from-populated-places-simple-source',
+    type: 'source',
+    params: {
+        query: 'select adm0name as country from populated_places_simple where adm0name = \'Spain\''
+    }
+};
+
+var georeferenceCountryDefinition = {
+    id: 'georeference-country-definition',
+    type: 'georeference-country',
+    params: {
+        source: countriesFromPopulatedPlacesSimpleSource,
+        country_column: 'country'
+    }
+};
+
 
 var routingToSinglePointDefinition = {
     id: 'routing-to-single-point-example',
@@ -1767,6 +1785,25 @@ var examples = {
    'georeference-street-address': {
        name: 'georeferencing street addresses',
        def: georeferenceStreetAddressDefinition,
+       cartocss: [
+           '#layer{',
+           '   marker-fill-opacity: 0.9;',
+           '   marker-line-color: #FFF;',
+           '   marker-line-width: 1;',
+           '   marker-line-opacity: 1;',
+           '   marker-placement: point;',
+           '   marker-type: ellipse;',
+           '   marker-width: 10;',
+           '   marker-fill: #FF6600;',
+           '   marker-allow-overlap: true;',
+           '}'
+       ].join('\n'),
+       center: [40.44, -3.7],
+       zoom: 6
+   },
+   'georeference-country': {
+       name: 'georeferencing country',
+       def: georeferenceCountryDefinition,
        cartocss: [
            '#layer{',
            '   marker-fill-opacity: 0.9;',
