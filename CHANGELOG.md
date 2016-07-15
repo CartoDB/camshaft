@@ -1,8 +1,13 @@
 # Changelog
 
-## 0.36.1
+## 0.37.0
 
-Released 2016-mm-dd
+Released 2016-07-15
+
+ - Fixed issues in geocoding analysis:
+  - Allowed to use column values and custom tests in params
+  - Created a separated analysis for country geocoding
+  - Made optional some params and used different geocoding functions depending on input params.
 
 
 ## 0.36.0
