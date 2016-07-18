@@ -2,7 +2,9 @@
 
 ## 0.37.1
 
-Released 2016-mm-dd
+Released 2016-07-18
+
+ - Changed default value for trade-area provider.
 
 
 ## 0.37.0
