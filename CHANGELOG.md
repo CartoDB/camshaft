@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Set order clause in AOI analysis to render polygons big-to-small
+
 
 ## 0.37.1
 
