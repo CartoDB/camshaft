@@ -17,6 +17,7 @@ _cdb_analysis_isochrones_spread AS (
     (isochrone).data_range,
     (isochrone).the_geom
   FROM _cdb_analysis_isochrones
+  ORDER BY (isochrone).data_range DESC
 )
 SELECT
   data_range,

@@ -18,3 +18,4 @@ SELECT
   (isochrone).the_geom,
   {{=it.columnsQuery}}
 FROM _cdb_analysis_isochrones
+ORDER BY (isochrone).data_range DESC
