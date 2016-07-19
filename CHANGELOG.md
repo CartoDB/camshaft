@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.37.2
+## 0.38.0
 
 Released 2016-mm-dd
+
+ - Now in intersection analysis client is able to specify source columns.
 
 
 ## 0.37.1
@@ -17,9 +19,9 @@ Released 2016-07-18
 Released 2016-07-15
 
  - Fixed issues in geocoding analysis:
-  - Allowed to use column values and custom tests in params
-  - Created a separated analysis for country geocoding
-  - Made optional some params and used different geocoding functions depending on input params.
+ - Allowed to use column values and custom tests in params
+ - Created a separated analysis for country geocoding
+ - Made optional some params and used different geocoding functions depending on input params.
 
 
 ## 0.36.0
