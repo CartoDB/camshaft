@@ -1,6 +1,6 @@
 SELECT input_query.*, moran.*
 FROM ({{=it._query}}) input_query, (
-  SELECT * FROM
+  SELECT quads, significance, moran FROM
   cdb_crankshaft.CDB_AreasOfInterestLocal(
     '{{=it._query}}',
     '{{=it._numeratorColumn}}',
