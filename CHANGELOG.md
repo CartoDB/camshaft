@@ -2,7 +2,9 @@
 
 ## 0.38.1
 
-Released 2016-mm-dd
+Released 2016-07-21
+
+ - Fixes missing `cartodb_id` column in merge analysis.
 
 
 ## 0.38.0
