@@ -2,7 +2,7 @@
 
 ## 0.38.0
 
-Released 2016-mm-dd
+Released 2016-07-21
 
  - Set order clause in AOI analysis to render polygons big-to-small
  - Now in intersection analysis client is able to specify source columns.
