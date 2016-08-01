@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Freeze last updated time for queries/tables not found by CDB_QueryTables_Updated_At #143.
+
 
 ## 0.38.1
 
