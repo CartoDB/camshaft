@@ -19,6 +19,10 @@ MockNode.prototype.getInputNodes = function() {
     return this._inputNodes;
 };
 
+MockNode.prototype.getType = function() {
+    return 'mock-node';
+};
+
 MockNode.prototype.toJSON = function() {
     return {
         id: this._id,
