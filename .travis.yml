@@ -3,6 +3,9 @@ sudo: false
 addons:
   postgresql: "9.5"
 
+before_script:
+  - psql -c 'create database analysis_api_test_db;' -U postgres
+
 env:
   - PGUSER=postgres
 

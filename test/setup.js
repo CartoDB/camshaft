@@ -32,15 +32,16 @@ before(function setupTestDatabase(done) {
 
     async.waterfall(
         [
-            function dropDatabaseIfExists(callback) {
-                exec('dropdb ' + DATABASE_NAME, function(/*ignore error*/) {
-                    return callback(null);
-                });
-            },
-            function createDatabase(callback) {
-                exec('createdb -EUTF8 ' + DATABASE_NAME, callback);
-            },
-            function applyFixtures(stdout, stderr, callback) {
+//            function dropDatabaseIfExists(callback) {
+//                exec('dropdb ' + DATABASE_NAME, function(/*ignore error*/) {
+//                    return callback(null);
+//                });
+//            },
+//            function createDatabase(callback) {
+//                exec('createdb -EUTF8 ' + DATABASE_NAME, callback);
+//            },
+//            function applyFixtures(stdout, stderr, callback) {
+            function applyFixtures(callback) {
                 async.eachSeries(fixturePaths, function (path, callback) {
                     exec('psql -d ' + DATABASE_NAME + ' -f ' + path, callback);
                 }, callback);
