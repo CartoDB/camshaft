@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.39.1
+
+Released 2016-mm-dd
+
+
 ## 0.39.0
 
 Released 2016-08-09
