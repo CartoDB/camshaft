@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.38.2
+## 0.39.0
 
 Released 2016-mm-dd
 
+ - Lazy nodes: skip filters from parent nodes and apply themselves.
  - Freeze last updated time for queries/tables not found by CDB_QueryTables_Updated_At #143.
 
 
