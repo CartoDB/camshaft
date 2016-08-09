@@ -4,7 +4,7 @@ addons:
   postgresql: "9.5"
 
 before_script:
-  - psql -c 'create database analysis_api_test_db;' -U postgres
+  - psql -c 'select 1;' -U postgres
 
 env:
   - PGUSER=postgres
