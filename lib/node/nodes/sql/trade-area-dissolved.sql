@@ -4,7 +4,7 @@ _cdb_analysis_source_points AS (
 ),
 _cdb_analysis_isochrones AS (
   SELECT
-    cdb_dataservices_client.{{=it.provider_function}}(
+    cdb_dataservices_client.cdb_isochrone(
       _cdb_analysis_source_points.the_geom,
       '{{=it.kind}}'::text,
       ARRAY[{{=it.isolines}}]::integer[]
