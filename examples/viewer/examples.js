@@ -398,12 +398,7 @@ var routingToLayerAllToAllDefinition = {
 var sourceAtmMachinesOffset = {
     type: 'source',
     params: {
-        query: [
-            'select',
-            '  _t.*,',
-            '  ST_Translate(the_geom, random(), random()) as the_geom_target',
-            'from (select * from atm_machines) _t'
-        ].join('\n')
+        query: 'select * from atm_machines'
     }
 };
 
@@ -1890,7 +1885,7 @@ var examples = {
              '  line-opacity: 0.7;',
              '}'
          ].join('\n'),
-         center: [40.44, -3.7],
-         zoom: 12
+         center: [ 40.7246183, -3.1864915 ],
+         zoom: 9
      }
 };

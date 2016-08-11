@@ -15,12 +15,7 @@ describe('line-this-layer-column analysis', function() {
         queryRunner = new QueryRunner(testConfig.db);
     });
 
-    var QUERY_SOURCE = [
-        'select',
-        '  _t.*,',
-        '  ST_Translate(the_geom, random(), random()) as the_geom_target',
-        'from (select * from atm_machines) _t'
-    ].join('\n');
+    var QUERY_SOURCE = 'select * from atm_machines';
 
     var sourceAtmMachines = {
         type: 'source',
