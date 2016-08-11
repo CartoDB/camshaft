@@ -1,8 +1,28 @@
 # Changelog
 
-## 0.38.0
+## 0.39.1
 
 Released 2016-mm-dd
+
+
+## 0.39.0
+
+Released 2016-08-09
+
+ - Lazy nodes: skip filters from parent nodes and apply themselves.
+ - Freeze last updated time for queries/tables not found by CDB_QueryTables_Updated_At #143.
+
+
+## 0.38.1
+
+Released 2016-07-21
+
+ - Fixes missing `cartodb_id` column in merge analysis.
+
+
+## 0.38.0
+
+Released 2016-07-21
 
  - Set order clause in AOI analysis to render polygons big-to-small
  - Now in intersection analysis client is able to specify source columns.
