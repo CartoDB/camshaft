@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Node model exposes method to determine if it's out of date from its input nodes.
+
 
 ## 0.39.0
 
