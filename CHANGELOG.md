@@ -2,7 +2,7 @@
 
 ## 0.40.0
 
-Released 2016-mm-dd
+Released 2016-08-16
 
  - Add closest features finding #171.
  - Change to use agnostic functions for isochrones and geocode-street #165.
