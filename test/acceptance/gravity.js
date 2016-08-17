@@ -15,7 +15,6 @@ describe('gravity analysis', function() {
         queryRunner = new QueryRunner(testConfig.db);
     });
 
-
     var sourceAtmMachines = {
         type: 'source',
         params: {
@@ -64,10 +63,10 @@ describe('gravity analysis', function() {
             params: {
                 source: sourceAtmMachines,
                 target: targetAtmMachines,
-                weightColunn: 'cartodb_id',
-                popColumn: 'cartodb_id',
-                maxDistance: 500,
-                targetID: 1
+                weight_column: 'cartodb_id',
+                pop_column: 'cartodb_id',
+                max_distance: 500,
+                target_id: 1
             }
         };
 
