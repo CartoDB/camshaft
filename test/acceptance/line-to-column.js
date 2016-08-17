@@ -7,7 +7,7 @@ var Analysis = require('../../lib/analysis');
 var testConfig = require('../test-config');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 
-describe('line-this-layer-column analysis', function() {
+describe('line-to-column analysis', function() {
 
     var queryRunner;
 
@@ -51,17 +51,17 @@ describe('line-this-layer-column analysis', function() {
         });
     }
 
-    describe('line this layer column analysis', function () {
-        var lineToSinglePointDefinition = {
-            type: 'line-this-layer-column',
+    describe('line to column analysis', function () {
+        var lineToColumnDefinition = {
+            type: 'line-to-column',
             params: {
                 source: sourceAtmMachines,
                 column_target: 'the_geom_target'
             }
         };
 
-        it('should create analysis all to all', function (done) {
-            performAnalysis(lineToSinglePointDefinition, function (err, values) {
+        it('should create analysis', function (done) {
+            performAnalysis(lineToColumnDefinition, function (err, values) {
                 if(err) {
                     return done(err);
                 }
