@@ -59,7 +59,7 @@ describe('line-to-layer-all-to-all analysis', function() {
     }
 
     describe('line to layer all to all analysis', function () {
-        var lineToSinglePointDefinition = {
+        var lineToLayerAllToAllDefinition = {
             type: 'line-to-layer-all-to-all',
             params: {
                 source: sourceAtmMachines,
@@ -71,7 +71,7 @@ describe('line-to-layer-all-to-all analysis', function() {
         };
 
         it('should create analysis all to all', function (done) {
-            performAnalysis(lineToSinglePointDefinition, function (err, values) {
+            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
                 if(err) {
                     return done(err);
                 }
@@ -87,8 +87,8 @@ describe('line-to-layer-all-to-all analysis', function() {
         });
 
         it('should create analysis to closest', function (done) {
-            lineToSinglePointDefinition.params.closest = true;
-            performAnalysis(lineToSinglePointDefinition, function (err, values) {
+            lineToLayerAllToAllDefinition.params.closest = true;
+            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
                 if(err) {
                     return done(err);
                 }
