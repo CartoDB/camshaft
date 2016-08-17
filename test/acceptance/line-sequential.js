@@ -51,7 +51,7 @@ describe('line-sequential analysis', function() {
     }
 
     describe('line sequential analysis', function () {
-        var lineToSinglePointDefinition = {
+        var lineSequentialDefinition = {
             type: 'line-sequential',
             params: {
                 source: sourceAtmMachines,
@@ -61,8 +61,8 @@ describe('line-sequential analysis', function() {
         };
 
         it('should create analysis sequential order by bank desc', function (done) {
-            performAnalysis(lineToSinglePointDefinition, function (err, values) {
-                if(err) {
+            performAnalysis(lineSequentialDefinition, function (err, values) {
+                if (err) {
                     return done(err);
                 }
 
@@ -76,8 +76,8 @@ describe('line-sequential analysis', function() {
         });
 
         it('should create analysis sequential order by bank asc', function (done) {
-            lineToSinglePointDefinition.params.order_type = 'asc';
-            performAnalysis(lineToSinglePointDefinition, function (err, values) {
+            lineSequentialDefinition.params.order_type = 'asc';
+            performAnalysis(lineSequentialDefinition, function (err, values) {
                 if(err) {
                     return done(err);
                 }
@@ -92,8 +92,8 @@ describe('line-sequential analysis', function() {
         });
 
         it('should create analysis sequential order by cartodb_id (by default) asc', function (done) {
-            lineToSinglePointDefinition.params.order_column = undefined;
-            performAnalysis(lineToSinglePointDefinition, function (err, values) {
+            lineSequentialDefinition.params.order_column = undefined;
+            performAnalysis(lineSequentialDefinition, function (err, values) {
                 if(err) {
                     return done(err);
                 }
