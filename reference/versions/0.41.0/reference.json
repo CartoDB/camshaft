@@ -586,20 +586,7 @@
                 }
             }
         },
-        "line-to-column": {
-            "params": {
-                "source": {
-                    "type": "node",
-                    "geometry": [
-                        "point"
-                    ]
-                },
-                "column_target": {
-                    "type": "string"
-                }
-            }
-        },
-        "line-to-layer-all-to-all": {
+        "line-source-to-target": {
             "params": {
                 "source": {
                     "type": "node",
@@ -621,6 +608,19 @@
                 },
                 "closest": {
                     "type": "boolean"
+                }
+            }
+        },
+        "line-to-column": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "column_target": {
+                    "type": "string"
                 }
             }
         },
