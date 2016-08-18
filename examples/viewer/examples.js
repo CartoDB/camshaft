@@ -409,9 +409,9 @@ var targetAtmMachines = {
     }
 };
 
-var lineToLayerAllToAllDefinition = {
-    id: 'line-to-layer-all-to-all-example',
-    type: 'line-to-layer-all-to-all',
+var lineSourceToTargetDefinition = {
+    id: 'line-source-to-target',
+    type: 'line-source-to-target',
     params: {
         source: sourceAtmMachines,
         source_column: 'kind',
@@ -1885,9 +1885,9 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
-    'line-to-layer-all-to-all': {
-         name: 'lines to layer all to all',
-         def: lineToLayerAllToAllDefinition,
+    'line-source-to-target-all': {
+         name: 'lines source to target',
+         def: lineSourceToTargetDefinition,
          cartocss: [
              '#layer{',
              '  line-color: #F42220;',

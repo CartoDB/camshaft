@@ -7,7 +7,7 @@ var Analysis = require('../../lib/analysis');
 var testConfig = require('../test-config');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 
-describe('line-to-layer-all-to-all analysis', function() {
+describe('line-source-to-target analysis', function() {
 
     var queryRunner;
 
@@ -58,9 +58,9 @@ describe('line-to-layer-all-to-all analysis', function() {
         });
     }
 
-    describe('line to layer all to all analysis', function () {
+    describe('line source to target analysis', function () {
         var lineToLayerAllToAllDefinition = {
-            type: 'line-to-layer-all-to-all',
+            type: 'line-source-to-target',
             params: {
                 source: sourceAtmMachines,
                 source_column: 'kind',
@@ -70,7 +70,7 @@ describe('line-to-layer-all-to-all analysis', function() {
             }
         };
 
-        it('should create analysis all to all', function (done) {
+        it('should create analysis', function (done) {
             performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
                 if(err) {
                     return done(err);
@@ -86,7 +86,7 @@ describe('line-to-layer-all-to-all analysis', function() {
             });
         });
 
-        it('should create analysis to closest', function (done) {
+        it('should create analysis to the closest', function (done) {
             lineToLayerAllToAllDefinition.params.closest = true;
             performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
                 if(err) {
