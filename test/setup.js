@@ -25,6 +25,10 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_route_with_waypoints.sql'),
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/obs_getmeasure.sql'),
 
+        fs.realpathSync('./test/fixtures/cdb_crankshaft/schema.sql'),
+        fs.realpathSync('./test/fixtures/cdb_crankshaft/cdb_kmeans.sql'),
+        fs.realpathSync('./test/fixtures/cdb_crankshaft/cdb_gravity.sql'),
+
         fs.realpathSync('./test/fixtures/table/madrid_districts.sql'),
         fs.realpathSync('./test/fixtures/table/atm_machines.sql'),
         fs.realpathSync('./test/fixtures/table/airbnb_rooms.sql')
