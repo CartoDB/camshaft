@@ -411,6 +411,14 @@ var lineThisLayerColumnDefinition = {
     }
 };
 
+var lineSequentialDefinition = {
+    id: 'line-sequential-example',
+    type: 'line-sequential',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
 var examples = {
     centroid: {
         name: 'populated places centroids adm0name',
@@ -1887,5 +1895,18 @@ var examples = {
          ].join('\n'),
          center: [ 40.7246183, -3.1864915 ],
          zoom: 9
-     }
+     },
+    'line-sequential': {
+        name: 'line sequential',
+        def: lineSequentialDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    }
 };
