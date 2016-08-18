@@ -395,6 +395,66 @@ var routingToLayerAllToAllDefinition = {
     }
 };
 
+var sourceAtmMachinesOffset = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines'
+    }
+};
+
+var lineToColumnDefinition = {
+    id: 'line-to-column-example',
+    type: 'line-to-column',
+    params: {
+        source: sourceAtmMachinesOffset,
+        column_target: 'the_geom_target'
+    }
+};
+
+var lineSequentialDefinition = {
+    id: 'line-sequential-example',
+    type: 'line-sequential',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
+var sourceAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'Santander\''
+    }
+};
+
+var targetAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'BBVA\''
+    }
+};
+
+var lineToLayerAllToAllDefinition = {
+    id: 'line-to-layer-all-to-all-example',
+    type: 'line-to-layer-all-to-all',
+    params: {
+        source: sourceAtmMachines,
+        source_column: 'kind',
+        target: targetAtmMachines,
+        target_column: 'kind',
+        closest: false
+    }
+};
+
+var lineToSinglePointDefinition = {
+    id: 'line-to-single-point-example',
+    type: 'line-to-single-point',
+    params: {
+        source: sourceAtmDef,
+        destination_longitude: -3.66909027,
+        destination_latitude: 40.43989237
+    }
+};
+
 var examples = {
     bounding_circle: {
         name: 'bounding circle populated places',
@@ -1983,6 +2043,58 @@ var examples = {
         cartocss: [
             '#layer{',
             '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-to-column': {
+         name: 'line to column',
+         def: lineToColumnDefinition,
+         cartocss: [
+             '#layer{',
+             '  line-color: #F42220;',
+             '  line-width: 2;',
+             '  line-opacity: 0.7;',
+             '}'
+         ].join('\n'),
+         center: [ 40.7246183, -3.1864915 ],
+         zoom: 9
+     },
+    'line-sequential': {
+        name: 'line sequential',
+        def: lineSequentialDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-to-layer-all-to-all': {
+        name: 'lines to layer all to all',
+        def: lineToLayerAllToAllDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-to-single-point': {
+        name: 'lines to a single point',
+        def: lineToSinglePointDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #FABADA;',
             '  line-width: 2;',
             '  line-opacity: 0.7;',
             '}'
