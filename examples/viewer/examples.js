@@ -445,6 +445,16 @@ var lineToLayerAllToAllDefinition = {
     }
 };
 
+var lineToSinglePointDefinition = {
+    id: 'line-to-single-point-example',
+    type: 'line-to-single-point',
+    params: {
+        source: sourceAtmDef,
+        destination_longitude: -3.66909027,
+        destination_latitude: 40.43989237
+    }
+};
+
 var examples = {
     centroid: {
         name: 'populated places centroids adm0name',
@@ -1941,6 +1951,19 @@ var examples = {
         cartocss: [
             '#layer{',
             '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-to-single-point': {
+        name: 'lines to a single point',
+        def: lineToSinglePointDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #FABADA;',
             '  line-width: 2;',
             '  line-opacity: 0.7;',
             '}'
