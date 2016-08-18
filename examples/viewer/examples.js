@@ -402,9 +402,9 @@ var sourceAtmMachinesOffset = {
     }
 };
 
-var lineThisLayerColumnDefinition = {
-    id: 'line-this-layer-column-example',
-    type: 'line-this-layer-column',
+var lineToColumnDefinition = {
+    id: 'line-to-column-example',
+    type: 'line-to-column',
     params: {
         source: sourceAtmMachinesOffset,
         column_target: 'the_geom_target'
@@ -1875,9 +1875,9 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
-    'line-this-layer-column': {
-         name: 'line this layer column',
-         def: lineThisLayerColumnDefinition,
+    'line-to-column': {
+         name: 'line to column',
+         def: lineToColumnDefinition,
          cartocss: [
              '#layer{',
              '  line-color: #F42220;',
