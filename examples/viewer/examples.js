@@ -395,6 +395,22 @@ var routingToLayerAllToAllDefinition = {
     }
 };
 
+var sourceAtmMachinesOffset = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines'
+    }
+};
+
+var lineThisLayerColumnDefinition = {
+    id: 'line-this-layer-column-example',
+    type: 'line-this-layer-column',
+    params: {
+        source: sourceAtmMachinesOffset,
+        column_target: 'the_geom_target'
+    }
+};
+
 var examples = {
     centroid: {
         name: 'populated places centroids adm0name',
@@ -1858,5 +1874,18 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
-    }
+    },
+    'line-this-layer-column': {
+         name: 'line this layer column',
+         def: lineThisLayerColumnDefinition,
+         cartocss: [
+             '#layer{',
+             '  line-color: #F42220;',
+             '  line-width: 2;',
+             '  line-opacity: 0.7;',
+             '}'
+         ].join('\n'),
+         center: [ 40.7246183, -3.1864915 ],
+         zoom: 9
+     }
 };
