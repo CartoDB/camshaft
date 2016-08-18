@@ -562,6 +562,84 @@
                 }
             }
         },
+        "line-sequential": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "order_column": {
+                    "type": "string",
+                    "optional": true,
+                    "default-value": "cartodb_id"
+                },
+                "order_type": {
+                    "type": "enum",
+                    "values": [
+                        "asc",
+                        "desc"
+                    ],
+                    "optional": true,
+                    "default-value": "asc"
+                }
+            }
+        },
+        "line-to-column": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "column_target": {
+                    "type": "string"
+                }
+            }
+        },
+        "line-to-layer-all-to-all": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "source_column": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "target_column": {
+                    "type": "string"
+                },
+                "closest": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "line-to-single-point": {
+            "params": {
+                "source": {
+                    "type": "node",
+                    "geometry": [
+                        "point"
+                    ]
+                },
+                "destination_longitude": {
+                    "type": "number"
+                },
+                "destination_latitude": {
+                    "type": "number"
+                }
+            }
+        },
         "link-by-line": {
             "params": {
                 "source_points": {
