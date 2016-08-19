@@ -376,7 +376,7 @@ var routingSequentialDefinition = {
     params: {
         source: sourceAtmDef,
         mode: 'car',
-        column_target: 'the_geom',
+        target_column: 'the_geom',
         units: 'kilometers'
     }
 };
