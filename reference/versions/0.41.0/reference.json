@@ -619,7 +619,7 @@
                         "point"
                     ]
                 },
-                "column_target": {
+                "target_column": {
                     "type": "string"
                 }
             }
@@ -801,7 +801,7 @@
                         "public_transport"
                     ]
                 },
-                "column_target": {
+                "target_column": {
                     "type": "string"
                 },
                 "units": {
