@@ -56,7 +56,7 @@ describe('line-to-column analysis', function() {
             type: 'line-to-column',
             params: {
                 source: sourceAtmMachines,
-                column_target: 'the_geom_target'
+                target_column: 'the_geom_target'
             }
         };
 

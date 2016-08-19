@@ -407,7 +407,7 @@ var lineToColumnDefinition = {
     type: 'line-to-column',
     params: {
         source: sourceAtmMachinesOffset,
-        column_target: 'the_geom_target'
+        target_column: 'the_geom_target'
     }
 };
 
