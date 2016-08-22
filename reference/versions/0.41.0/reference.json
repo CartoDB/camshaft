@@ -595,7 +595,8 @@
                     ]
                 },
                 "source_column": {
-                    "type": "string"
+                    "type": "string",
+                    "optional": true
                 },
                 "target": {
                     "type": "node",
@@ -604,7 +605,8 @@
                     ]
                 },
                 "target_column": {
-                    "type": "string"
+                    "type": "string",
+                    "optional": true
                 },
                 "closest": {
                     "type": "boolean"
