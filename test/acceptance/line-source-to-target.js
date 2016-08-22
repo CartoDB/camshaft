@@ -70,7 +70,7 @@ describe('line-source-to-target analysis', function() {
             }
         };
 
-        it('should create analysis', function (done) {
+        it('should create analysis joined by kind', function (done) {
             performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
                 if(err) {
                     return done(err);
@@ -86,7 +86,7 @@ describe('line-source-to-target analysis', function() {
             });
         });
 
-        it('should create analysis to the closest', function (done) {
+        it('should create analysis to the closest joined by kind', function (done) {
             lineToLayerAllToAllDefinition.params.closest = true;
             performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
                 if(err) {
@@ -103,5 +103,45 @@ describe('line-source-to-target analysis', function() {
             });
         });
 
+        it('should create analysis to all', function (done) {
+            lineToLayerAllToAllDefinition.params.closest = false;
+            lineToLayerAllToAllDefinition.params.source_column = undefined;
+            lineToLayerAllToAllDefinition.params.target_column = undefined;
+
+            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
+                if(err) {
+                    return done(err);
+                }
+
+                assert.ok(values);
+                assert.equal(values.length, 6);
+                values.forEach(function (value) {
+                    assert.ok(value.length);
+                    assert.equal(value.bank, 'Santander');
+                });
+                done();
+            });
+        });
+
+        it('should create analysis to the closest', function (done) {
+            lineToLayerAllToAllDefinition.params.closest = true;
+            lineToLayerAllToAllDefinition.params.source_column = undefined;
+            lineToLayerAllToAllDefinition.params.target_column = undefined;
+
+            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
+                if(err) {
+                    return done(err);
+                }
+
+                assert.ok(values);
+                assert.equal(values.length, 1);
+                values.forEach(function (value) {
+                    assert.ok(value.length);
+                });
+                done();
+            });
+        });
+
     });
+
 });
