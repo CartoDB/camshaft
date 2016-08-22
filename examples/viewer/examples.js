@@ -395,6 +395,14 @@ var routingToLayerAllToAllDefinition = {
     }
 };
 
+var lineSequentialDefinition = {
+    id: 'line-sequential-example',
+    type: 'line-sequential',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
 var sourceAtmMachinesOffset = {
     type: 'source',
     params: {
@@ -1875,17 +1883,30 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    'line-sequential': {
+        name: 'line sequential',
+        def: lineSequentialDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
     'line-to-column': {
-         name: 'line to column',
-         def: lineToColumnDefinition,
-         cartocss: [
-             '#layer{',
-             '  line-color: #F42220;',
-             '  line-width: 2;',
-             '  line-opacity: 0.7;',
-             '}'
-         ].join('\n'),
-         center: [ 40.7246183, -3.1864915 ],
-         zoom: 9
-     }
+        name: 'line to column',
+        def: lineToColumnDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [ 40.7246183, -3.1864915 ],
+        zoom: 9
+    }
 };
