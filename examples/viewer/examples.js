@@ -395,6 +395,14 @@ var routingToLayerAllToAllDefinition = {
     }
 };
 
+var voronoiDefinition = {
+    id: 'voronoi-example',
+    type: 'voronoi',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
 var examples = {
     centroid: {
         name: 'populated places centroids adm0name',
@@ -1858,5 +1866,22 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
+    },
+    'voronoi': {
+        name: 'voronoi',
+        def: voronoiDefinition,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: #FABADA;',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
     }
+
 };
