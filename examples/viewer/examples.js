@@ -395,6 +395,32 @@ var routingToLayerAllToAllDefinition = {
     }
 };
 
+var sourceAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'Santander\''
+    }
+};
+
+var targetAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'BBVA\''
+    }
+};
+
+var lineSourceToTargetDefinition = {
+    id: 'line-source-to-target',
+    type: 'line-source-to-target',
+    params: {
+        source: sourceAtmMachines,
+        source_column: 'kind',
+        target: targetAtmMachines,
+        target_column: 'kind',
+        closest: false
+    }
+};
+
 var lineSequentialDefinition = {
     id: 'line-sequential-example',
     type: 'line-sequential',
@@ -1883,6 +1909,19 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    'line-source-to-target-all': {
+         name: 'lines source to target',
+         def: lineSourceToTargetDefinition,
+         cartocss: [
+             '#layer{',
+             '  line-color: #F42220;',
+             '  line-width: 2;',
+             '  line-opacity: 0.7;',
+             '}'
+         ].join('\n'),
+         center: [40.44, -3.7],
+         zoom: 12
+     },
     'line-sequential': {
         name: 'line sequential',
         def: lineSequentialDefinition,
