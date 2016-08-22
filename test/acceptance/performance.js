@@ -8,7 +8,7 @@ var Analysis = require('../../lib/analysis');
 
 var testConfig = require('../test-config');
 
-describe.skip('performance', function() {
+describe('performance', function() {
 
     function explain(query, callback) {
         var queryRunner = new QueryRunner(testConfig.db);
