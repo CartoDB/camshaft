@@ -405,6 +405,56 @@ var lineToSinglePointDefinition = {
     }
 };
 
+var sourceAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'Santander\''
+    }
+};
+
+var targetAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'BBVA\''
+    }
+};
+
+var lineSourceToTargetDefinition = {
+    id: 'line-source-to-target',
+    type: 'line-source-to-target',
+    params: {
+        source: sourceAtmMachines,
+        source_column: 'kind',
+        target: targetAtmMachines,
+        target_column: 'kind',
+        closest: false
+    }
+};
+
+var lineSequentialDefinition = {
+    id: 'line-sequential-example',
+    type: 'line-sequential',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
+var sourceAtmMachinesOffset = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines'
+    }
+};
+
+var lineToColumnDefinition = {
+    id: 'line-to-column-example',
+    type: 'line-to-column',
+    params: {
+        source: sourceAtmMachinesOffset,
+        target_column: 'the_geom_target'
+    }
+};
+
 var examples = {
     centroid: {
         name: 'populated places centroids adm0name',
@@ -1881,5 +1931,44 @@ var examples = {
         ].join('\n'),
         center: [40.44, -3.7],
         zoom: 12
+    },
+    'line-source-to-target-all': {
+         name: 'lines source to target',
+         def: lineSourceToTargetDefinition,
+         cartocss: [
+             '#layer{',
+             '  line-color: #F42220;',
+             '  line-width: 2;',
+             '  line-opacity: 0.7;',
+             '}'
+         ].join('\n'),
+         center: [40.44, -3.7],
+         zoom: 12
+     },
+    'line-sequential': {
+        name: 'line sequential',
+        def: lineSequentialDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-to-column': {
+        name: 'line to column',
+        def: lineToColumnDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [ 40.7246183, -3.1864915 ],
+        zoom: 9
     }
 };

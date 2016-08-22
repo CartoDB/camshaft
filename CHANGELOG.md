@@ -1,8 +1,17 @@
 # Changelog
 
-## 0.39.1
+## 0.40.1
 
 Released 2016-mm-dd
+
+
+## 0.40.0
+
+Released 2016-08-16
+
+ - Add closest features finding #171.
+ - Change to use agnostic functions for isochrones and geocode-street #165.
+ - Node model exposes method to determine if it's out of date from its input nodes.
 
 
 ## 0.39.0
