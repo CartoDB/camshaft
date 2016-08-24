@@ -1019,7 +1019,7 @@ var examples = {
         zoom: 3
     },
     moran: {
-        name: 'cluster outliers',
+        name: 'moran clusters and outliers',
         def: moranDefinition,
         cartocss: [
             '@HL: #00695C;//dark teal',
@@ -1050,6 +1050,106 @@ var examples = {
             '}',
             '#layer[significance >= 0.05] {',
             '    polygon-fill: transparent;',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
+    moran_clusters: {
+        name: 'moran clusters',
+        def: {
+            id: 'moran-demo-clusters',
+            type: 'moran',
+            params: {
+                source: {
+                    'type': 'source',
+                    'params': {
+                        'query': 'select * from working_from_home'
+                    }
+                },
+                'numerator_column': 'worked_at_home',
+                'denominator_column': 'workers_16_years_and_over',
+                'significance': 0.05,
+                'neighbours': 5,
+                'permutations': 999,
+                'w_type': 'queen',
+                'filters': {
+                    outliers_quads: {
+                        type: 'category',
+                        column: 'quads',
+                        params: {
+                            accept: ['HH', 'LL']
+                        }
+                    }
+                }
+            }
+        },
+        cartocss: [
+            '@HH: #4DB6AC;//light teal',
+            '@LL: #FB8C00;//light orange',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HH"] {',
+            '    polygon-fill: @HH;',
+            '}',
+            '#layer[quads="LL"] {',
+            '    polygon-fill: @LL;',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
+    moran_outliers: {
+        name: 'moran outliers',
+        def: {
+            id: 'moran-demo-outliers',
+            type: 'moran',
+            params: {
+                source: {
+                    'type': 'source',
+                    'params': {
+                        'query': 'select * from working_from_home'
+                    }
+                },
+                'numerator_column': 'worked_at_home',
+                'denominator_column': 'workers_16_years_and_over',
+                'significance': 0.05,
+                'neighbours': 5,
+                'permutations': 999,
+                'w_type': 'queen',
+                'filters': {
+                    outliers_quads: {
+                        type: 'category',
+                        column: 'quads',
+                        params: {
+                            accept: ['HL', 'LH']
+                        }
+                    }
+                }
+            }
+        },
+        cartocss: [
+            '@HL: #00695C;//dark teal',
+            '@LH: #d84315;//dark orange',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HL"] {',
+            '    polygon-fill: @HL;',
+            '}',
+            '#layer[quads="LH"] {',
+            '    polygon-fill: @LH;',
             '}'
         ].join('\n'),
         center: [40.01, -101.16],
