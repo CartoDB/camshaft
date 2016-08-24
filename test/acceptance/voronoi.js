@@ -51,8 +51,8 @@ describe('voronoi analysis', function() {
         });
     }
 
-    describe('trade area analysis', function () {
-        var tradeAreaDefinition = {
+    describe('voronoi analysis', function () {
+        var voronoiDefinition = {
             type: 'voronoi',
             params: {
                 source: sourceAtmMachines,
@@ -60,7 +60,7 @@ describe('voronoi analysis', function() {
         };
 
         it('should create an analysis', function (done) {
-            performAnalysis(tradeAreaDefinition, function (err, values) {
+            performAnalysis(voronoiDefinition, function (err, values) {
                 if(err) {
                     return done(err);
                 }
