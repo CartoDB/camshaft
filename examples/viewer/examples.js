@@ -395,6 +395,66 @@ var routingToLayerAllToAllDefinition = {
     }
 };
 
+var lineToSinglePointDefinition = {
+    id: 'line-to-single-point-example',
+    type: 'line-to-single-point',
+    params: {
+        source: sourceAtmDef,
+        destination_longitude: -3.66909027,
+        destination_latitude: 40.43989237
+    }
+};
+
+var sourceAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'Santander\''
+    }
+};
+
+var targetAtmMachines = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines where bank = \'BBVA\''
+    }
+};
+
+var lineSourceToTargetDefinition = {
+    id: 'line-source-to-target',
+    type: 'line-source-to-target',
+    params: {
+        source: sourceAtmMachines,
+        source_column: 'kind',
+        target: targetAtmMachines,
+        target_column: 'kind',
+        closest: false
+    }
+};
+
+var lineSequentialDefinition = {
+    id: 'line-sequential-example',
+    type: 'line-sequential',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
+var sourceAtmMachinesOffset = {
+    type: 'source',
+    params: {
+        query: 'select * from atm_machines'
+    }
+};
+
+var lineToColumnDefinition = {
+    id: 'line-to-column-example',
+    type: 'line-to-column',
+    params: {
+        source: sourceAtmMachinesOffset,
+        target_column: 'the_geom_target'
+    }
+};
+
 var voronoiDefinition = {
     id: 'voronoi-example',
     type: 'voronoi',
@@ -404,6 +464,137 @@ var voronoiDefinition = {
 };
 
 var examples = {
+    bounding_circle: {
+        name: 'bounding circle populated places',
+        def: {
+            id: 'boundingCircle',
+            type: 'bounding-circle',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple where adm0_a3 IN (\'ITA\', \'ESP\')'
+                    }
+                },
+                category_column: 'adm0_a3',
+                aggregation: 'sum',
+                aggregation_column: 'pop_max'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  polygon-fill: ramp([sum_pop_max], colorbrewer(Greens));',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    bounding_box: {
+        name: 'bounding box populated places',
+        def: {
+            id: 'boundingBox',
+            type: 'bounding-box',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple where adm0_a3 IN (\'ITA\', \'ESP\')'
+                    }
+                },
+                category_column: 'adm0_a3'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  polygon-fill: ramp([count_vals], colorbrewer(Greens));',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    concave_hull: {
+        name: 'concave hull populated places',
+        def: {
+            id: 'concaveHull',
+            type: 'concave-hull',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from populated_places_simple where adm0_a3 IN (\'ITA\', \'ESP\')'
+                    }
+                },
+                allow_holes: true,
+                target_percent: 0.85,
+                category_column: 'adm0_a3'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  polygon-fill: ramp([count_vals], colorbrewer(Greens));',
+            '  polygon-opacity: 1.0;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 3
+    },
+    convex_hull_n: {
+        name: 'convex hull for kmeans',
+        def: {
+            id: 'convexHull',
+            type: 'convex-hull',
+            params: {
+                source: {
+                    id: 'kmeans',
+                    type: 'kmeans',
+                    params:{
+                        source: populatedPlacesSource,
+                        clusters : 10
+                    }
+                },
+                category_column: 'cluster_no'
+            }
+        },
+        cartocss:[
+            '#layer{',
+            '  polygon-fill: ramp([count_vals], colorbrewer(Greens));',
+            '  polygon-opacity: 0.4;',
+            '}'
+        ].join('\n'),
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'kmeans' },
+                    cartocss: [
+                        '@1: #E58606;',
+                        '@2: #5D69B1;',
+                        '@3: #52BCA3;',
+                        '@4: #99C945;',
+                        '@5: #2F8AC4;',
+                        '@6: #24796C;',
+                        '#layer{',
+                        '  [cluster_no =0]{marker-fill:@1;}',
+                        '  [cluster_no =1]{marker-fill:@2;}',
+                        '  [cluster_no =2]{marker-fill:@3;}',
+                        '  [cluster_no =3]{marker-fill:@4;}',
+                        '  [cluster_no =4]{marker-fill:@5;}',
+                        '  [cluster_no =5]{marker-fill:@6;}',
+                        '  marker-fill: grey;',
+                        '  marker-line-width: 0.5;',
+                        '  marker-allow-overlap: true;',
+                        '  marker-width: 10.0;',
+                        '}'
+                    ].join('\n'),
+                    cartocss_version: '2.3.0'
+                }
+            }
+        ],
+        center: [40.44, -3.7],
+        zoom: 3
+    },
     centroid: {
         name: 'populated places centroids adm0name',
         def: {
@@ -836,7 +1027,7 @@ var examples = {
         zoom: 3
     },
     moran: {
-        name: 'cluster outliers',
+        name: 'moran clusters and outliers',
         def: moranDefinition,
         cartocss: [
             '@HL: #00695C;//dark teal',
@@ -867,6 +1058,106 @@ var examples = {
             '}',
             '#layer[significance >= 0.05] {',
             '    polygon-fill: transparent;',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
+    moran_clusters: {
+        name: 'moran clusters',
+        def: {
+            id: 'moran-demo-clusters',
+            type: 'moran',
+            params: {
+                source: {
+                    'type': 'source',
+                    'params': {
+                        'query': 'select * from working_from_home'
+                    }
+                },
+                'numerator_column': 'worked_at_home',
+                'denominator_column': 'workers_16_years_and_over',
+                'significance': 0.05,
+                'neighbours': 5,
+                'permutations': 999,
+                'w_type': 'queen',
+                'filters': {
+                    outliers_quads: {
+                        type: 'category',
+                        column: 'quads',
+                        params: {
+                            accept: ['HH', 'LL']
+                        }
+                    }
+                }
+            }
+        },
+        cartocss: [
+            '@HH: #4DB6AC;//light teal',
+            '@LL: #FB8C00;//light orange',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HH"] {',
+            '    polygon-fill: @HH;',
+            '}',
+            '#layer[quads="LL"] {',
+            '    polygon-fill: @LL;',
+            '}'
+        ].join('\n'),
+        center: [40.01, -101.16],
+        zoom: 4
+    },
+    moran_outliers: {
+        name: 'moran outliers',
+        def: {
+            id: 'moran-demo-outliers',
+            type: 'moran',
+            params: {
+                source: {
+                    'type': 'source',
+                    'params': {
+                        'query': 'select * from working_from_home'
+                    }
+                },
+                'numerator_column': 'worked_at_home',
+                'denominator_column': 'workers_16_years_and_over',
+                'significance': 0.05,
+                'neighbours': 5,
+                'permutations': 999,
+                'w_type': 'queen',
+                'filters': {
+                    outliers_quads: {
+                        type: 'category',
+                        column: 'quads',
+                        params: {
+                            accept: ['HL', 'LH']
+                        }
+                    }
+                }
+            }
+        },
+        cartocss: [
+            '@HL: #00695C;//dark teal',
+            '@LH: #d84315;//dark orange',
+            '',
+            '#layer {',
+            '    polygon-opacity: 1;',
+            '    line-color: #FFF;',
+            '    line-width: 0;',
+            '    line-opacity: 1;',
+            '}',
+            '',
+            '#layer[quads="HL"] {',
+            '    polygon-fill: @HL;',
+            '}',
+            '#layer[quads="LH"] {',
+            '    polygon-fill: @LH;',
             '}'
         ].join('\n'),
         center: [40.01, -101.16],
@@ -1867,6 +2158,58 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     },
+    'line-to-single-point': {
+        name: 'lines to a single point',
+        def: lineToSinglePointDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #FABADA;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-source-to-target-all': {
+         name: 'lines source to target',
+         def: lineSourceToTargetDefinition,
+         cartocss: [
+             '#layer{',
+             '  line-color: #F42220;',
+             '  line-width: 2;',
+             '  line-opacity: 0.7;',
+             '}'
+         ].join('\n'),
+         center: [40.44, -3.7],
+         zoom: 12
+     },
+    'line-sequential': {
+        name: 'line sequential',
+        def: lineSequentialDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
+    },
+    'line-to-column': {
+        name: 'line to column',
+        def: lineToColumnDefinition,
+        cartocss: [
+            '#layer{',
+            '  line-color: #F42220;',
+            '  line-width: 2;',
+            '  line-opacity: 0.7;',
+            '}'
+        ].join('\n'),
+        center: [ 40.7246183, -3.1864915 ],
+        zoom: 9
+    },
     'voronoi': {
         name: 'voronoi',
         def: voronoiDefinition,
@@ -1883,5 +2226,4 @@ var examples = {
         center: [40.44, -3.7],
         zoom: 12
     }
-
 };

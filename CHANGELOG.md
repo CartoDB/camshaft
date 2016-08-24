@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.40.1
+## 0.41.1
 
 Released 2016-mm-dd
+
+
+## 0.41.0
+
+Released 2016-08-23
+
+ - Added Connect with Lines analyses.
+ - Added Group point analyses.
 
 
 ## 0.40.0
