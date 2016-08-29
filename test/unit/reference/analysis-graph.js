@@ -36,6 +36,27 @@ describe('camshaft-reference-graph', function() {
         }
     };
 
+    function alreadyFilteredTradeAreaDefinition() {
+        return {
+            id: 'a1',
+            type: 'trade-area',
+            params: {
+                source: sourceAtmDef,
+                kind: TRADE_AREA_WALK,
+                time: TRADE_AREA_15M,
+                filters: {
+                    original_bank_category: {
+                        type: 'category',
+                        column: 'bank',
+                        params: {
+                            accept: ['BBVA']
+                        }
+                    }
+                }
+            }
+        };
+    }
+
     var pointsInPolygonDefinition = {
         id: 'a2',
         type: 'point-in-polygon',
@@ -98,6 +119,52 @@ describe('camshaft-reference-graph', function() {
         var nodes = extendedGraph.getNodesWithId();
 
         assert.deepEqual(nodes.a0.params.filters, filters);
+    });
+
+    it('should return a modified node with filters, keeping previous filters', function() {
+        var analysisGraph = new reference.AnalysisGraph(alreadyFilteredTradeAreaDefinition());
+        var filters = {
+            bank_category: {
+                type: 'category',
+                column: 'bank',
+                params: {
+                    accept: ['BBVA']
+                }
+            }
+        };
+        var analysisDefinition = analysisGraph.getDefinitionWith('a1', {filters: filters});
+
+        var extendedGraph = new reference.AnalysisGraph(analysisDefinition);
+        var extendedNodes = extendedGraph.getNodesWithId();
+
+        assert.deepEqual(
+            extendedNodes.a1.params.filters.original_bank_category,
+            alreadyFilteredTradeAreaDefinition().params.filters.original_bank_category
+        );
+
+        assert.deepEqual(
+            extendedNodes.a1.params.filters.bank_category,
+            filters.bank_category
+        );
+    });
+
+    it('should return a modified node with filters, overwriting keys', function() {
+        var analysisGraph = new reference.AnalysisGraph(alreadyFilteredTradeAreaDefinition());
+        var filters = {
+            original_bank_category: {
+                type: 'category',
+                column: 'bank',
+                params: {
+                    accept: ['BBVA']
+                }
+            }
+        };
+        var analysisDefinition = analysisGraph.getDefinitionWith('a1', {filters: filters});
+
+        var extendedGraph = new reference.AnalysisGraph(analysisDefinition);
+        var extendedNodes = extendedGraph.getNodesWithId();
+
+        assert.deepEqual(extendedNodes.a1.params.filters, filters);
     });
 
 });
