@@ -25,7 +25,9 @@ create table cdb_analysis_catalog (
     -- last job modifying the node
     last_modified_by uuid,
     -- store error message for failures
-    last_error_message text
+    last_error_message text,
+    -- cached tables involved in the analysis
+    cache_tables regclass[] NOT NULL DEFAULT '{}'
 );
 
 --GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE cartodb.cdb_analysis_catalog TO "development_cartodb_user_359a4d9f-a063-4130-9674-799e90960886";

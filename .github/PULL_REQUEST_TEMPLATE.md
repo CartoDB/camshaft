@@ -1,5 +1,6 @@
 For new analysis use the following checklist:
 
+- [ ] Uses `the_geom geometry(Geometry, 4326)` column for all geospatial operations.
 - [ ] Outputs a `the_geom geometry(Geometry, 4326)` column.
 - [ ] Outputs a `cartodb_id numeric` column.
 - [ ] Uses `{cache: true}` option when it needs full knowledge of the table it. Hints: aggregations, window functions.
