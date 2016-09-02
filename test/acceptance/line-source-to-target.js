@@ -64,7 +64,8 @@ describe('line-source-to-target analysis', function() {
                 source: sourceAtmMachines,
                 source_column: 'kind',
                 target: targetAtmMachines,
-                target_column: 'kind'
+                target_column: 'kind',
+                closest: false
             }
         };
 
@@ -103,4 +104,53 @@ describe('line-source-to-target analysis', function() {
             });
         });
     });
+
+    describe('closest line from source to target', function () {
+        var lineToLayerAllToAllDefinition = {
+            type: 'line-source-to-target',
+            params: {
+                source: sourceAtmMachines,
+                source_column: 'kind',
+                target: targetAtmMachines,
+                target_column: 'kind',
+                closest: true
+            }
+        };
+
+        it('should create analysis joined by kind', function (done) {
+            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
+                if(err) {
+                    return done(err);
+                }
+
+                assert.ok(values);
+                assert.equal(values.length, 3);
+                values.forEach(function (value) {
+                    assert.ok(value.length);
+                    assert.equal(value.bank, 'Santander');
+                });
+                done();
+            });
+        });
+
+        it('should create analysis to all', function (done) {
+            lineToLayerAllToAllDefinition.params.source_column = undefined;
+            lineToLayerAllToAllDefinition.params.target_column = undefined;
+
+            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
+                if(err) {
+                    return done(err);
+                }
+
+                assert.ok(values);
+                assert.equal(values.length, 3);
+                values.forEach(function (value) {
+                    assert.ok(value.length);
+                    assert.equal(value.bank, 'Santander');
+                });
+                done();
+            });
+        });
+    });
+
 });
