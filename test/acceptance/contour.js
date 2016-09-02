@@ -28,7 +28,6 @@ describe('contour', function () {
 
     it('basic contour test', function (done) {
         testHelper.createAnalyses(analysisDefinition, function (err, analysisResult) {
-
             if (err) {
                 return done(err);
             }
@@ -37,9 +36,7 @@ describe('contour', function () {
                 if (err) {
                     return done(err);
                 }
-                rows.forEach(function (row) {
-                    assert.ok(row.max_value > row.min_value);
-                });
+                assert.equal(rows.length, analysisDefinition.params.steps);
                 return done();
             });
         });
