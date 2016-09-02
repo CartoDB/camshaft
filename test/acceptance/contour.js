@@ -36,7 +36,6 @@ describe('contour', function () {
             }
             rows.forEach(function (row) {
                 assert.ok(row.max_value > row.min_value);
-                assert.ok(row.bucket < 10);
             });
             return done();
         });
