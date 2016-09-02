@@ -35,14 +35,15 @@ BEGIN
         SELECT
         *
         FROM
-        unnest(geomin, colin) WITH ORDINALITY as t(the_geom, avg_value, bin)
+        unnest(geomin, colin) WITH ORDINALITY as t(geom, av, b)
     )
     SELECT
-        the_geom,
-        bin,
-        floor(avg_value) as min_value,
-        ceil(avg_value) as max_value
+        geom as the_geom,
+        b as bin,
+        sv as avg_value
+        floor(av) as min_value,
+        ceil(av) as max_value
     FROM a
-    WHERE bin < steps;
+    WHERE b < steps;
 END;
 $$ language plpgsql;

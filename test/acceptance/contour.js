@@ -26,11 +26,13 @@ describe('contour', function () {
         }
     };
 
-    it('should be ready in basic scenario', function (done) {
+    it('basic contour test', function (done) {
         testHelper.createAnalyses(analysisDefinition, function (err, analysisResult) {
+
             if (err) {
                 return done(err);
             }
+
             testHelper.getRows(analysisResult.getQuery(), function (err, rows) {
                 if (err) {
                     return done(err);
