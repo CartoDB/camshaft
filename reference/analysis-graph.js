@@ -30,7 +30,13 @@ AnalysisGraph.prototype.getDefinitionWith = function(nodeId, extendedWithParams)
 function extendDefinition(definition, reference, nodeId, extendedWithParams) {
     if (definition.id && definition.id === nodeId) {
         Object.keys(extendedWithParams).forEach(function(extendWithParamsKey) {
-            definition.params[extendWithParamsKey] = extendedWithParams[extendWithParamsKey];
+            if (!definition.params.hasOwnProperty(extendWithParamsKey)) {
+                definition.params[extendWithParamsKey] = {};
+            }
+            var obj = extendedWithParams[extendWithParamsKey];
+            Object.keys(obj).forEach(function(objK) {
+                definition.params[extendWithParamsKey][objK] = obj[objK];
+            });
         });
     }
 
