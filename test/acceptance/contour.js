@@ -18,7 +18,7 @@ describe('contour', function () {
                 }
             },
             column: 'price',
-            buffer: '0.2',
+            buffer: 0.2,
             method: 'barymetric',
             class_method: 'quantiles',
             steps: 7,
