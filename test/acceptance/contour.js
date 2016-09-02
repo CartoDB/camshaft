@@ -26,18 +26,20 @@ describe('contour', function () {
         }
     };
 
-    testHelper.createAnalyses(analysisDefinition, function (err, analysisResult) {
-        if (err) {
-            return done(err);
-        }
-        testHelper.getRows(analysisResult.getQuery(), function (err, rows) {
+    it('should be ready in basic scenario', function (done) {
+        testHelper.createAnalyses(analysisDefinition, function (err, analysisResult) {
             if (err) {
                 return done(err);
             }
-            rows.forEach(function (row) {
-                assert.ok(row.max_value > row.min_value);
+            testHelper.getRows(analysisResult.getQuery(), function (err, rows) {
+                if (err) {
+                    return done(err);
+                }
+                rows.forEach(function (row) {
+                    assert.ok(row.max_value > row.min_value);
+                });
+                return done();
             });
-            return done();
         });
     });
 
