@@ -8,7 +8,6 @@ var testConfig = require('../test-config');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 
 describe('line-source-to-target analysis', function() {
-
     var queryRunner;
 
     before(function() {
@@ -65,8 +64,7 @@ describe('line-source-to-target analysis', function() {
                 source: sourceAtmMachines,
                 source_column: 'kind',
                 target: targetAtmMachines,
-                target_column: 'kind',
-                closest: false
+                target_column: 'kind'
             }
         };
 
@@ -86,25 +84,7 @@ describe('line-source-to-target analysis', function() {
             });
         });
 
-        it('should create analysis to the closest joined by kind', function (done) {
-            lineToLayerAllToAllDefinition.params.closest = true;
-            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
-
-                assert.ok(values);
-                assert.equal(values.length, 2);
-                values.forEach(function (value) {
-                    assert.ok(value.length);
-                    assert.equal(value.bank, 'Santander');
-                });
-                done();
-            });
-        });
-
         it('should create analysis to all', function (done) {
-            lineToLayerAllToAllDefinition.params.closest = false;
             lineToLayerAllToAllDefinition.params.source_column = undefined;
             lineToLayerAllToAllDefinition.params.target_column = undefined;
 
@@ -122,26 +102,5 @@ describe('line-source-to-target analysis', function() {
                 done();
             });
         });
-
-        it('should create analysis to the closest', function (done) {
-            lineToLayerAllToAllDefinition.params.closest = true;
-            lineToLayerAllToAllDefinition.params.source_column = undefined;
-            lineToLayerAllToAllDefinition.params.target_column = undefined;
-
-            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
-
-                assert.ok(values);
-                assert.equal(values.length, 1);
-                values.forEach(function (value) {
-                    assert.ok(value.length);
-                });
-                done();
-            });
-        });
-
     });
-
 });
