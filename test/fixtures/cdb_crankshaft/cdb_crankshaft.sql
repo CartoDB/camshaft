@@ -41,8 +41,8 @@ BEGIN
         geom as the_geom,
         b as bin,
         av::numeric as avg_value
-        floor(av)::numeric as min_value,
-        ceil(av)::numeric as max_value
+        (floor(av))::numeric as min_value,
+        (ceil(av))::numeric as max_value
     FROM a
     WHERE b < steps;
 END;
