@@ -1,9 +1,11 @@
 # Changelog
 
-## 0.41.1
+## 0.42.0
 
-Released 2016-mm-dd
+Released 2016-09-06
 
+ - Adds column length to connect with lines analyses #187.
+ - Fixes connect with lines analysis, now closest option connects to the closest geometry for each source geometry #188.
 
 ## 0.41.0
 
