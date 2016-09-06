@@ -68,6 +68,11 @@ describe('line-to-column analysis', function() {
 
                 assert.ok(values);
                 assert.ok(values.length > 0);
+                values.forEach(function (value) {
+                    assert.equal(typeof value.cartodb_id, 'number');
+                    assert.ok(value.the_geom);
+                    assert.ok(value.length);
+                });
                 done();
             });
         });

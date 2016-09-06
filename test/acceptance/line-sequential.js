@@ -71,6 +71,7 @@ describe('line-sequential analysis', function() {
                 values.forEach(function (value) {
                     assert.equal(typeof value.cartodb_id, 'number');
                     assert.ok(value.the_geom);
+                    assert.ok(value.length);
                 });
                 done();
             });
@@ -88,6 +89,7 @@ describe('line-sequential analysis', function() {
                 values.forEach(function (value) {
                     assert.equal(typeof value.cartodb_id, 'number');
                     assert.ok(value.the_geom);
+                    assert.ok(value.length);
                 });
                 done();
             });
@@ -105,6 +107,7 @@ describe('line-sequential analysis', function() {
                 values.forEach(function (value) {
                     assert.equal(typeof value.cartodb_id, 'number');
                     assert.ok(value.the_geom);
+                    assert.ok(value.length);
                 });
                 done();
             });

@@ -67,6 +67,11 @@ describe('line-to-single-point analysis', function() {
                     return done(err);
                 }
                 assert.ok(values);
+                values.forEach(function (value) {
+                    assert.equal(typeof value.cartodb_id, 'number');
+                    assert.ok(value.the_geom);
+                    assert.ok(value.length);
+                });
                 done();
             });
         });
