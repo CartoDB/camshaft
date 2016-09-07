@@ -1,45 +1,10 @@
 'use strict';
 
 var assert = require('assert');
-var async = require('async');
-
-var Analysis = require('../../lib/analysis');
-
-var testConfig = require('../test-config');
-var BatchClient = require('../../lib/postgresql/batch-client');
-var QueryRunner = require('../../lib/postgresql/query-runner');
+var testHelper = require('../helper');
 
 
 describe('filters', function() {
-
-    var queryRunner;
-    var enqueueFn;
-    var enqueueCalled;
-
-    before(function() {
-        queryRunner = new QueryRunner(testConfig.db);
-        enqueueFn = BatchClient.prototype.enqueue;
-        enqueueCalled = 0;
-        BatchClient.prototype.enqueue = function(query, callback) {
-            enqueueCalled += 1;
-            return callback(null, {status: 'ok'});
-        };
-    });
-    after(function() {
-        assert.ok(enqueueCalled > 0);
-        BatchClient.prototype.enqueue = enqueueFn;
-    });
-
-    function getRows(query, callback) {
-        queryRunner.run(query, function(err, result) {
-            assert.ok(!err, err);
-            assert.ok(result);
-            var rows = result.rows;
-            assert.ok(Array.isArray(rows));
-
-            return callback(null, rows);
-        });
-    }
 
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
     var BANKS_ALL = ['BBVA', 'Santander', 'Santander', 'Santander', 'BBVA', 'ING'];
@@ -59,10 +24,10 @@ describe('filters', function() {
     };
 
     it('should return all banks', function(done) {
-        Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
+        testHelper.createAnalyses(sourceAnalysisDefinition, function(err, analysis) {
             assert.ok(!err, err);
 
-            getRows(analysis.getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getQuery(), function(err, rows) {
                 assert.ok(!err, err);
 
                 var banks = rows.map(function(row) {
@@ -89,12 +54,12 @@ describe('filters', function() {
 
     it('should return just BBVA banks as they are filtered', function(done) {
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
-        Analysis.create(testConfig, filteredSource, function(err, analysis) {
+        testHelper.createAnalyses(filteredSource, function(err, analysis) {
             assert.ok(!err, err);
 
             assert.deepEqual(analysis.getRoot().getFilters(), filters);
 
-            getRows(analysis.getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getQuery(), function(err, rows) {
                 assert.ok(!err, err);
 
                 var banks = rows.map(function(row) {
@@ -110,10 +75,10 @@ describe('filters', function() {
 
     it('should return all banks as we are skipping the category filter', function(done) {
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
-        Analysis.create(testConfig, filteredSource, function(err, analysis) {
+        testHelper.createAnalyses(filteredSource, function(err, analysis) {
             assert.ok(!err, err);
 
-            getRows(analysis.getRoot().getQuery({bank_category: false}), function(err, rows) {
+            testHelper.getRows(analysis.getRoot().getQuery({bank_category: false}), function(err, rows) {
                 assert.ok(!err, err);
 
                 var banks = rows.map(function(row) {
@@ -138,10 +103,10 @@ describe('filters', function() {
             }
         };
 
-        Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
+        testHelper.createAnalyses(tradeAreaAnalysisDefinition, function(err, analysis) {
             assert.ok(!err, err);
 
-            getRows(analysis.getRoot().getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getRoot().getQuery(), function(err, rows) {
                 assert.ok(!err, err);
 
                 var banks = rows.map(function(row) {
@@ -156,14 +121,11 @@ describe('filters', function() {
     });
 
     describe('node-id', function() {
-        function create(definition, callback) {
-            Analysis.create(testConfig, definition, callback);
-        }
 
         it('should have different id when filter is applied', function(done) {
             var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
 
-            async.map([sourceAnalysisDefinition, filteredSource], create, function(err, results) {
+            testHelper.createAnalyses([sourceAnalysisDefinition, filteredSource], function(err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
