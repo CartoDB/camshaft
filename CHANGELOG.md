@@ -2,7 +2,7 @@
 
 ## 0.42.1
 
-Released 2016-mm-dd
+Released 2016-09-07
 
  - Cache `buffer` results: buffer+intersection anti-pattern is quite expensive otherwise.
 
