@@ -54,7 +54,7 @@ describe('centroid analysis', function() {
         });
     }
 
-    describe('non optional params', function () {
+    describe('w/o optional params', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -73,7 +73,7 @@ describe('centroid analysis', function() {
         });
     });
 
-    describe('with category column', function () {
+    describe('with `category_column`', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -93,7 +93,7 @@ describe('centroid analysis', function() {
         });
     });
 
-    describe('with category column and aggregation (miss aggregation_column)', function () {
+    describe('with `category_column` and `aggregation` (miss `aggregation_column`)', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -112,7 +112,7 @@ describe('centroid analysis', function() {
         });
     });
 
-    describe('with category column, aggregation and aggregation column', function () {
+    describe('with `category_column`, `aggregation` and `aggregation_column`', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -135,7 +135,7 @@ describe('centroid analysis', function() {
     });
 
 
-    describe('with aggregation (miss aggregation_colum for avg method)', function () {
+    describe('with `aggregation` (miss `aggregation_colum` for `avg` method)', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -154,7 +154,7 @@ describe('centroid analysis', function() {
     });
 
 
-    describe('with aggregation (miss aggregation_colum for avg method)', function () {
+    describe('with `aggregation` (miss `aggregation_colum` for `count` method)', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -163,7 +163,7 @@ describe('centroid analysis', function() {
             }
         };
 
-        it('should create an analysis', function (done) {
+        it('should create an analysis `aggregation`', function (done) {
             performAnalysis(centroidDefinition, function (err, values) {
                 if(err) {
                     return done(err);
@@ -174,7 +174,7 @@ describe('centroid analysis', function() {
         });
     });
 
-    describe('with aggregation and aggregation column', function () {
+    describe('with `aggregation` and `aggregation_column`', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -196,7 +196,7 @@ describe('centroid analysis', function() {
     });
 
 
-    describe('with category_column and aggregation column', function () {
+    describe('with `category_column` and `aggregation_column`', function () {
         var centroidDefinition = {
             type: 'centroid',
             params: {
@@ -206,10 +206,12 @@ describe('centroid analysis', function() {
             }
         };
 
-        it('should return error', function (done) {
+        it('should create an analysis', function (done) {
             performAnalysis(centroidDefinition, function (err, values) {
-                assert.ok(err);
-                assert.ok(!values);
+                if(err) {
+                    return done(err);
+                }
+                assert.ok(values);
                 done();
             });
         });
