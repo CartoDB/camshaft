@@ -23,7 +23,7 @@ describe('batch-client-postgresql', function () {
         testCase: 'should enqueue a query',
         assert: function (err, result) {
             assert.ok(!err, err);
-            assert.deepEqual(result, {status: 'ok'});
+            assert.deepEqual(result, { status: 'ok', job_id: 'wadus' });
         }
     }, {
         title: 'when Batch API does not work',
