@@ -2,7 +2,7 @@
 
 ## 0.42.2
 
-Released 2016-mm-dd
+Released 2016-09-09
 
  - Put back vals column in moram analysis #195.
 
