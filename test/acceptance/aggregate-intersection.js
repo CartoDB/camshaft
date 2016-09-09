@@ -38,15 +38,14 @@ describe('aggregate-intersection analysis', function() {
             }
         };
 
-
         it('should create an analysis and get districts with their average price', function (done) {
             testHelper.createAnalyses(averagePriceAnalysisDefinition, function(err, averagePriceAnalysis) {
+                assert.ifError(err);
+
                 var rootNode = averagePriceAnalysis.getRoot();
 
-                assert.ok(!err, err);
-
                 testHelper.getRows(rootNode.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
+                    assert.ifError(err);
                     rows.forEach(function(row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
@@ -60,7 +59,6 @@ describe('aggregate-intersection analysis', function() {
     });
 
     describe('max price analysis', function  () {
-
         var maxPriceAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
@@ -73,12 +71,12 @@ describe('aggregate-intersection analysis', function() {
 
         it('should create an analysis and get districts with their max price room', function (done) {
             testHelper.createAnalyses(maxPriceAnalysisDefinition, function(err, maxPriceAnalysis) {
+                assert.ifError(err);
+
                 var rootNode = maxPriceAnalysis.getRoot();
 
-                assert.ok(!err, err);
-
                 testHelper.getRows(rootNode.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
+                    assert.ifError(err);
                     rows.forEach(function(row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
@@ -92,7 +90,6 @@ describe('aggregate-intersection analysis', function() {
     });
 
     describe('count rooms analysis', function  () {
-
         var countRoomsAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
@@ -105,12 +102,12 @@ describe('aggregate-intersection analysis', function() {
 
         it('should create an analysis and get districts with their counted rooms', function (done) {
             testHelper.createAnalyses(countRoomsAnalysisDefinition, function(err, countRoomsAnalysis) {
+                assert.ifError(err);
+
                 var rootNode = countRoomsAnalysis.getRoot();
 
-                assert.ok(!err, err);
-
                 testHelper.getRows(rootNode.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
+                    assert.ifError(err);
                     rows.forEach(function(row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
