@@ -1,7 +1,6 @@
 SELECT
-  ST_Length(the_geom) as length,
-  the_geom,
-  {{=it.final_columns}}
+  *,
+  ST_Length(the_geom::geography) / 1000 AS length
 FROM (
   SELECT
     ST_MakeLine(
@@ -18,4 +17,4 @@ FROM (
   WHERE
     {{=it.source_alias}}.{{=it.source_column}} = {{=it.target_alias}}.{{=it.target_column}}
   {{?}}
-) {{=it.final_alias}}
+) _cdb_analysis_lines
