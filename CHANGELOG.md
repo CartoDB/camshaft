@@ -6,6 +6,7 @@ Released 2016-mm-dd
 
  - Returns `cartodb_id` column for trade-area whether dissolved is enabled
  - Used `test-helper` utility in acceptance test
+ - Transforms `2D cartesian distance` to `kilometers` for connect with lines analyses
 
 
 ## 0.42.2
