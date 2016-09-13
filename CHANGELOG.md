@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Returns `cartodb_id` column for trade-area whether dissolved is enabled
+
 
 ## 0.42.2
 
