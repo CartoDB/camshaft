@@ -1,19 +1,9 @@
 'use strict';
 
 var assert = require('assert');
-
-var Analysis = require('../../lib/analysis');
-
-var testConfig = require('../test-config');
-var QueryRunner = require('../../lib/postgresql/query-runner');
+var testHelper = require('../helper');
 
 describe('aggregate-intersection analysis', function() {
-
-    var queryRunner;
-
-    before(function() {
-        queryRunner = new QueryRunner(testConfig.db);
-    });
 
     var SOURCE_AIRBNB = 'select * from airbnb_rooms';
     var SOURCE_DISTRICTS = 'select * from madrid_districts';
@@ -37,53 +27,6 @@ describe('aggregate-intersection analysis', function() {
         }
     };
 
-    var config = testConfig.create({
-        batch: {
-            inlineExecution: true
-        }
-    });
-
-    function performAnalysis(definition, callback) {
-        Analysis.create(config, definition, function (err, analysis) {
-            if (err) {
-                return callback(err);
-            }
-
-            queryRunner.run(analysis.getQuery(), function(err, result) {
-                if (err) {
-                    return callback(err);
-                }
-
-                assert.ok(Array.isArray(result.rows));
-                var aggregatedValues = result.rows.map(function (district) {
-                    assert.ok(Number.isFinite(district.cartodb_id));
-                    assert.ok(district.name);
-                    assert.ok(district.the_geom);
-                    assert.ok(district.the_geom_webmercator);
-
-                    var aggregateProperty = [
-                        definition.params.aggregate_function,
-                        definition.params.aggregate_column
-                    ].join('_');
-
-                    if (definition.params.aggregate_function === 'count') {
-                        assert.ok(district.count_vals);
-                        assert.ok(district.count_vals_density);
-
-                        return district.count_vals;
-                    } else {
-                        assert.ok(district[aggregateProperty]);
-
-                        return district[aggregateProperty];
-                    }
-
-                });
-
-                callback(null, aggregatedValues);
-            });
-        });
-    }
-
     describe('average price analysis', function  () {
         var averagePriceAnalysisDefinition = {
             type: 'aggregate-intersection',
@@ -96,18 +39,26 @@ describe('aggregate-intersection analysis', function() {
         };
 
         it('should create an analysis and get districts with their average price', function (done) {
-            performAnalysis(averagePriceAnalysisDefinition, function (err, averageValues) {
-                assert.ok(!err, err);
-                assert.deepEqual(averageValues, [ 72.42857142857143, 39.92857142857143 ]);
+            testHelper.createAnalyses(averagePriceAnalysisDefinition, function(err, averagePriceAnalysis) {
+                assert.ifError(err);
 
-                done();
+                var rootNode = averagePriceAnalysis.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.avg_price === 'number');
+                    });
+
+                    return done();
+                });
             });
         });
-
     });
 
     describe('max price analysis', function  () {
-
         var maxPriceAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
@@ -119,17 +70,26 @@ describe('aggregate-intersection analysis', function() {
         };
 
         it('should create an analysis and get districts with their max price room', function (done) {
-            performAnalysis(maxPriceAnalysisDefinition,  function (err, maxValues) {
-                assert.ok(!err, err);
-                assert.deepEqual(maxValues, [ 195, 100 ]);
+            testHelper.createAnalyses(maxPriceAnalysisDefinition, function(err, maxPriceAnalysis) {
+                assert.ifError(err);
 
-                done();
+                var rootNode = maxPriceAnalysis.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.max_price === 'number');
+                    });
+
+                    return done();
+                });
             });
         });
     });
 
     describe('count rooms analysis', function  () {
-
         var countRoomsAnalysisDefinition = {
             type: 'aggregate-intersection',
             params: {
@@ -141,11 +101,21 @@ describe('aggregate-intersection analysis', function() {
         };
 
         it('should create an analysis and get districts with their counted rooms', function (done) {
-            performAnalysis(countRoomsAnalysisDefinition,  function (err, countValues) {
-                assert.ok(!err, err);
-                assert.deepEqual(countValues, [ 14, 14 ]);
+            testHelper.createAnalyses(countRoomsAnalysisDefinition, function(err, countRoomsAnalysis) {
+                assert.ifError(err);
 
-                done();
+                var rootNode = countRoomsAnalysis.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.count_vals === 'number');
+                    });
+
+                    return done();
+                });
             });
         });
     });
