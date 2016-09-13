@@ -1,8 +1,18 @@
 # Changelog
 
-## 0.42.2
+## 0.42.3
 
 Released 2016-mm-dd
+
+ - Returns `cartodb_id` column for trade-area whether dissolved is enabled
+ - Used `test-helper` utility in acceptance test
+
+
+## 0.42.2
+
+Released 2016-09-09
+
+ - Put back vals column in moram analysis #195.
 
 
 ## 0.42.1

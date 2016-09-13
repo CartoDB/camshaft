@@ -23,95 +23,60 @@ describe('line-sequential analysis', function() {
         };
 
         it('should create analysis sequential order by bank desc', function (done) {
-            testHelper.createAnalyses(lineSequentialDefinition, function(err, analysis) {
-                assert.ok(!err, err);
-                testHelper.getRows(analysis.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
-                    assert.ok(rows);
-                    assert.equal(rows.length, 1);
-                    rows.forEach(function (row) {
-                        assert.equal(typeof row.cartodb_id, 'number');
-                        assert.ok(row.the_geom);
-                        assert.ok(row.length);
+            testHelper.createAnalyses(lineSequentialDefinition, function(err, lineSequential) {
+                assert.ifError(err);
+
+                var rootNode = lineSequential.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
                     });
 
-                    done();
+                    return done();
                 });
             });
         });
 
         it('should create analysis sequential order by bank asc', function (done) {
             lineSequentialDefinition.params.order_type = 'asc';
-            testHelper.createAnalyses(lineSequentialDefinition, function(err, analysis) {
-                assert.ok(!err, err);
-                testHelper.getRows(analysis.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
-                    assert.ok(rows);
-                    assert.equal(rows.length, 1);
-                    rows.forEach(function (row) {
-                        assert.equal(typeof row.cartodb_id, 'number');
-                        assert.ok(row.the_geom);
-                        assert.ok(row.length);
+            testHelper.createAnalyses(lineSequentialDefinition, function(err, lineSequential) {
+                assert.ifError(err);
+
+                var rootNode = lineSequential.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
                     });
-                    done();
+
+                    return done();
                 });
             });
         });
 
         it('should create analysis sequential order by cartodb_id (by default) asc', function (done) {
             lineSequentialDefinition.params.order_column = undefined;
-            testHelper.createAnalyses(lineSequentialDefinition, function(err, analysis) {
-                assert.ok(!err, err);
-                testHelper.getRows(analysis.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
-                    assert.ok(rows);
-                    assert.equal(rows.length, 1);
-                    rows.forEach(function (row) {
-                        assert.equal(typeof row.cartodb_id, 'number');
-                        assert.ok(row.the_geom);
-                        assert.ok(row.length);
-                    });
-                    done();
-                });
-            });
-        });
+            testHelper.createAnalyses(lineSequentialDefinition, function(err, lineSequential) {
+                assert.ifError(err);
 
-        it('should create analysis sequential grouped by `kind`', function (done) {
-            lineSequentialDefinition.params.order_column = undefined;
-            lineSequentialDefinition.params.category_column = 'kind';
+                var rootNode = lineSequential.getRoot();
 
-            testHelper.createAnalyses(lineSequentialDefinition, function(err, analysis) {
-                assert.ok(!err, err);
-                testHelper.getRows(analysis.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
-                    assert.ok(rows);
-                    assert.equal(rows.length, 2);
-                    rows.forEach(function (row) {
-                        assert.equal(typeof row.cartodb_id, 'number');
-                        assert.ok(row.the_geom);
-                        assert.ok(row.length);
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
                     });
-                    done();
-                });
-            });
-        });
 
-        it('should create analysis sequential grouped by `kind` and ordered by bank asc', function (done) {
-            lineSequentialDefinition.params.order_type = 'asc';
-            lineSequentialDefinition.params.category_column = 'kind';
-            testHelper.createAnalyses(lineSequentialDefinition, function(err, analysis) {
-                assert.ok(!err, err);
-                testHelper.getRows(analysis.getQuery(), function(err, rows) {
-                    assert.ok(!err, err);
-                    assert.ok(rows);
-                    assert.equal(rows.length, 2);
-                    rows.forEach(function (row) {
-                        assert.equal(typeof row.cartodb_id, 'number');
-                        assert.ok(row.the_geom);
-                        assert.ok(row.category);
-                        assert.ok(row.length);
-                    });
-                    done();
+                    return done();
                 });
             });
         });
