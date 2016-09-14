@@ -2,7 +2,7 @@
 
 ## 0.43.0
 
-Released 2016-mm-dd
+Released 2016-09-14
 
  - Returns `cartodb_id` column for trade-area whether dissolved is enabled
  - Uses `test-helper` utility in acceptance test
