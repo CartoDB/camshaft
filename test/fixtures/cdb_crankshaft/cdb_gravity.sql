@@ -4,7 +4,9 @@
 
 /* The following implmentation comes from the original cdb_crankshaft.CDB_Gravity. Please implement a fake function that fits with your needs */
 
-CREATE OR REPLACE FUNCTION CDB_Gravity(
+CREATE SCHEMA IF NOT EXISTS cdb_crankshaft;
+
+CREATE OR REPLACE FUNCTION cdb_crankshaft.CDB_Gravity(
     IN target_query text,
     IN weight_column text,
     IN source_query text,
