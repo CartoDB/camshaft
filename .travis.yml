@@ -1,4 +1,5 @@
-sudo: false
+dist: trusty # only environment that supports Postgres 9.5 at this time
+sudo: required
 
 addons:
   postgresql: "9.5"
