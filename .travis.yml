@@ -4,9 +4,6 @@ sudo: required
 addons:
   postgresql: "9.5"
 
-before_script:
-  - psql -c 'select 1;' -U postgres
-
 env:
   - PGUSER=postgres
 
