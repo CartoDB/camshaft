@@ -1,20 +1,9 @@
 'use strict';
 
 var assert = require('assert');
-
-var Analysis = require('../../lib/analysis');
-
-var testConfig = require('../test-config');
-var QueryRunner = require('../../lib/postgresql/query-runner');
+var testHelper = require('../helper');
 
 describe('intersection analysis', function() {
-
-    var queryRunner;
-
-    before(function() {
-        queryRunner = new QueryRunner(testConfig.db);
-    });
-
     var SOURCE_AIRBNB = 'select * from airbnb_rooms';
     var SOURCE_DISTRICTS = 'select * from madrid_districts';
 
@@ -32,30 +21,8 @@ describe('intersection analysis', function() {
         }
     };
 
-    var config = testConfig.create({
-        batch: {
-            inlineExecution: true
-        }
-    });
-
-    function performAnalysis(definition, callback) {
-        Analysis.create(config, definition, function (err, analysis) {
-            if (err) {
-                return callback(err);
-            }
-
-            queryRunner.run(analysis.getQuery(), function(err, result) {
-                if (err) {
-                    return callback(err);
-                }
-
-                callback(null, result.rows);
-            });
-        });
-    }
-
     describe('intersection with all source columns', function  () {
-        var averagePriceAnalysisDefinition = {
+        var intersectionAnalysisDefinition = {
             type: 'intersection',
             params: {
                 source: sourceAirbnbRooms,
@@ -64,21 +31,27 @@ describe('intersection analysis', function() {
         };
 
         it('should create an analysis', function (done) {
-            performAnalysis(averagePriceAnalysisDefinition, function (err, result) {
-                assert.ok(!err, err);
-                assert.ok(result);
+            testHelper.createAnalyses(intersectionAnalysisDefinition, function(err, intersectionAnalysis) {
+                assert.ifError(err);
 
-                assert.ok(result[0].source_cartodb_id);
-                assert.ok(result[0].source_name);
+                var rootNode = intersectionAnalysis.getRoot();
 
-                done();
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.source_cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.source_name === 'string');
+                    });
+
+                    return done();
+                });
             });
         });
-
     });
 
     describe('intersection with only name source column', function  () {
-        var averagePriceAnalysisDefinition = {
+        var intersectionAnalysisDefinition = {
             type: 'intersection',
             params: {
                 source: sourceAirbnbRooms,
@@ -88,17 +61,22 @@ describe('intersection analysis', function() {
         };
 
         it('should create an analysis', function (done) {
-            performAnalysis(averagePriceAnalysisDefinition, function (err, result) {
-                assert.ok(!err, err);
-                assert.ok(result);
+            testHelper.createAnalyses(intersectionAnalysisDefinition, function(err, intersectionAnalysis) {
+                assert.ifError(err);
 
-                assert.ok(!result[0].source_cartodb_id);
-                assert.ok(result[0].source_name);
+                var rootNode = intersectionAnalysis.getRoot();
 
-                done();
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.source_name === 'string');
+                    });
+
+                    return done();
+                });
             });
         });
-
     });
-
 });

@@ -1,9 +1,34 @@
 # Changelog
 
-## 0.41.1
+## 0.43.0
 
-Released 2016-mm-dd
+Released 2016-09-14
 
+ - Returns `cartodb_id` column for trade-area whether dissolved is enabled
+ - Uses `test-helper` utility in acceptance test
+ - Transforms `2D cartesian distance` to `kilometers` for column length in connect with lines analyses
+ - Adds `category_column` to connect with lines (sequential) analysis
+
+## 0.42.2
+
+Released 2016-09-09
+
+ - Put back vals column in moram analysis #195.
+
+
+## 0.42.1
+
+Released 2016-09-07
+
+ - Cache `buffer` results: buffer+intersection anti-pattern is quite expensive otherwise.
+
+
+## 0.42.0
+
+Released 2016-09-06
+
+ - Adds column length to connect with lines analyses #187.
+ - Fixes connect with lines analysis, now closest option connects to the closest geometry for each source geometry #188.
 
 ## 0.41.0
 
