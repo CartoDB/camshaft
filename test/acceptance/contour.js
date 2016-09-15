@@ -27,18 +27,18 @@ describe('contour', function () {
     };
 
     it('basic contour test', function (done) {
-        testHelper.createAnalyses(analysisDefinition, function (err, analysisResult) {
-            if (err) {
-                return done(err);
-            }
+        testHelper.createAnalyses(analysisDefinition, function (err, contour) {
 
-            testHelper.getRows(analysisResult.getQuery(), function (err, rows) {
-                if (err) {
-                    return done(err);
-                }
-                assert.equal(rows.length, analysisDefinition.params.steps);
-                assert.ok(typeof row.cartodb_id === 'number');
-                assert.ok(typeof row.the_geom === 'string');
+            assert.ifError(err);
+
+            var rootNode = contour.getRoot();
+
+            testHelper.getRows(rootNode.getQuery(), function (err, rows) {
+                assert.ifError(err);
+                rows.forEach(function (row) {
+                    assert.ok(typeof row.cartodb_id === 'number');
+                    assert.ok(typeof row.the_geom === 'string');
+                });
                 return done();
             });
         });
