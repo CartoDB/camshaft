@@ -20,6 +20,7 @@ _cdb_analysis_isochrones_spread AS (
   ORDER BY (isochrone).data_range DESC
 )
 SELECT
+  row_number() over() as cartodb_id,
   data_range,
   ST_Union(the_geom) the_geom
 FROM

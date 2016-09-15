@@ -1,20 +1,9 @@
 'use strict';
 
 var assert = require('assert');
-
-var Analysis = require('../../lib/analysis');
-
-var testConfig = require('../test-config');
-var QueryRunner = require('../../lib/postgresql/query-runner');
+var testHelper = require('../helper');
 
 describe('line-to-column analysis', function() {
-
-    var queryRunner;
-
-    before(function() {
-        queryRunner = new QueryRunner(testConfig.db);
-    });
-
     var QUERY_SOURCE = 'select * from atm_machines';
 
     var sourceAtmMachines = {
@@ -23,33 +12,6 @@ describe('line-to-column analysis', function() {
             query: QUERY_SOURCE
         }
     };
-
-    var config = testConfig.create({
-        batch: {
-            inlineExecution: true
-        }
-    });
-
-    function performAnalysis(definition, callback) {
-        Analysis.create(config, definition, function (err, analysis) {
-            if (err) {
-                return callback(err);
-            }
-
-            queryRunner.run(analysis.getQuery(), function(err, result) {
-                if (err) {
-                    return callback(err);
-                }
-
-                assert.ok(Array.isArray(result.rows));
-                var values = result.rows.map(function (value) {
-                    return value;
-                });
-
-                callback(null, values);
-            });
-        });
-    }
 
     describe('line to column analysis', function () {
         var lineToColumnDefinition = {
@@ -61,19 +23,21 @@ describe('line-to-column analysis', function() {
         };
 
         it('should create analysis', function (done) {
-            performAnalysis(lineToColumnDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
+            testHelper.createAnalyses(lineToColumnDefinition, function(err, lineToColumn) {
+                assert.ifError(err);
 
-                assert.ok(values);
-                assert.ok(values.length > 0);
-                values.forEach(function (value) {
-                    assert.equal(typeof value.cartodb_id, 'number');
-                    assert.ok(value.the_geom);
-                    assert.ok(value.length);
+                var rootNode = lineToColumn.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
+                    });
+
+                    return done();
                 });
-                done();
             });
         });
     });
