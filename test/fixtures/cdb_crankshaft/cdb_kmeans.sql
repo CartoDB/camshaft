@@ -1,5 +1,3 @@
-create schema cdb_crankshaft;
-
 CREATE TYPE kmeans_type as (cartodb_id numeric, cluster_no numeric);
 
 CREATE OR REPLACE FUNCTION cdb_crankshaft.CDB_KMeans(query text, no_clusters integer,no_init integer default 20)
