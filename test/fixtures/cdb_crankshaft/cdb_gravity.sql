@@ -37,7 +37,7 @@ BEGIN
 END;
 $$ language plpgsql;
 
-CREATE OR REPLACE FUNCTION CDB_Gravity(
+CREATE OR REPLACE FUNCTION cdb_crankshaft.CDB_Gravity(
     IN t_id bigint[],
     IN t_geom geometry[],
     IN t_weight numeric[],
