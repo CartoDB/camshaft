@@ -20,7 +20,8 @@ describe('gravity analysis', function () {
     };
 
     describe('gravity', function () {
-        var tradeAreaDefinition = {
+
+        var node_definition = {
             type: 'gravity',
             params: {
                 source: sourceAtmMachines,
@@ -33,7 +34,7 @@ describe('gravity analysis', function () {
         };
 
         it('should create analysis', function (done) {
-            testHelper.createAnalyses(tradeAreaDefinition, function (err, gravity) {
+            testHelper.createAnalyses(node_definition, function (err, gravity) {
 
                 assert.ifError(err);
 
@@ -44,7 +45,6 @@ describe('gravity analysis', function () {
                     rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
-                        assert.ok(typeof row.length === 'number');
                     });
                     return done();
                 });
