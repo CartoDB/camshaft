@@ -37,6 +37,8 @@ describe('contour', function () {
                     return done(err);
                 }
                 assert.equal(rows.length, analysisDefinition.params.steps);
+                assert.ok(typeof row.cartodb_id === 'number');
+                assert.ok(typeof row.the_geom === 'string');
                 return done();
             });
         });
