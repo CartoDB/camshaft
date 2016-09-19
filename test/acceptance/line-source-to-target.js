@@ -1,20 +1,9 @@
 'use strict';
 
 var assert = require('assert');
-
-var Analysis = require('../../lib/analysis');
-
-var testConfig = require('../test-config');
-var QueryRunner = require('../../lib/postgresql/query-runner');
+var testHelper = require('../helper');
 
 describe('line-source-to-target analysis', function() {
-
-    var queryRunner;
-
-    before(function() {
-        queryRunner = new QueryRunner(testConfig.db);
-    });
-
     var QUERY_SOURCE = 'select * from atm_machines where bank = \'Santander\'';
     var sourceAtmMachines = {
         type: 'source',
@@ -31,33 +20,6 @@ describe('line-source-to-target analysis', function() {
         }
     };
 
-    var config = testConfig.create({
-        batch: {
-            inlineExecution: true
-        }
-    });
-
-    function performAnalysis(definition, callback) {
-        Analysis.create(config, definition, function (err, analysis) {
-            if (err) {
-                return callback(err);
-            }
-
-            queryRunner.run(analysis.getQuery(), function(err, result) {
-                if (err) {
-                    return callback(err);
-                }
-
-                assert.ok(Array.isArray(result.rows));
-                var values = result.rows.map(function (value) {
-                    return value;
-                });
-
-                callback(null, values);
-            });
-        });
-    }
-
     describe('line source to target analysis', function () {
         var lineToLayerAllToAllDefinition = {
             type: 'line-source-to-target',
@@ -71,77 +33,98 @@ describe('line-source-to-target analysis', function() {
         };
 
         it('should create analysis joined by kind', function (done) {
-            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+                assert.ifError(err);
 
-                assert.ok(values);
-                assert.equal(values.length, 3);
-                values.forEach(function (value) {
-                    assert.ok(value.length);
-                    assert.equal(value.bank, 'Santander');
+                var rootNode = lineToLayerAllToAll.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
+                    });
+
+                    return done();
                 });
-                done();
-            });
-        });
-
-        it('should create analysis to the closest joined by kind', function (done) {
-            lineToLayerAllToAllDefinition.params.closest = true;
-            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
-
-                assert.ok(values);
-                assert.equal(values.length, 2);
-                values.forEach(function (value) {
-                    assert.ok(value.length);
-                    assert.equal(value.bank, 'Santander');
-                });
-                done();
             });
         });
 
         it('should create analysis to all', function (done) {
-            lineToLayerAllToAllDefinition.params.closest = false;
             lineToLayerAllToAllDefinition.params.source_column = undefined;
             lineToLayerAllToAllDefinition.params.target_column = undefined;
 
-            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+                assert.ifError(err);
 
-                assert.ok(values);
-                assert.equal(values.length, 6);
-                values.forEach(function (value) {
-                    assert.ok(value.length);
-                    assert.equal(value.bank, 'Santander');
+                var rootNode = lineToLayerAllToAll.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
+                    });
+
+                    return done();
                 });
-                done();
             });
         });
-
-        it('should create analysis to the closest', function (done) {
-            lineToLayerAllToAllDefinition.params.closest = true;
-            lineToLayerAllToAllDefinition.params.source_column = undefined;
-            lineToLayerAllToAllDefinition.params.target_column = undefined;
-
-            performAnalysis(lineToLayerAllToAllDefinition, function (err, values) {
-                if(err) {
-                    return done(err);
-                }
-
-                assert.ok(values);
-                assert.equal(values.length, 1);
-                values.forEach(function (value) {
-                    assert.ok(value.length);
-                });
-                done();
-            });
-        });
-
     });
 
+    describe('closest line from source to target', function () {
+        var lineToLayerAllToAllDefinition = {
+            type: 'line-source-to-target',
+            params: {
+                source: sourceAtmMachines,
+                source_column: 'kind',
+                target: targetAtmMachines,
+                target_column: 'kind',
+                closest: true
+            }
+        };
+
+        it('should create analysis joined by kind', function (done) {
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+                assert.ifError(err);
+
+                var rootNode = lineToLayerAllToAll.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
+                    });
+
+                    return done();
+                });
+            });
+        });
+
+        it('should create analysis to all', function (done) {
+            lineToLayerAllToAllDefinition.params.source_column = undefined;
+            lineToLayerAllToAllDefinition.params.target_column = undefined;
+
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+                assert.ifError(err);
+
+                var rootNode = lineToLayerAllToAll.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.length === 'number');
+                    });
+
+                    return done();
+                });
+            });
+        });
+    });
 });

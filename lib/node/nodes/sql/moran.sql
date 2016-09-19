@@ -1,4 +1,4 @@
-SELECT input_query.*, m.quads, m.significance, m.moran
+SELECT input_query.*, m.quads, m.significance, m.moran, m.vals
 FROM ({{=it._query}}) input_query, (
   SELECT * FROM
   cdb_crankshaft.CDB_AreasOfInterestLocal(
