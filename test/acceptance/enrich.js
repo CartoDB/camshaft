@@ -13,8 +13,7 @@ describe('enrich', function () {
     var QUERY_MADRID_DISTRICTS = 'select * from madrid_districts';
 
     var analysisDefinition = {
-        type: 'enrich
-        ',
+        type: 'enrich',
         params: {
             source: {
                 type: 'source',
