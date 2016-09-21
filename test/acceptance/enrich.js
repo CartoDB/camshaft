@@ -28,7 +28,7 @@ describe('enrich', function () {
                 }
             },
             column: 'price',
-            method: 'barymetric',
+            method: 'IDW',
             number_of_neighbors: 0,
             decay_order: 0
         }
