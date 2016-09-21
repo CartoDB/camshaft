@@ -8,13 +8,13 @@ var testHelper = require('../helper');
 
 describe('enrich', function () {
 
-    var source = {
+    var source_node = {
         type: 'source',
         params: {
             query: 'select * from airbnb_rooms'
         }
     };
-    var target = {
+    var target_node = {
         type: 'source',
         params: {
             query: 'select * from madrid_districts'
@@ -24,9 +24,9 @@ describe('enrich', function () {
     var analysisDefinition = {
         type: 'enrich',
         params: {
-            source: source,
-            target: target,
-            column: 'price',
+            source: source_node,
+            target: target_node,
+            val_column: 'price',
             method: 'IDW',
             number_of_neighbors: 0,
             decay_order: 0
