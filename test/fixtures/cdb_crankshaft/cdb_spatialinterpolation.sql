@@ -12,6 +12,6 @@ CREATE OR REPLACE FUNCTION cdb_crankshaft.CDB_SpatialInterpolation(
     )
 RETURNS numeric AS
 BEGIN
-    RETURN (p1 * p2 * method * colin[1]);
+    RETURN (p1 * p2 * method::numeric * colin[1]);
 END;
 $$ language plpgsql;
