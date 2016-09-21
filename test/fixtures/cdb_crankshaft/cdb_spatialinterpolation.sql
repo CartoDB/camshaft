@@ -10,7 +10,7 @@ CREATE OR REPLACE FUNCTION cdb_crankshaft.CDB_SpatialInterpolation(
     IN p1 numeric DEFAULT 0,
     IN p2 numeric DEFAULT 0
     )
-RETURNS numeric AS
+RETURNS numeric AS $$
 BEGIN
     RETURN (p1 * p2 * method::numeric * colin[1]);
 END;
