@@ -8,25 +8,24 @@ var testHelper = require('../helper');
 
 describe('enrich', function () {
 
-    var QUERY_AIRBNB_ROOMS = 'select * from airbnb_rooms';
-
-    var QUERY_MADRID_DISTRICTS = 'select * from madrid_districts';
+    var source = {
+        type: 'source',
+        params: {
+            query: 'select * from airbnb_rooms'
+        }
+    };
+    var target = {
+        type: 'source',
+        params: {
+            query: 'select * from madrid_districts'
+        }
+    };
 
     var analysisDefinition = {
         type: 'enrich',
         params: {
-            source: {
-                type: 'source',
-                params: {
-                    query: QUERY_AIRBNB_ROOMS
-                }
-            },
-            target: {
-                type: 'source',
-                params: {
-                    query: QUERY_MADRID_DISTRICTS
-                }
-            },
+            source: source,
+            target: target,
             column: 'price',
             method: 'IDW',
             number_of_neighbors: 0,
