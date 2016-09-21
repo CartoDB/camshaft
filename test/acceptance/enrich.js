@@ -46,7 +46,7 @@ describe('enrich', function () {
                 rows.forEach(function (row) {
                     assert.ok(typeof row.cartodb_id === 'number');
                     assert.ok(typeof row.the_geom === 'string');
-                    // assert.ok(typeof row.price === 'number');
+                    assert.ok(typeof row.price === 'number');
                 });
                 return done();
             });
