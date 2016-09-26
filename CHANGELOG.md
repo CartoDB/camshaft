@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.44.0
+
+Released 2016-09-26
+
+ - Add contour analysis #186
+ - Add gravity analysis #172
+ - Basic logging to track analysis #192
+
+
 ## 0.43.0
 
 Released 2016-09-14

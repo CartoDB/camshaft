@@ -27,8 +27,9 @@ var versions = {
     "0.38.0": require("./0.38.0/reference.json"),
     "0.40.0": require("./0.40.0/reference.json"),
     "0.41.0": require("./0.41.0/reference.json"),
-    "0.43.0": require("./0.43.0/reference.json")
+    "0.43.0": require("./0.43.0/reference.json"),
+    "0.44.0": require("./0.44.0/reference.json")
 };
 
-versions.latest = versions["0.43.0"];
+versions.latest = versions["0.44.0"];
 module.exports = versions;
