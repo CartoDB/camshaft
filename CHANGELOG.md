@@ -2,7 +2,9 @@
 
 ## 0.44.1
 
-Released 2016-mm-dd
+Released 2016-09-28
+
+ - Basic logging: Log once collected analysis data
 
 
 ## 0.44.0
