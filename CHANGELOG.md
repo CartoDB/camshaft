@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Log nodes with info about queued work.
+
 
 ## 0.44.1
 
