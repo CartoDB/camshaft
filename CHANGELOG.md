@@ -2,7 +2,7 @@
 
 ## 0.44.2
 
-Released 2016-mm-dd
+Released 2016-09-30
 
  - Log nodes with info about queued work.
 
