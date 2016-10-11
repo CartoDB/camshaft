@@ -4,6 +4,7 @@
 
 Released 2016-mm-dd
 
+ - Allow to set timeouts per analysis tag.
  - Allow to set timeouts per analysis type.
 
 

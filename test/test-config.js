@@ -9,6 +9,7 @@ function create (override) {
     };
     override.db = override.db || {};
     override.batch = override.batch || {};
+    override.limits = override.limits || {};
     return {
         user: override.user || 'localhost',
         db: defaults(override.db, {
@@ -22,6 +23,9 @@ function create (override) {
             endpoint: BATCH_API_ENDPOINT,
             username: 'localhost',
             apiKey: 1234
+        }),
+        limits: defaults(override.limits, {
+            analyses: {}
         })
     };
 }
