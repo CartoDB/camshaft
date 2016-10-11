@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.44.3
+## 0.45.0
 
 Released 2016-mm-dd
 
