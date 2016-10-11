@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+ - Allow to set timeouts per analysis type.
+
 
 ## 0.44.2
 
