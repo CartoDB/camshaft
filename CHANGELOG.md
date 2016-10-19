@@ -1,8 +1,16 @@
 # Changelog
 
-## 0.44.3
+## 0.45.1
 
 Released 2016-mm-dd
+
+
+## 0.45.0
+
+Released 2016-10-11
+
+ - Allow to set timeouts per analysis tag.
+ - Allow to set timeouts per analysis type.
 
 
 ## 0.44.2
