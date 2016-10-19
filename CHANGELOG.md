@@ -1,9 +1,10 @@
 # Changelog
 
-## 0.45.1
+## 0.46.0
 
-Released 2016-mm-dd
+Released 2016-10-19
 
+- Call SQL function `CDB_CheckAnalysisQuota` each time an analysis cache table is populated
 
 ## 0.45.0
 
