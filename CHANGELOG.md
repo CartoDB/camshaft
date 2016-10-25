@@ -2,7 +2,7 @@
 
 ## 0.46.1
 
-Released 2016-mm-dd
+Released 2016-10-25
 
 - Fix race condition during analysis creation  
 
