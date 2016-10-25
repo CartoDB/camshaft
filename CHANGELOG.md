@@ -1,16 +1,23 @@
 # Changelog
 
+## 0.46.2
+
+Released 2016-mm-dd
+
+
 ## 0.46.1
 
 Released 2016-10-25
 
 - Fix race condition during analysis creation  
 
+
 ## 0.46.0
 
 Released 2016-10-19
 
 - Call SQL function `CDB_CheckAnalysisQuota` each time an analysis cache table is populated
+
 
 ## 0.45.0
 
