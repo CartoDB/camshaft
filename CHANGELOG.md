@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+- Fix race condition during analysis creation  
+
 ## 0.46.0
 
 Released 2016-10-19
