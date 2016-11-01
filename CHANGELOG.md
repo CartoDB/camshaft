@@ -2,14 +2,16 @@
 
 ## 0.46.2
 
-Released 2016-mm-dd
+Released 2016-11-01
+
+- Expose `node_id` when cycle error is found
 
 
 ## 0.46.1
 
 Released 2016-10-25
 
-- Fix race condition during analysis creation  
+- Fix race condition during analysis creation
 
 
 ## 0.46.0
