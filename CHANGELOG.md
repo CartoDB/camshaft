@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.46.3
+
+Released 2016-mm-dd
+
+- Fix issue while sorting and validating analysis
+
+
 ## 0.46.2
 
 Released 2016-11-01
