@@ -106,7 +106,7 @@ describe('workflow', function() {
             Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
                 assert.ok(!err, err);
                 assert.equal(analysis.getRoot().estimatedRequirements.numberOfRows, 6);
-                assert.equal(analysis.getRoot().limits.maximumNumberOfRows, 1000000);
+                assert.equal(analysis.getRoot().limits.maximumNumberOfRows, undefined);
                 done();
             });
         });
