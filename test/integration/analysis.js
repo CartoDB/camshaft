@@ -139,6 +139,33 @@ describe('workflow', function() {
 
                 assert.ok(!err, err);
                 assert.equal(analysis.getRoot().requirements.getEstimatedRequirement('numberOfRows'), 6);
+                assert.equal(analysis.getRoot().requirements.getLimit('maximumNumberOfRows'), null);
+                done();
+            });
+        });
+
+        it('should compute node requirements and overridden limits for trade areas', function(done) {
+            var limitedConfig = testConfig.create({
+                limits: {
+                    analyses: {
+                        'trade-area': {
+                            maximumNumberOfRows: 1000000
+                        }
+                    }
+                }
+            });
+
+            var enqueueFn = BatchClient.prototype.enqueue;
+
+            BatchClient.prototype.enqueue = function(query, callback) {
+                return callback(null, {status: 'ok'});
+            };
+
+            Analysis.create(limitedConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
+                BatchClient.prototype.enqueue = enqueueFn;
+
+                assert.ok(!err, err);
+                assert.equal(analysis.getRoot().requirements.getEstimatedRequirement('numberOfRows'), 6);
                 assert.equal(analysis.getRoot().requirements.getLimit('maximumNumberOfRows'), 1000000);
                 done();
             });
