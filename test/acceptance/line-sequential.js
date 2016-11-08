@@ -61,24 +61,24 @@ describe('line-sequential analysis', function() {
             });
         });
 
-        it('should create analysis sequential order by cartodb_id (by default) asc', function (done) {
+        it('should return error: missing required param "order_column"', function (done) {
             lineSequentialDefinition.params.order_column = undefined;
-            testHelper.createAnalyses(lineSequentialDefinition, function(err, lineSequential) {
-                assert.ifError(err);
-
-                var rootNode = lineSequential.getRoot();
-
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
-                    assert.ifError(err);
-                    rows.forEach(function(row) {
-                        assert.ok(typeof row.cartodb_id === 'number');
-                        assert.ok(typeof row.the_geom === 'string');
-                        assert.ok(typeof row.length === 'number');
-                    });
-
-                    return done();
-                });
+            testHelper.createAnalyses(lineSequentialDefinition, function(err) {
+                assert.ok(err);
+                assert.equal(err.message, 'Missing required param "order_column"');
+                return done();
             });
         });
+
+        it('should return error: missing required param "order_column"', function (done) {
+            lineSequentialDefinition.params.order_column = 'bank';
+            lineSequentialDefinition.params.order_type = undefined;
+            testHelper.createAnalyses(lineSequentialDefinition, function(err) {
+                assert.ok(err);
+                assert.equal(err.message, 'Missing required param "order_type"');
+                return done();
+            });
+        });
+
     });
 });
