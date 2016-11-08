@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+- Buffer returns `cartodb_id` when using dissolved option
+
 
 ## 0.46.3
 
