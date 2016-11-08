@@ -105,8 +105,8 @@ describe('workflow', function() {
         it('should compute node requirements and limits for source', function(done) {
             Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
                 assert.ok(!err, err);
-                assert.equal(analysis.getRoot().estimatedRequirements.numberOfRows, 6);
-                assert.equal(analysis.getRoot().limits.maximumNumberOfRows, undefined);
+                assert.equal(analysis.getRoot().requirements.getEstimatedRequirement('numberOfRows'), 6);
+                assert.equal(analysis.getRoot().requirements.getLimit('maximumNumberOfRows'), undefined);
                 done();
             });
         });
@@ -138,8 +138,8 @@ describe('workflow', function() {
                 BatchClient.prototype.enqueue = enqueueFn;
 
                 assert.ok(!err, err);
-                assert.equal(analysis.getRoot().estimatedRequirements.numberOfRows, 6);
-                assert.equal(analysis.getRoot().limits.maximumNumberOfRows, 1000000);
+                assert.equal(analysis.getRoot().requirements.getEstimatedRequirement('numberOfRows'), 6);
+                assert.equal(analysis.getRoot().requirements.getLimit('maximumNumberOfRows'), 1000000);
                 done();
             });
         });
