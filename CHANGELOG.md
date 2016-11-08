@@ -2,7 +2,7 @@
 
 ## 0.47.0
 
-Released 2016-mm-dd
+Released 2016-11-08
 
 - Buffer returns `cartodb_id` when using dissolved option
 - Make mandatory `order_colum` and `order_type` params for line-sequential analysis
