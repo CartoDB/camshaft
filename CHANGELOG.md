@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.47.1
+## 0.48.0
 
-Released 2016-mm-dd
+Released 2016-11-10
+
+- Analysis requirements are checked before registration
 
 
 ## 0.47.0
