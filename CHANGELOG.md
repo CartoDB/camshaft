@@ -2,9 +2,9 @@
 
 ## 0.48.1
 
-Released 2016-mm-dd
+Released 2016-11-10
 
--
+- Fix incorrect analysis limit for aggregate-intersection
 
 
 ## 0.48.0
