@@ -2,10 +2,14 @@
 
 function MockNode(id, inputNodes) {
     this._id = id;
-    this._inputNodes = [];
+    this._inputNodes = {};
 
     if (inputNodes) {
-        this._inputNodes = Array.isArray(inputNodes) ? inputNodes : [inputNodes];
+        inputNodes = Array.isArray(inputNodes) ? inputNodes : [inputNodes];
+
+        inputNodes.forEach(function (inputNode) {
+            this._inputNodes[inputNode.id()] = inputNode;
+        }.bind(this));
     }
 }
 
@@ -16,7 +20,13 @@ MockNode.prototype.id = function() {
 };
 
 MockNode.prototype.getInputNodes = function() {
-    return this._inputNodes;
+    var inputNodes = [];
+
+    Object.keys(this._inputNodes).forEach(function (inputNodeId) {
+        inputNodes.push(this._inputNodes[inputNodeId]);
+    }.bind(this));
+
+    return inputNodes;
 };
 
 MockNode.prototype.getType = function() {
@@ -26,6 +36,6 @@ MockNode.prototype.getType = function() {
 MockNode.prototype.toJSON = function() {
     return {
         id: this._id,
-        inputNodes: this._inputNodes.map(function(n) { return n.id(); })
+        inputNodes: this.getInputNodes().map(function(n) { return n.id(); })
     };
 };
