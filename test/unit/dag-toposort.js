@@ -199,9 +199,7 @@ describe('dag-toposort', function() {
             var c0 = new MockNode('C0');
             var c1 = new MockNode('C1', [c0, b1]);
 
-            var a0 = new MockNode('B0');
-            var a1 = new MockNode('B1', [a0]);
-            var a2 = new MockNode('A2', [a1, b1]);
+            var a2 = new MockNode('A2', [b1, b1]);
             var a3 = new MockNode('A3', [a2]);
             var a4 = new MockNode('A4', [a3]);
             var a5 = new MockNode('A5', [a4]);
