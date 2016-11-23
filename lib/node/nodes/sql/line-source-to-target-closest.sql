@@ -1,6 +1,6 @@
 SELECT
   *,
-  ST_Length(the_geom::geography) / 1000 AS length
+  ST_Length(the_geom::geography) AS length
 FROM (
   SELECT
     {{=it.target_alias}}.cartodb_id as closest_id,
