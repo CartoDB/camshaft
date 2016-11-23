@@ -150,4 +150,66 @@ describe('dag-toposort', function() {
         });
     });
 
+    describe('node/s used in different parts of the graph', function() {
+        it('(B1 used as parent of C1 and A2 ', function() {
+            // C2 <-- C1 <-- CO
+            // ^      ^
+            // |      |
+            // |      B1 <-- B0
+            // |
+            // A5 <-- A4 <-- A3 <-- A2 <-- A1 <-- A0
+            //                      ^
+            //                      |
+            //                      B1 <-- B0
+
+            var b0 = new MockNode('B0');
+            var b1 = new MockNode('B1', [b0]);
+
+            var c0 = new MockNode('C0');
+            var c1 = new MockNode('C1', [c0, b1]);
+
+            var a0 = new MockNode('A0');
+            var a1 = new MockNode('A1', [a0]);
+            var a2 = new MockNode('A2', [a1, b1]);
+            var a3 = new MockNode('A3', [a2]);
+            var a4 = new MockNode('A4', [a3]);
+            var a5 = new MockNode('A5', [a4]);
+
+            var c2 = new MockNode('C2', [c1, a5]);
+
+            var sorted = toposort(c2);
+            assert.equal(sorted.length, 11);
+        });
+
+
+        it('(B1 used as parent of C1 and A2 (2 inputs)', function() {
+            // C2 <-- C1 <-- CO
+            // ^      ^
+            // |      |
+            // |      B1 <-- B0
+            // |
+            // A5 <-- A4 <-- A3 <-- A2 <-- B1 <-- B0
+            //                      ^
+            //                      |
+            //                      B1 <-- B0
+
+            var b0 = new MockNode('B0');
+            var b1 = new MockNode('B1', [b0]);
+
+            var c0 = new MockNode('C0');
+            var c1 = new MockNode('C1', [c0, b1]);
+
+            var a2 = new MockNode('A2', [b1, b1]);
+            var a3 = new MockNode('A3', [a2]);
+            var a4 = new MockNode('A4', [a3]);
+            var a5 = new MockNode('A5', [a4]);
+
+            var c2 = new MockNode('C2', [c1, a5]);
+
+            var sorted = toposort(c2);
+            assert.equal(sorted.length, 9);
+        });
+
+    });
+
 });
