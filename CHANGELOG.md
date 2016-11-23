@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.48.3
+
+Released 2016-11-23
+
+- Fix bug preventing line-sequential limits in some cases
+
+
 ## 0.48.2
 
 Released 2016-11-23
