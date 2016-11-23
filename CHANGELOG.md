@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.48.2
+
+Released 2016-11-23
+
+- Enhanced analysis pre-checking usig EXPLAIN
+- Avoid duplicated input nodes at topsort level
+
+
 ## 0.48.1
 
 Released 2016-11-10
