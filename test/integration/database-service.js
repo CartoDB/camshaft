@@ -35,4 +35,25 @@ describe('database-servie', function() {
         });
     });
 
+    it('should be able to register nodes with null updatedAt', function(done) {
+        var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
+        var sourceWithUpdatedAt = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
+        sourceWithUpdatedAt.setUpdatedAt(new Date());
+        var analysis = {
+            getSortedNodes: function() {
+                return [
+                    source, source, sourceWithUpdatedAt
+                ];
+            },
+            getRoot: function() {
+                return { type: 'wadus' };
+            }
+        };
+        this.databaseService.registerAnalysisInCatalog(analysis, function(err) {
+            assert.ok(!err, err);
+
+            done();
+        }); 
+    });
+
 });
