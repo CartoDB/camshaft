@@ -4,6 +4,8 @@
 
 Released 2016-mm-dd
 
+- Cast updated_at column to ::timestamp to avoid UNION types errors.
+
 
 ## 0.48.3
 
