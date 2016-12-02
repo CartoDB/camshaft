@@ -7,30 +7,25 @@ To check limits, the `checkLimits` method of Node must be overriden.
 Check number of input rows.
 
 ```javascript
-var LIMITS = {
+var LIMITS = new Limits({
     maximumNumberOfRows: {
         default: 1e6,
         name: 'maximumNumberOfRows',
         message: 'too many source rows'
     }
-};
+});
 
-var LIMITS_DISSOLVED = {
+var LIMITS_DISSOLVED = new Limits({
     maximumNumberOfRows: {
         default: 1e5,
         name: 'maximumNumberOfRowsDissolved',
         message: 'too many source rows'
     }
-};
+});
 
 Buffer.prototype.checkLimits = function(context, callback) {
-    var limits = this.dissolved ? LIMITS_DISSOLVED : LIMITS;
-
-    Checks.check(this, context, [{
-        checker: Checks.limitInputRows,
-        params: { input: 'source' },
-        limits: limits
-    }], callback);
+    var inputLimits = this.dissolved ? LIMITS_DISSOLVED : LIMITS;
+    inputLimits.isWithinRowsLimit(this.source, done);
 };
 ```
 
@@ -39,61 +34,43 @@ Buffer.prototype.checkLimits = function(context, callback) {
 Check both the number of input and output rows.
 
 ```javascript
-var INPUT_LIMITS = {
+var LIMITS = new Limits({
     maximumNumberOfRows: {
         default: 1e6,
-        name: 'maximumInputNumberOfRows',
+        name: 'maximumNumberOfRows',
         message: 'too many source rows'
     }
-};
+});
 
-var INPUT_LIMITS_DISSOLVED = {
-    INPUT_maximumNumberOfRows: {
+var LIMITS_DISSOLVED = new Limits({
+    maximumNumberOfRows: {
         default: 1e5,
-        name: 'maximumInputNumberOfRowsDissolved',
+        name: 'maximumNumberOfRowsDissolved',
         message: 'too many source rows'
     }
-};
+});
 
-var OUTPUT_LIMITS = {
+var OUTPUT_LIMITS = new Limits({
     maximumNumberOfRows: {
         default: 1e6,
         name: 'maximumInputNumberOfRows',
         message: 'too many source rows'
     }
-};
+});
 
 Buffer.prototype.checkLimits = function(context, callback) {
-    var inputLimits = this.dissolved ? INPUT_LIMITS_DISSOLVED : INPUT_LIMITS;
+    var inputLimits = this.dissolved ? LIMITS_DISSOLVED : LIMITS;
     var outputLimits = OUTPUT_LIMITS;
 
-    Checks.check(this, context, [{
-        checker: Checks.limitInputRows,
-        params: { input: 'source' },
-        limits: inputLimits
-    }, {
-        checker: Checks.limitNumberOfRows,
-        limits: outputLimits
-    }], callback);
-};
-```
-
-To avoid needeing a specific `limitInputRows` we coud: 
-
-```javascript
-Buffer.prototype.checkLimits = function(context, callback) {
-    var inputLimits = this.dissolved ? INPUT_LIMITS_DISSOLVED : INPUT_LIMITS;
-    var outputLimits = OUTPUT_LIMITS;
-
-    Checks.check(this, context, [{
-        checker: function(node, context, limits, params, callback) {
-            Checks.limitNumberOfRows(node.source, context, limits, params, callback);
+    async.waterfall([
+        function(done) {
+            inputLimits.isWithinRowsLimit(this.source, done);
         },
-        limits: inputLimits
-    }, {
-        checker: Checks.limitNumberOfRows,
-        limits: outputLimits
-    }], callback);
+        function(done) {
+            outputLimits.isWithinRowsLimit(this, done);
+        }
+    ], callback);
+
 };
 ```
 
@@ -102,23 +79,18 @@ Buffer.prototype.checkLimits = function(context, callback) {
 Check the user's luck.
 
 ```javascript
-var LIMITS = {
+var LIMITS = new Limits({
     chanceOfSuccess: {
         default: 0.5,
         message: 'no luck this time'
     }
-};
+});
 
 Buffer.prototype.checkLimits = function(context, callback) {
-    Checks.check(this, context, [{
-        checker: function(node, context, limits, params, callback) {
-             var err = null;
-             if (Math.ramdom() < limits.chanceOfSuccess.value) {
-                 err = nodeError(node, [limits.chanceOfSuccess.message]);
-             }
-             callback(err);
-        },
-        limits: LIMITS
-    }], callback);
+    var err = null;
+    if (Math.ramdom() < LIMITS.value('chanceOfSuccess')) {
+        err = nodeError(node, [LIMITS.message('chanceOfSuccess')]);
+    }
+    callback(err);
 };
 ```
