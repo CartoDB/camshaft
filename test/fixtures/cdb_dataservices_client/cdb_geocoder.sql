@@ -1,5 +1,5 @@
----- cdb_geocode_namedplace_point(city_name text, admin1_name text, country_name text)
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_geocode_namedplace_point(city_name text, admin1_name text, country_name text)
+---- _cdb_geocode_namedplace_point_exception_safe(city_name text, admin1_name text, country_name text)
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_geocode_namedplace_point_exception_safe(city_name text, admin1_name text, country_name text)
 RETURNS Geometry AS $$
   DECLARE
     ret Geometry;
@@ -12,8 +12,8 @@ RETURNS Geometry AS $$
   END
 $$ LANGUAGE plpgsql;
 
----- cdb_geocode_admin1_polygon(admin1_name text, country_name text)
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_geocode_admin1_polygon(admin1_name text, country_name text)
+---- _cdb_geocode_admin1_polygon_exception_safe(admin1_name text, country_name text)
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_geocode_admin1_polygon_exception_safe(admin1_name text, country_name text)
 RETURNS Geometry AS $$
   DECLARE
     ret Geometry;
@@ -37,8 +37,8 @@ RETURNS Geometry AS $$
   END
 $$ LANGUAGE plpgsql;
 
----- cdb_geocode_postalcode_polygon(postal_code text, country_name text)
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_geocode_postalcode_polygon(postal_code text, country_name text)
+---- _cdb_geocode_postalcode_polygon_exception_safe(postal_code text, country_name text)
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_geocode_postalcode_polygon_exception_safe(postal_code text, country_name text)
 RETURNS Geometry AS $$
   DECLARE
     ret Geometry;
@@ -62,8 +62,8 @@ RETURNS Geometry AS $$
   END
 $$ LANGUAGE plpgsql;
 
----- cdb_geocode_ipaddress_point(ip text)
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_geocode_ipaddress_point(ip text)
+---- _cdb_geocode_ipaddress_point_exception_safe(ip text)
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_geocode_ipaddress_point_exception_safe(ip text)
 RETURNS Geometry AS $$
   DECLARE
     i INTEGER := 0;
@@ -101,7 +101,7 @@ RETURNS Geometry AS $$
   END
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_geocode_street_point(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_geocode_street_point_exception_safe(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
 RETURNS Geometry AS $$
   DECLARE
     ret Geometry;
