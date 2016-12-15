@@ -1,8 +1,8 @@
-dist: trusty # only environment that supports Postgres 9.5 at this time
-sudo: required
-
 addons:
   postgresql: "9.5"
+  apt:
+    packages:
+      - postgresql-9.5-postgis-2.3
 
 env:
   - PGUSER=postgres
