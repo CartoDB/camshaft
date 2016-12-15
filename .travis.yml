@@ -6,6 +6,7 @@ addons:
 
 env:
   - PGUSER=postgres
+  - DEBUG=*
 
 language: node_js
 node_js:
