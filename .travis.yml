@@ -1,3 +1,5 @@
+dist: trusty
+
 addons:
   postgresql: "9.5"
   apt:
