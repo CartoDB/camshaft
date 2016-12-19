@@ -2,7 +2,10 @@
 
 ## 0.48.5
 
-Released 2016-mm-dd
+Released 2016-12-19
+
+- Use DS exception safe API functions #243
+- `.travis.yml` improvements: Add postgis addon, Use trusty
 
 
 ## 0.48.4
