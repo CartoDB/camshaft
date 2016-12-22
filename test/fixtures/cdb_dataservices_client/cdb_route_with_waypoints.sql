@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_route_with_waypoints(
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_route_with_waypoints_exception_safe(
   waypoints geometry(Point, 4326)[],
   mode TEXT,
   options text[] DEFAULT ARRAY[]::text[],
