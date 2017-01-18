@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.48.6
+## 0.49.0
 
-Released yyyy-mm-dd
+Released 2017-01-18
+
+- Support Node v6
 
 
 ## 0.48.5
