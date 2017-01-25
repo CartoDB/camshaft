@@ -1,7 +1,7 @@
 Contributing
 ---
 
-The issue tracker is at [github.com/CartoDB/CartoDB-SQL-API](https://github.com/CartoDB/camshaft).
+The issue tracker is at [github.com/CartoDB/camshaft](https://github.com/CartoDB/camshaft).
 
 We love pull requests from everyone, see [Contributing to Open Source on GitHub](https://guides.github.com/activities/contributing-to-open-source/#contributing).
 
