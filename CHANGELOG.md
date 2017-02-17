@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.50.0
+
+Released 2017-02-20
+
+- Improved data observatory analysis using new observatory, OBS_GetData and OBS_GetMeta, functions
+
 ## 0.49.0
 
 Released 2017-01-18
