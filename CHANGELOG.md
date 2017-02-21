@@ -2,7 +2,9 @@
 
 ## 0.50.1
 
-Released 2017-mm-dd
+Released 2017-02-21
+
+- Run ANALYZE on cache tables upon creation #260
 
 ## 0.50.0
 
