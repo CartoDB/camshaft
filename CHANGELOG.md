@@ -4,6 +4,8 @@
 
 Released 2017-mm-dd
 
+- Cache `filter-by-node-column` and `merge` nodes.
+
 ## 0.50.1
 
 Released 2017-02-21
