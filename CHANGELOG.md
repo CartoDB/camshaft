@@ -2,7 +2,7 @@
 
 ## 0.50.2
 
-Released 2017-mm-dd
+Released 2017-02-23
 
 - Fixes id column name clash on data-observatory node.
 - Cache `filter-by-node-column` and `merge` nodes.
