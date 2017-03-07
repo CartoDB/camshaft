@@ -188,6 +188,32 @@ describe('nodes', function() {
             });
         });
 
+        it('should store the affected tables for the source node', function(done) {
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+                return callback(null, new Date('2016-07-01'), ['public.atm_machines']);
+            };
+            async.map([SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+                assert.ok(!err, err);
+                assert.equal(results.length, 1);
+                var sourceNode = results[0].rootNode;
+                assert.equal(sourceNode.getAffectedTables()[0], 'public.atm_machines');
+                done();
+            });
+        });
+
+        it('should store the affected tables for the non-source node', function(done) {
+            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+                return callback(null, new Date('2016-07-01'), []);
+            };
+            async.map([BUFFER_OVER_SOURCE], create, function(err, results) {
+                assert.ok(!err, err);
+                assert.equal(results.length, 1);
+                var sourceNode = results[0].rootNode;
+                assert.equal(sourceNode.getAffectedTables().length, 0);
+                done();
+            });
+        });
+
     });
 
     describe('operation', function() {

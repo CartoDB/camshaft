@@ -3,14 +3,16 @@
 var assert = require('assert');
 
 var Source = require('../../lib/node/nodes/source');
+var Buffer = require('../../lib/node/nodes/buffer');
 
 var DatabaseService = require('../../lib/service/database');
 var testConfig = require('../test-config');
 
-describe('database-servie', function() {
+describe('database-service', function() {
 
     var SKIP = true;
     var QUERY_QUERYTABLES = 'select * from atm_machines';
+    var QUERY_MULTIPLETABLES = 'select * from multiple_tables';
     var QUERY_NO_QUERYTABLES = 'select * from nulltime';
 
     before(function() {
@@ -53,7 +55,43 @@ describe('database-servie', function() {
             assert.ok(!err, err);
 
             done();
-        }); 
+        });
+    });
+
+    it('should return affected table names for source nodes', function(done) {
+        var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
+        this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP,
+        function(err, lastUpdatedTime, tables) {
+            assert.ok(!err, err);
+            tables.forEach(function(tableName) {
+                assert.equal(tableName, 'public.atm_machines');
+            });
+            done();
+        });
+    });
+
+    it('should return two affected table names for source node', function(done) {
+        var source = new Source(testConfig.user, { query: QUERY_MULTIPLETABLES });
+        this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP,
+        function(err, lastUpdatedTime, tables) {
+            assert.ok(!err, err);
+            assert.equal(tables.length, 2);
+            assert.equal(tables[0], 'public.table_a');
+            assert.equal(tables[1], 'public.table_b');
+            assert.equal(lastUpdatedTime.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
+            done();
+        });
+    });
+
+    it('should return empty affected tables for non-source queries', function(done) {
+        var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
+        var buffer = new Buffer(testConfig.user, {source: source, radius: 100, isolines: 1, dissolved: false});
+        this.databaseService.getLastUpdatedTimeFromAffectedTables(buffer, !SKIP,
+        function(err, lastUpdatedTime, tables) {
+            assert.ok(!err, err);
+            assert.equal(tables.length, 0);
+            done();
+        });
     });
 
 });
