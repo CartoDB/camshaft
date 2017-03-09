@@ -43,8 +43,7 @@ new Analysis(FakeDatabaseService).create({}, analysisDefinition, function (err, 
     }
 
     var dotSpawn = spawn('dot', ['-T', 'png', '-o', outputPath]);
-    dotSpawn.stdout.on('end', process.exit.bind(process, 0));
-
+    dotSpawn.on('close', process.exit);
     var bufferStream = new stream.PassThrough();
     bufferStream.end(new Buffer(graphviz.dotFromNode(analysis.getRoot())));
     bufferStream.pipe(dotSpawn.stdin);
