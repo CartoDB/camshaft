@@ -43,7 +43,19 @@ new Analysis(FakeDatabaseService).create({}, analysisDefinition, function (err, 
     }
 
     var dotSpawn = spawn('dot', ['-T', 'png', '-o', outputPath]);
-    dotSpawn.on('close', process.exit);
+    var errorMessage = null;
+    dotSpawn.stderr.on('data', function(data) {
+        if (errorMessage === null) {
+            errorMessage = '';
+        }
+        errorMessage += data.toString();
+    });
+    dotSpawn.on('close', function(code) {
+        if (code !== 0 && errorMessage !== null) {
+            console.log(errorMessage);
+        }
+        process.exit(code);
+    });
     var bufferStream = new stream.PassThrough();
     bufferStream.end(new Buffer(graphviz.dotFromNode(analysis.getRoot())));
     bufferStream.pipe(dotSpawn.stdin);
