@@ -343,5 +343,122 @@ describe('nodes', function() {
 
         });
 
+        it('should calculate and return one input node for a node', function(done) {
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: SOURCE_ATM_MACHINES_DEF,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                assert.equal(inputNodes.length, 1);
+                done();
+            });
+        });
+
+        it('should calculate and return two input nodes, not just the direct ones', function(done) {
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: BUFFER_OVER_SOURCE,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                assert.equal(inputNodes.length, 2);
+                done();
+            });
+        });
+
+        it('should calculate and return three input nodes, not just the direct ones', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: merge,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                var types = inputNodes.reduce(function(list, node){
+                    list[node.getType()] = ++list[node.getType()] || 1;
+                    return list;
+                }, {});
+                assert.equal(types.merge, 1);
+                assert.equal(types.source, 2);
+                assert.equal(inputNodes.length, 3);
+                done();
+            });
+        });
+
+        it('should filter and return only source nodes for all the input nodes', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: merge,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes(function(node) {
+                    return node.getType() === 'source';
+                });
+                var types = inputNodes.reduce(function(list, node){
+                    list[node.getType()] = ++list[node.getType()] || 1;
+                    return list;
+                }, {});
+                assert.equal('merge' in types, false);
+                assert.equal(types.source, 2);
+                assert.equal(inputNodes.length, 2);
+                done();
+            });
+        });
     });
 });
