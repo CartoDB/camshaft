@@ -2,7 +2,7 @@
 
 ## 0.50.3
 
-Released 2017-mm-dd
+Released 2017-03-10
 
 - Revert "Cache `filter-by-node-column` and `merge` nodes" from 0.50.2.
 
