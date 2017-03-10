@@ -6,7 +6,7 @@ RETURNS Geometry AS $$
   BEGIN
   SELECT the_geom INTO ret
   FROM (
-      SELECT * FROM populated_places_simple WHERE name = city_name AND adm1name = admin1_name AND adm0name = country_name LIMIT 1
+      SELECT st_setsrid(st_makepoint(10, 10), 4326)
     ) v;
     RETURN ret;
   END
@@ -31,7 +31,7 @@ RETURNS Geometry AS $$
       4326
     ) INTO ret
   FROM (
-      SELECT * FROM populated_places_simple WHERE adm1name = admin1_name AND adm0name = country_name LIMIT 1
+      SELECT st_setsrid(st_makepoint(10, 10), 4326)
     ) v;
     RETURN ret;
   END
@@ -56,7 +56,7 @@ RETURNS Geometry AS $$
       4326
     ) INTO ret
   FROM (
-      SELECT * FROM populated_places_simple WHERE cartodb_id::text = postal_code AND adm0name = country_name LIMIT 1
+      SELECT st_setsrid(st_makepoint(10, 10), 4326)
     ) v;
     RETURN ret;
   END
@@ -106,7 +106,7 @@ RETURNS Geometry AS $$
   DECLARE
     ret Geometry;
   BEGIN
-    SELECT the_geom INTO ret FROM populated_places_simple WHERE cartodb_id = searchtext::integer LIMIT 1;
+    SELECT st_setsrid(st_makepoint(10, 10), 4326) INTO ret;
 
     RETURN ret;
   END
