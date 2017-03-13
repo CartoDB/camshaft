@@ -21,18 +21,18 @@ describe('database-service', function() {
 
     it('should return time from CDB_QueryTables_Updated_At', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
-        this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP, function(err, lastUpdatedTime) {
+        this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP, function(err, data) {
             assert.ok(!err, err);
-            assert.equal(lastUpdatedTime.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
+            assert.equal(data.last_update.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
             done();
         });
     });
 
     it('should return a fixed time in the past for tables not found by CDB_QueryTables_Updated_At', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_NO_QUERYTABLES });
-        this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP, function(err, lastUpdatedTime) {
+        this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP, function(err, data) {
             assert.ok(!err, err);
-            assert.equal(lastUpdatedTime.getTime(), new Date('1970-01-01T00:00:00.000Z').getTime());
+            assert.equal(data.last_update.getTime(), new Date('1970-01-01T00:00:00.000Z').getTime());
             done();
         });
     });
@@ -61,9 +61,9 @@ describe('database-service', function() {
     it('should return affected table names for source nodes', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
         this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP,
-        function(err, lastUpdatedTime, tables) {
+        function(err, data) {
             assert.ok(!err, err);
-            tables.forEach(function(tableName) {
+            data.affected_tables.forEach(function(tableName) {
                 assert.equal(tableName, 'public.atm_machines');
             });
             done();
@@ -73,12 +73,12 @@ describe('database-service', function() {
     it('should return two affected table names for source node', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_MULTIPLETABLES });
         this.databaseService.getLastUpdatedTimeFromAffectedTables(source, !SKIP,
-        function(err, lastUpdatedTime, tables) {
+        function(err, data) {
             assert.ok(!err, err);
-            assert.equal(tables.length, 2);
-            assert.equal(tables[0], 'public.table_a');
-            assert.equal(tables[1], 'public.table_b');
-            assert.equal(lastUpdatedTime.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
+            assert.equal(data.affected_tables.length, 2);
+            assert.equal(data.affected_tables[0], 'public.table_a');
+            assert.equal(data.affected_tables[1], 'public.table_b');
+            assert.equal(data.last_update.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
             done();
         });
     });
@@ -87,9 +87,9 @@ describe('database-service', function() {
         var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
         var buffer = new Buffer(testConfig.user, {source: source, radius: 100, isolines: 1, dissolved: false});
         this.databaseService.getLastUpdatedTimeFromAffectedTables(buffer, !SKIP,
-        function(err, lastUpdatedTime, tables) {
+        function(err, data) {
             assert.ok(!err, err);
-            assert.equal(tables.length, 0);
+            assert.equal(data.affected_tables.length, 0);
             done();
         });
     });

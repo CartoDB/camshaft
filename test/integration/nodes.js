@@ -127,7 +127,7 @@ describe('nodes', function() {
             var called = false;
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
                 if (node.type !== 'source' || node.getUpdatedAt() !== null) {
-                    return callback(null, node.getUpdatedAt());
+                    return callback(null, {'last_update': node.getUpdatedAt(), 'affected_tables': []});
                 }
                 var lastUpdatedTimeFromAffectedTables = new Date('2016-07-01');
                 if (called) {
@@ -136,7 +136,7 @@ describe('nodes', function() {
                 if (!called) {
                     called = true;
                 }
-                return callback(null, lastUpdatedTimeFromAffectedTables);
+                return callback(null, {'last_update': lastUpdatedTimeFromAffectedTables, 'affected_tables': []});
             };
 
             async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
@@ -163,7 +163,7 @@ describe('nodes', function() {
 
         it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
-                return callback(null, new Date('2016-07-01'));
+                return callback(null, {'last_update': new Date('2016-07-01'), 'affected_tables': []});
             };
 
             async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
@@ -190,7 +190,8 @@ describe('nodes', function() {
 
         it('should store the affected tables for the source node', function(done) {
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
-                return callback(null, new Date('2016-07-01'), ['public.atm_machines']);
+                return callback(null, {'last_update': new Date('2016-07-01'), 
+                                       'affected_tables': ['public.atm_machines']});
             };
             async.map([SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
                 assert.ok(!err, err);
@@ -203,7 +204,8 @@ describe('nodes', function() {
 
         it('should store the affected tables for the non-source node', function(done) {
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
-                return callback(null, new Date('2016-07-01'), []);
+                return callback(null, {'last_update': new Date('2016-07-01'), 
+                                       'affected_tables': []});
             };
             async.map([BUFFER_OVER_SOURCE], create, function(err, results) {
                 assert.ok(!err, err);
