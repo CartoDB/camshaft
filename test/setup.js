@@ -18,6 +18,7 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/cdb_querytables_updated_at.sql'),
         fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql'),
         fs.realpathSync('./test/fixtures/cdb_analysischeck.sql'),
+        fs.realpathSync('./test/fixtures/cdb_invalidate_varnish.sql'),
 
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/schema.sql'),
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_geocoder.sql'),

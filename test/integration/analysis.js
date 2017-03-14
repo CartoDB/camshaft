@@ -107,7 +107,7 @@ describe('workflow', function() {
                 return callback(null, {status: 'ok'});
             };
 
-            Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
+            Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
                 assert.ok(enqueueCalled);
