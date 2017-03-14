@@ -113,7 +113,7 @@ describe('workflow', function() {
                 assert.ok(enqueueCalled);
                 assert.ok(!err, err);
                 assert.ok(invalidateQuery.match(
-                    new RegExp('select cdb_invalidate_varnish\\(\'"public"."atm_machines"\'\\)', 'i')
+                    new RegExp('select cdb_invalidate_varnish\\(\'public.atm_machines\'\\)', 'i')
                 ));
 
                 done();
