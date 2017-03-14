@@ -64,7 +64,7 @@ describe('database-service', function() {
         function(err, data) {
             assert.ok(!err, err);
             data.affected_tables.forEach(function(tableName) {
-                assert.equal(tableName, 'public.atm_machines');
+                assert.equal(tableName, '"public"."atm_machines"');
             });
             done();
         });
@@ -76,8 +76,8 @@ describe('database-service', function() {
         function(err, data) {
             assert.ok(!err, err);
             assert.equal(data.affected_tables.length, 2);
-            assert.equal(data.affected_tables[0], 'public.table_a');
-            assert.equal(data.affected_tables[1], 'public.table_b');
+            assert.equal(data.affected_tables[0], '"public"."table_a"');
+            assert.equal(data.affected_tables[1], '"public"."table_b"');
             assert.equal(data.last_update.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
             done();
         });
