@@ -26,6 +26,13 @@ describe('nodes', function() {
         }
     };
 
+    var SOURCE_POSTAL_CODES_DEF = {
+        type: 'source',
+        params: {
+            query: QUERY_POSTAL_CODES
+        }
+    };
+
     var BUFFER_OVER_SOURCE = {
         type: 'buffer',
         params: {
@@ -62,14 +69,7 @@ describe('nodes', function() {
 
 
         it('should have different ids for different queries', function(done) {
-            var sourcePostalCodesDef = {
-                type: 'source',
-                params: {
-                    query: QUERY_POSTAL_CODES
-                }
-            };
-
-            async.map([SOURCE_ATM_MACHINES_DEF, sourcePostalCodesDef], create, function(err, results) {
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_POSTAL_CODES_DEF], create, function(err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -418,8 +418,57 @@ describe('nodes', function() {
                     return list;
                 }, {});
                 assert.equal(types.merge, 1);
-                assert.equal(types.source, 2);
+                assert.equal(types.source, 1);
+                assert.equal(inputNodes.length, 2);
+                done();
+            });
+        });
+
+        it('should return a set of input nodes, removing duplicates', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: merge,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            var mergeSourceAndTradeArea = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: tradeArea15m,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+            Analysis.create(testConfig, mergeSourceAndTradeArea, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                var types = inputNodes.reduce(function(list, node){
+                    list[node.getType()] = ++list[node.getType()] || 1;
+                    return list;
+                }, {});
                 assert.equal(inputNodes.length, 3);
+                assert.equal(types.source, 1);
+                assert.equal(types.merge, 1);
+                assert.equal(types['trade-area'], 1);
                 done();
             });
         });
@@ -457,8 +506,8 @@ describe('nodes', function() {
                     return list;
                 }, {});
                 assert.equal('merge' in types, false);
-                assert.equal(types.source, 2);
-                assert.equal(inputNodes.length, 2);
+                assert.equal(types.source, 1);
+                assert.equal(inputNodes.length, 1);
                 done();
             });
         });
