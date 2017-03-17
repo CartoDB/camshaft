@@ -115,17 +115,20 @@ describe('nodes', function() {
                 enqueueCalled += 1;
                 return callback(null, {status: 'ok'});
             };
-            getLastUpdatedTimeFromAffectedTablesFn = DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables;
+            getLastUpdatedTimeFromAffectedTablesFn =
+                DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables;
         });
         afterEach(function() {
             assert.ok(enqueueCalled > 0);
             BatchClient.prototype.enqueue = enqueueFn;
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = getLastUpdatedTimeFromAffectedTablesFn;
+            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables =
+                getLastUpdatedTimeFromAffectedTablesFn;
         });
 
         it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
             var called = false;
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+            callback) {
                 if (node.type !== 'source' || node.getUpdatedAt() !== null) {
                     return callback(null, {'last_update': node.getUpdatedAt(), 'affected_tables': []});
                 }
@@ -162,7 +165,8 @@ describe('nodes', function() {
         });
 
         it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+                callback) {
                 return callback(null, {'last_update': new Date('2016-07-01'), 'affected_tables': []});
             };
 
@@ -189,7 +193,8 @@ describe('nodes', function() {
         });
 
         it('should store the affected tables for the source node', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+                callback) {
                 return callback(null, {'last_update': new Date('2016-07-01'),
                                        'affected_tables': [
                                            {'schema': 'public', 'table':'atm_machines'}
@@ -205,7 +210,8 @@ describe('nodes', function() {
         });
 
         it('should store the affected tables for the non-source node', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+                callback) {
                 return callback(null, {'last_update': new Date('2016-07-01'),
                                        'affected_tables': []});
             };
