@@ -190,8 +190,10 @@ describe('nodes', function() {
 
         it('should store the affected tables for the source node', function(done) {
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
-                return callback(null, {'last_update': new Date('2016-07-01'), 
-                                       'affected_tables': ['public.atm_machines']});
+                return callback(null, {'last_update': new Date('2016-07-01'),
+                                       'affected_tables': [
+                                           {'schema': 'public', 'table':'atm_machines'}
+                                        ]});
             };
             async.map([SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
                 assert.ok(!err, err);
@@ -204,7 +206,7 @@ describe('nodes', function() {
 
         it('should store the affected tables for the non-source node', function(done) {
             DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
-                return callback(null, {'last_update': new Date('2016-07-01'), 
+                return callback(null, {'last_update': new Date('2016-07-01'),
                                        'affected_tables': []});
             };
             async.map([BUFFER_OVER_SOURCE], create, function(err, results) {
