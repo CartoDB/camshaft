@@ -1,22 +1,30 @@
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetMeasure(
-  geom geometry,
-  segment_name text
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetMeta(
+  geom_ref Geometry(Geometry, 4326),
+  params json,
+  max_timespan_rank integer DEFAULT NULL,
+  max_score_rank integer DEFAULT NULL,
+  target_geoms integer DEFAULT NULL
 )
-RETURNS numeric
+RETURNS json
 AS $$
 BEGIN
-  RETURN trunc(random() * 1e5 + 1);
+  RETURN '{}'::json;
 END;
-$$  LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetMeasure(
-  geom geometry,
-  segment_name text,
-  denominator text
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetData(
+  geomvals geomval[],
+  params json,
+  merge boolean DEFAULT true
 )
-RETURNS numeric
+RETURNS TABLE(
+  id int,
+  data json)
 AS $$
 BEGIN
-  RETURN trunc(random() * 100 + 1);
+  RETURN QUERY EXECUTE $query$
+    SELECT 1, '{}'::JSON
+  $query$;
+  RETURN;
 END;
-$$  LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql;

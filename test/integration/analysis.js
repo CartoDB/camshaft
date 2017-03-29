@@ -72,6 +72,31 @@ describe('workflow', function() {
             });
         });
 
+        it('should ANALYZE cache table upon creation', function(done) {
+            var enqueueFn = BatchClient.prototype.enqueue;
+
+            var enqueueCalled = false;
+            var lastEnqueuedQuery = null;
+            BatchClient.prototype.enqueue = function(query, callback) {
+                enqueueCalled = true;
+                lastEnqueuedQuery = query[query.length-1].query;
+                return callback(null, {status: 'ok'});
+            };
+
+            Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
+                BatchClient.prototype.enqueue = enqueueFn;
+
+                assert.ok(enqueueCalled);
+                assert.ok(!err, err);
+
+                var nodeBuffer = analysis.getNodes()[0];
+                assert.ok(lastEnqueuedQuery.match(new RegExp('ANALYZE ' + nodeBuffer.getTargetTable() + ';')));
+
+                done();
+            });
+        });
+
+
         it('should fail for invalid types', function(done) {
             var analysisType = 'wadus';
             Analysis.create(testConfig, {type: analysisType}, function(err) {

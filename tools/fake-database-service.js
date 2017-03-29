@@ -19,12 +19,12 @@ FakeDatabaseService.prototype = {
         return callback(null, true);
     },
 
-    setUpdatedAtForSources: function(analysis, callback) {
+    registerAnalysisInCatalog: function(analysis, callback) {
         return callback(null);
     },
 
-    registerAnalysisInCatalog: function(analysis, callback) {
-        return callback(null);
+    getLastUpdatedTimeFromAffectedTables: function(node, skip, callback) {
+        return callback(null, 0);
     },
 
     queueAnalysisOperations: function(analysis, callback) {
@@ -45,13 +45,5 @@ FakeDatabaseService.prototype = {
 
     enqueue: function(query, callback) {
         return callback(null, {status: 'ok'});
-    },
-
-    registerNodesInCatalog: function(nodes, callback) {
-        return callback(null);
-    },
-
-    trackNode: function(node, callback) {
-        return callback(null);
     }
 };

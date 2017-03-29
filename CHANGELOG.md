@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.50.4
+
+Released 2017-mm-dd
+
+
+## 0.50.3
+
+Released 2017-03-10
+
+- Revert "Cache `filter-by-node-column` and `merge` nodes" from 0.50.2.
+
+## 0.50.2
+
+Released 2017-02-23
+
+- Fixes id column name clash on data-observatory node.
+- Cache `filter-by-node-column` and `merge` nodes.
+
+## 0.50.1
+
+Released 2017-02-21
+
+- Run ANALYZE on cache tables upon creation #260
+
+## 0.50.0
+
+Released 2017-02-20
+
+- Improved data observatory analysis using new observatory, OBS_GetData and OBS_GetMeta, functions
+
 ## 0.49.0
 
 Released 2017-01-18
