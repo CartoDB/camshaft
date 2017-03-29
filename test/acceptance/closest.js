@@ -25,7 +25,7 @@ describe('closest', function () {
                 }
             },
             responses: 2,
-            category: "bank"
+            category: 'bank'
         }
     };
 
