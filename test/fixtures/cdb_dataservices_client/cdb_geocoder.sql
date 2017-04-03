@@ -103,11 +103,12 @@ $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_geocode_street_point_exception_safe(searchtext TEXT, city TEXT DEFAULT NULL, state_province TEXT DEFAULT NULL, country TEXT DEFAULT NULL)
 RETURNS Geometry AS $$
-  DECLARE
-    ret Geometry;
-  BEGIN
-    SELECT the_geom INTO ret FROM populated_places_simple WHERE cartodb_id = searchtext::integer LIMIT 1;
-
-    RETURN ret;
-  END
-$$ LANGUAGE plpgsql;
+  SELECT CASE
+    WHEN searchtext = 'W 26th Street' THEN ST_SetSRID(ST_MakePoint(-74.990425, 40.744131), 4326)
+    WHEN searchtext = 'Madrid, Spain' THEN ST_SetSRID(ST_MakePoint(-3.669245, 40.429913), 4326)
+    WHEN searchtext = 'Logroño, Argentina' THEN ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)
+    WHEN searchtext = 'Logroño, La Rioja, Spain' THEN ST_SetSRID(ST_MakePoint(-2.517555, 42.302939), 4326)
+    ELSE ST_SetSRID(ST_MakePoint(0, 0), 4326)
+    END;
+$$
+LANGUAGE SQL;
