@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.50.4
+## 0.51.0
 
 Released 2017-mm-dd
+
+ - Template support for georeference-street-address' address param.
 
 
 ## 0.50.3
