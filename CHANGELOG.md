@@ -2,7 +2,7 @@
 
 ## 0.51.0
 
-Released 2017-mm-dd
+Released 2017-04-03
 
  - Template support for georeference-street-address' address param.
 
