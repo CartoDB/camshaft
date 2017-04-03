@@ -47,4 +47,33 @@ describe('closest', function () {
         });
     });
 
+    it('check CLOSEST number of responses', function (done) {
+        testHelper.createAnalyses(analysisDefinition, function (err, closest) {
+
+            assert.ifError(err);
+
+            var rootNode = closest.getRoot();
+
+            testHelper.getRows(rootNode.getQuery(), function (err, rows) {
+                var checker = {};
+                var checked;
+                assert.ifError(err);
+                rows.forEach(function (row) {
+                    checker[row.bank] = (!checker[row.bank])?  1 : checker[row.bank] + 1;
+                });
+                checked = Object.keys(checker).filter(function(key) {
+                    /*
+                    in the corner case that the number of responses requested is
+                    bigger than the available items within a category, the number of
+                    responses will below the requested value
+                    */
+                    return checker[key] > analysisDefinition.params.responses;
+                });
+                assert.ok(checked.length == 0);
+                return done();
+            });
+        });
+    });
+
+
 });
