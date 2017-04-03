@@ -8,3 +8,4 @@ For new analysis use the following checklist:
 - [ ] Naming uses a-z lowercase and hyphens.
 - [ ] All mandatory params cannot be made optional.
 - [ ] Avoids using CTEs for join operations when result is not cached.
+- [ ] Has tests to validate the result is the expected one.
