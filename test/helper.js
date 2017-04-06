@@ -59,3 +59,18 @@ function getRows(query, config, callback) {
 }
 
 module.exports.getRows = getRows;
+
+function getResult(analysisDefinition, config, callback) {
+    if (!callback) {
+        callback = config;
+        config = testConfig;
+    }
+    createAnalyses(analysisDefinition, config, function(err, analysisResult) {
+        if (err) {
+            return callback(err);
+        }
+        getRows(analysisResult.getRoot().getQuery(), config, callback);
+    });
+}
+
+module.exports.getResult = getResult;
