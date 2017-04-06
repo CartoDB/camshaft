@@ -74,3 +74,23 @@ function getResult(analysisDefinition, config, callback) {
 }
 
 module.exports.getResult = getResult;
+
+function checkCartoDBIsSorted(rows) {
+    var cartodbIds = rows.map(function(row) { return row.cartodb_id; });
+
+    var allAreNumeric = cartodbIds.every(Number.isFinite);
+    assert.ok(allAreNumeric, 'cartodb_id should be a number');
+
+    var isSorted = cartodbIds.reduce(function(sorted, current, index, arr) {
+        if (!sorted) {
+            return false;
+        }
+        if (index === 0) {
+            return true;
+        }
+        return arr[index - 1] <= current;
+    }, true);
+    assert.ok(isSorted, 'cartodb_id should be in order');
+}
+
+module.exports.checkCartoDBIsSorted = checkCartoDBIsSorted;
