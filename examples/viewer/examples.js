@@ -5,17 +5,21 @@ var TRADE_AREA_WALK = 'walk';
 var TRADE_AREA_15M = 900;
 var ISOLINES = 4;
 
-var CARTOCSS_POINTS = [
-    '#layer{',
-    '  marker-placement: point;',
-    '  marker-allow-overlap: true;',
-    '  marker-line-opacity: 0.2;',
-    '  marker-line-width: 0.5;',
-    '  marker-opacity: 1;',
-    '  marker-width: 5;',
-    '  marker-fill: red;',
-    '}'
-].join('\n');
+function points(markerFill, opacity) {
+    return [
+        '#layer{',
+        '  marker-placement: point;',
+        '  marker-allow-overlap: true;',
+        '  marker-line-opacity: 0.2;',
+        '  marker-line-width: 0.5;',
+        '  marker-opacity: '+(Number.isFinite(opacity) ? opacity : 1)+';',
+        '  marker-width: 5;',
+        '  marker-fill: ' + markerFill + ';',
+        '}'
+    ].join('\n');
+}
+
+var CARTOCSS_POINTS = points('red');
 
 var CARTOCSS_LINES = [
     '#lines {',
@@ -36,21 +40,25 @@ var CARTOCSS_POLYGONS = [
     '}'
 ].join('\n');
 
-var CARTOCSS_LABELS = [
-    '#layer::labels {',
-    '    text-name: [category];',
-    '    text-face-name: \'DejaVu Sans Book\';',
-    '    text-size: 10;',
-    '    text-label-position-tolerance: 10;',
-    '    text-fill: #000;',
-    '    text-halo-fill: #FFF;',
-    '    text-halo-radius: 1;',
-    '    text-dy: -10;',
-    '    text-allow-overlap: true;',
-    '    text-placement: point;',
-    '    text-placement-type: simple;',
-    '}',
-].join('\n');
+function labels(column) {
+    return [
+        '#layer::labels {',
+        '    text-name: [' + column + '];',
+        '    text-face-name: \'DejaVu Sans Book\';',
+        '    text-size: 10;',
+        '    text-label-position-tolerance: 10;',
+        '    text-fill: #000;',
+        '    text-halo-fill: #FFF;',
+        '    text-halo-radius: 1;',
+        '    text-dy: 0;',
+        '    text-allow-overlap: true;',
+        '    text-placement: point;',
+        '    text-placement-type: simple;',
+        '}',
+    ].join('\n');
+}
+
+var CARTOCSS_LABELS = labels('category');
 
 var sourceAtmDef = {
     type: 'source',
