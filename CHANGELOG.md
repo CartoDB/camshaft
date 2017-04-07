@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.51.1
+## 0.52.0
 
 Released 2017-mm-dd
+
+ - Closest analysis with multiple and categorized results.
 
 
 ## 0.51.0
