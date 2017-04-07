@@ -5,17 +5,21 @@ var TRADE_AREA_WALK = 'walk';
 var TRADE_AREA_15M = 900;
 var ISOLINES = 4;
 
-var CARTOCSS_POINTS = [
-    '#layer{',
-    '  marker-placement: point;',
-    '  marker-allow-overlap: true;',
-    '  marker-line-opacity: 0.2;',
-    '  marker-line-width: 0.5;',
-    '  marker-opacity: 1;',
-    '  marker-width: 5;',
-    '  marker-fill: red;',
-    '}'
-].join('\n');
+function points(markerFill, opacity) {
+    return [
+        '#layer{',
+        '  marker-placement: point;',
+        '  marker-allow-overlap: true;',
+        '  marker-line-opacity: 0.2;',
+        '  marker-line-width: 0.5;',
+        '  marker-opacity: '+(Number.isFinite(opacity) ? opacity : 1)+';',
+        '  marker-width: 5;',
+        '  marker-fill: ' + markerFill + ';',
+        '}'
+    ].join('\n');
+}
+
+var CARTOCSS_POINTS = points('red');
 
 var CARTOCSS_LINES = [
     '#lines {',
@@ -36,21 +40,25 @@ var CARTOCSS_POLYGONS = [
     '}'
 ].join('\n');
 
-var CARTOCSS_LABELS = [
-    '#layer::labels {',
-    '    text-name: [category];',
-    '    text-face-name: \'DejaVu Sans Book\';',
-    '    text-size: 10;',
-    '    text-label-position-tolerance: 10;',
-    '    text-fill: #000;',
-    '    text-halo-fill: #FFF;',
-    '    text-halo-radius: 1;',
-    '    text-dy: -10;',
-    '    text-allow-overlap: true;',
-    '    text-placement: point;',
-    '    text-placement-type: simple;',
-    '}',
-].join('\n');
+function labels(column) {
+    return [
+        '#layer::labels {',
+        '    text-name: [' + column + '];',
+        '    text-face-name: \'DejaVu Sans Book\';',
+        '    text-size: 10;',
+        '    text-label-position-tolerance: 10;',
+        '    text-fill: #000;',
+        '    text-halo-fill: #FFF;',
+        '    text-halo-radius: 1;',
+        '    text-dy: 0;',
+        '    text-allow-overlap: true;',
+        '    text-placement: point;',
+        '    text-placement-type: simple;',
+        '}',
+    ].join('\n');
+}
+
+var CARTOCSS_LABELS = labels('category');
 
 var sourceAtmDef = {
     type: 'source',
@@ -456,6 +464,78 @@ var lineToColumnDefinition = {
 };
 
 var examples = {
+    closest: {
+        name: 'closest',
+        def: {
+            'id': 'closest',
+            type: 'closest',
+            params: {
+                responses: 2,
+                // category: 'category',
+                source: {
+                    id: 'sources',
+                    type: 'source',
+                    params: {
+                        query: [
+                            'WITH sources AS (',
+                            '   select i as cartodb_id, st_setsrid(st_makepoint(i,0), 4326) as the_geom',
+                            '   from generate_series(1,3) as i',
+                            ')',
+                            'select *, st_x(the_geom) as x, st_y(the_geom) as y from sources'
+                        ].join('\n')
+                    }
+                },
+                target: {
+                    id: 'targets',
+                    type: 'source',
+                    params: {
+                        query: [
+                            'WITH s as (',
+                            '   WITH sources AS (',
+                            '      select i as cartodb_id, st_setsrid(st_makepoint(i,0), 4326) as the_geom',
+                            '      from generate_series(1,3) as i',
+                            '   )',
+                            '   select *, st_x(the_geom) as x, st_y(the_geom) as y from sources',
+                            '),',
+                            'targets AS (',
+                            'select',
+                            '   row_number() over() as cartodb_id,',
+                            '   chr(64 + (i % 4)) as category,',
+                            '   st_translate(the_geom, 0, i*.1) as the_geom',
+                            'from s, generate_series(1,3) as i',
+                            ')',
+                            'select *, st_x(the_geom) as x, st_y(the_geom) as y from targets'
+                        ].join('\n')
+                    }
+                }
+            }
+        },
+        cartocss: points('green') + labels('category'),
+        center: [0, 2],
+        zoom: 8,
+        debugLayers: [
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'sources' },
+                    cartocss: points('red'),
+                    cartocss_version: '2.3.0',
+                    geom_column: 'the_geom',
+                    srid: '4326'
+                }
+            },
+            {
+                type: 'cartodb',
+                options: {
+                    source: { id: 'targets' },
+                    cartocss: points('ramp([category], cartocolor(Antique), category())'),
+                    cartocss_version: '2.3.0',
+                    geom_column: 'the_geom',
+                    srid: '4326'
+                }
+            }
+        ],
+    },
     bounding_circle: {
         name: 'bounding circle populated places',
         def: {
