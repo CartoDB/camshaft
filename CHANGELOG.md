@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.52.1
+
+Released 2017-mm-dd
+
+
 ## 0.52.0
 
 Released 2017-04-07
