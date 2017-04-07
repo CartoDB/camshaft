@@ -21,7 +21,7 @@ describe('database-service', function() {
 
     it('should return time from CDB_QueryTables_Updated_At', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
-        this.databaseService.getLastUpdatedTimeAndTableDataFromAffectedTables(source, !SKIP, function(err, data) {
+        this.databaseService.getMetadataFromAffectedTables(source, !SKIP, function(err, data) {
             assert.ok(!err, err);
             assert.equal(data.last_update.getTime(), new Date('2016-07-01T11:40:05.699Z').getTime());
             done();
@@ -30,7 +30,7 @@ describe('database-service', function() {
 
     it('should return a fixed time in the past for tables not found by CDB_QueryTables_Updated_At', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_NO_QUERYTABLES });
-        this.databaseService.getLastUpdatedTimeAndTableDataFromAffectedTables(source, !SKIP, function(err, data) {
+        this.databaseService.getMetadataFromAffectedTables(source, !SKIP, function(err, data) {
             assert.ok(!err, err);
             assert.equal(data.last_update.getTime(), new Date('1970-01-01T00:00:00.000Z').getTime());
             done();
@@ -60,7 +60,7 @@ describe('database-service', function() {
 
     it('should return affected table names for source nodes', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
-        this.databaseService.getLastUpdatedTimeAndTableDataFromAffectedTables(source, !SKIP,
+        this.databaseService.getMetadataFromAffectedTables(source, !SKIP,
         function(err, data) {
             assert.ok(!err, err);
             data.affected_tables.forEach(function(data) {
@@ -73,7 +73,7 @@ describe('database-service', function() {
 
     it('should return two affected table names for source node', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_MULTIPLETABLES });
-        this.databaseService.getLastUpdatedTimeAndTableDataFromAffectedTables(source, !SKIP,
+        this.databaseService.getMetadataFromAffectedTables(source, !SKIP,
         function(err, data) {
             assert.ok(!err, err);
             assert.equal(data.affected_tables.length, 2);
@@ -89,7 +89,7 @@ describe('database-service', function() {
     it('should return empty affected tables for non-source queries', function(done) {
         var source = new Source(testConfig.user, { query: QUERY_QUERYTABLES });
         var buffer = new Buffer(testConfig.user, {source: source, radius: 100, isolines: 1, dissolved: false});
-        this.databaseService.getLastUpdatedTimeAndTableDataFromAffectedTables(buffer, !SKIP,
+        this.databaseService.getMetadataFromAffectedTables(buffer, !SKIP,
         function(err, data) {
             assert.ok(!err, err);
             assert.equal(data.affected_tables.length, 0);

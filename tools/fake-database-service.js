@@ -23,7 +23,7 @@ FakeDatabaseService.prototype = {
         return callback(null);
     },
 
-    getLastUpdatedTimeAndTableDataFromAffectedTables: function(node, skip, callback) {
+    getMetadataFromAffectedTables: function(node, skip, callback) {
         return callback(null, 0);
     },
 

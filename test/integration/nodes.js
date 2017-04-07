@@ -116,18 +116,18 @@ describe('nodes', function() {
                 return callback(null, {status: 'ok'});
             };
             getLastUpdatedTimeFromAffectedTablesFn =
-                DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables;
+                DatabaseService.prototype.getMetadataFromAffectedTables;
         });
         afterEach(function() {
             assert.ok(enqueueCalled > 0);
             BatchClient.prototype.enqueue = enqueueFn;
-            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables =
+            DatabaseService.prototype.getMetadataFromAffectedTables =
                 getLastUpdatedTimeFromAffectedTablesFn;
         });
 
         it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
             var called = false;
-            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
             callback) {
                 if (node.type !== 'source' || node.getUpdatedAt() !== null) {
                     return callback(null, {'last_update': node.getUpdatedAt(), 'affected_tables': []});
@@ -165,7 +165,7 @@ describe('nodes', function() {
         });
 
         it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
                 callback) {
                 return callback(null, {'last_update': new Date('2016-07-01'), 'affected_tables': []});
             };
@@ -193,7 +193,7 @@ describe('nodes', function() {
         });
 
         it('should store the affected tables for the source node', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
                 callback) {
                 return callback(null, {'last_update': new Date('2016-07-01'),
                                        'affected_tables': [
@@ -210,7 +210,7 @@ describe('nodes', function() {
         });
 
         it('should store the affected tables for the non-source node', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeAndTableDataFromAffectedTables = function(node, skip,
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
                 callback) {
                 return callback(null, {'last_update': new Date('2016-07-01'),
                                        'affected_tables': []});
