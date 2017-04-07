@@ -2,7 +2,7 @@
 
 ## 0.52.0
 
-Released 2017-mm-dd
+Released 2017-04-07
 
  - Closest analysis with multiple and categorized results.
 
