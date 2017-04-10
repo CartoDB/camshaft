@@ -79,7 +79,7 @@ describe('workflow', function() {
             var lastEnqueuedQuery = null;
             BatchClient.prototype.enqueue = function(query, callback) {
                 enqueueCalled = true;
-                lastEnqueuedQuery = query[query.length-1].query;
+                lastEnqueuedQuery = query[2].query;
                 return callback(null, {status: 'ok'});
             };
 
@@ -91,6 +91,30 @@ describe('workflow', function() {
 
                 var nodeBuffer = analysis.getNodes()[0];
                 assert.ok(lastEnqueuedQuery.match(new RegExp('ANALYZE ' + nodeBuffer.getTargetTable() + ';')));
+
+                done();
+            });
+        });
+
+        it('should invalidate cache for affected tables', function(done) {
+            var enqueueFn = BatchClient.prototype.enqueue;
+
+            var enqueueCalled = false;
+            var invalidateQuery = null;
+            BatchClient.prototype.enqueue = function(query, callback) {
+                enqueueCalled = true;
+                invalidateQuery = query[3].query;
+                return callback(null, {status: 'ok'});
+            };
+
+            Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err) {
+                BatchClient.prototype.enqueue = enqueueFn;
+
+                assert.ok(enqueueCalled);
+                assert.ok(!err, err);
+                assert.ok(invalidateQuery.match(
+                    new RegExp('select cdb_invalidate_varnish\\(\'public.atm_machines\'\\)', 'i')
+                ));
 
                 done();
             });
@@ -128,5 +152,58 @@ describe('workflow', function() {
         });
 
     });
+});
 
+describe('operations', function() {
+
+    var QUERY_ATM_MACHINES = 'select * from atm_machines';
+    var TRADE_AREA_WALK = 'walk';
+    var TRADE_AREA_15M = 900;
+    var ISOLINES = 4;
+    var DISSOLVED = false;
+
+    var sourceAnalysisDefinition = {
+        type: 'source',
+        params: {
+            query: QUERY_ATM_MACHINES
+        }
+    };
+
+    var tradeAreaAnalysisDefinition = {
+        type: 'trade-area',
+        params: {
+            source: sourceAnalysisDefinition,
+            kind: TRADE_AREA_WALK,
+            time: TRADE_AREA_15M,
+            isolines: ISOLINES,
+            dissolved: DISSOLVED
+        }
+    };
+
+    var enqueueCalled = 0;
+    var enqueueFn;
+    beforeEach(function() {
+        enqueueFn = BatchClient.prototype.enqueue;
+        enqueueCalled = false;
+        BatchClient.prototype.enqueue = function(query, callback) {
+            enqueueCalled = true;
+            return callback(null, {status: 'ok'});
+        };
+    });
+
+    it('should return two nodes', function(done) {
+        Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
+            assert.ok(!err, err);
+            assert.equal(analysis.getNodes().length, 2);
+            done();
+        });
+    });
+
+    it('should return just one node', function(done) {
+        Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
+            assert.ok(!err, err);
+            assert.equal(analysis.getNodes().length, 1);
+            done();
+        });
+    });
 });

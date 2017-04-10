@@ -26,6 +26,13 @@ describe('nodes', function() {
         }
     };
 
+    var SOURCE_POSTAL_CODES_DEF = {
+        type: 'source',
+        params: {
+            query: QUERY_POSTAL_CODES
+        }
+    };
+
     var BUFFER_OVER_SOURCE = {
         type: 'buffer',
         params: {
@@ -62,14 +69,7 @@ describe('nodes', function() {
 
 
         it('should have different ids for different queries', function(done) {
-            var sourcePostalCodesDef = {
-                type: 'source',
-                params: {
-                    query: QUERY_POSTAL_CODES
-                }
-            };
-
-            async.map([SOURCE_ATM_MACHINES_DEF, sourcePostalCodesDef], create, function(err, results) {
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_POSTAL_CODES_DEF], create, function(err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -115,19 +115,22 @@ describe('nodes', function() {
                 enqueueCalled += 1;
                 return callback(null, {status: 'ok'});
             };
-            getLastUpdatedTimeFromAffectedTablesFn = DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables;
+            getLastUpdatedTimeFromAffectedTablesFn =
+                DatabaseService.prototype.getMetadataFromAffectedTables;
         });
         afterEach(function() {
             assert.ok(enqueueCalled > 0);
             BatchClient.prototype.enqueue = enqueueFn;
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = getLastUpdatedTimeFromAffectedTablesFn;
+            DatabaseService.prototype.getMetadataFromAffectedTables =
+                getLastUpdatedTimeFromAffectedTablesFn;
         });
 
         it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
             var called = false;
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+            callback) {
                 if (node.type !== 'source' || node.getUpdatedAt() !== null) {
-                    return callback(null, node.getUpdatedAt());
+                    return callback(null, {'last_update': node.getUpdatedAt(), 'affected_tables': []});
                 }
                 var lastUpdatedTimeFromAffectedTables = new Date('2016-07-01');
                 if (called) {
@@ -136,7 +139,7 @@ describe('nodes', function() {
                 if (!called) {
                     called = true;
                 }
-                return callback(null, lastUpdatedTimeFromAffectedTables);
+                return callback(null, {'last_update': lastUpdatedTimeFromAffectedTables, 'affected_tables': []});
             };
 
             async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
@@ -162,8 +165,9 @@ describe('nodes', function() {
         });
 
         it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
-            DatabaseService.prototype.getLastUpdatedTimeFromAffectedTables = function(node, skip, callback) {
-                return callback(null, new Date('2016-07-01'));
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+                callback) {
+                return callback(null, {'last_update': new Date('2016-07-01'), 'affected_tables': []});
             };
 
             async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
@@ -184,6 +188,38 @@ describe('nodes', function() {
                         bufferA.id() + '" == "' + bufferB.id() + '"'
                 );
 
+                done();
+            });
+        });
+
+        it('should store the affected tables for the source node', function(done) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+                callback) {
+                return callback(null, {'last_update': new Date('2016-07-01'),
+                                       'affected_tables': [
+                                           {'schema': 'public', 'table':'atm_machines'}
+                                        ]});
+            };
+            async.map([SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+                assert.ok(!err, err);
+                assert.equal(results.length, 1);
+                var sourceNode = results[0].rootNode;
+                assert.equal(sourceNode.getAffectedTables()[0], 'public.atm_machines');
+                done();
+            });
+        });
+
+        it('should store the affected tables for the non-source node', function(done) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+                callback) {
+                return callback(null, {'last_update': new Date('2016-07-01'),
+                                       'affected_tables': []});
+            };
+            async.map([BUFFER_OVER_SOURCE], create, function(err, results) {
+                assert.ok(!err, err);
+                assert.equal(results.length, 1);
+                var sourceNode = results[0].rootNode;
+                assert.equal(sourceNode.getAffectedTables().length, 0);
                 done();
             });
         });
@@ -317,5 +353,171 @@ describe('nodes', function() {
 
         });
 
+        it('should calculate and return one input node for a node', function(done) {
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: SOURCE_ATM_MACHINES_DEF,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                assert.equal(inputNodes.length, 1);
+                done();
+            });
+        });
+
+        it('should calculate and return two input nodes, not just the direct ones', function(done) {
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: BUFFER_OVER_SOURCE,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                assert.equal(inputNodes.length, 2);
+                done();
+            });
+        });
+
+        it('should calculate and return three input nodes, not just the direct ones', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: merge,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                var types = inputNodes.reduce(function(list, node){
+                    list[node.getType()] = ++list[node.getType()] || 1;
+                    return list;
+                }, {});
+                assert.equal(types.merge, 1);
+                assert.equal(types.source, 1);
+                assert.equal(inputNodes.length, 2);
+                done();
+            });
+        });
+
+        it('should return a set of input nodes, removing duplicates', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: merge,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            var mergeSourceAndTradeArea = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: tradeArea15m,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+            Analysis.create(testConfig, mergeSourceAndTradeArea, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes();
+                var types = inputNodes.reduce(function(list, node){
+                    list[node.getType()] = ++list[node.getType()] || 1;
+                    return list;
+                }, {});
+                assert.equal(inputNodes.length, 3);
+                assert.equal(types.source, 1);
+                assert.equal(types.merge, 1);
+                assert.equal(types['trade-area'], 1);
+                done();
+            });
+        });
+
+        it('should filter and return only source nodes for all the input nodes', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'cartodb_id',
+                    right_source_column: 'cartodb_id'
+                }
+            };
+
+            var tradeArea15m = {
+                type: 'trade-area',
+                params: {
+                    source: merge,
+                    kind: TRADE_AREA_WALK,
+                    time: TRADE_AREA_15M,
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED
+                }
+            };
+
+            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+                assert.ok(!err, err);
+                var rootNode = analysis.getRoot();
+                var inputNodes = rootNode.getAllInputNodes(function(node) {
+                    return node.getType() === 'source';
+                });
+                var types = inputNodes.reduce(function(list, node){
+                    list[node.getType()] = ++list[node.getType()] || 1;
+                    return list;
+                }, {});
+                assert.equal('merge' in types, false);
+                assert.equal(types.source, 1);
+                assert.equal(inputNodes.length, 1);
+                done();
+            });
+        });
     });
 });
