@@ -61,7 +61,7 @@ describe('workflow-validator', function() {
         getMetadataFromAffectedTables: function(query, skip, callback) {
             return callback(null, {'last_update': new Date(), 'affected_tables': []});
         },
-        createTableIfNotExists: function(table, query, callback) {
+        createTableIfNotExists: function(node, callback) {
             return callback(null, true);
         },
         registerNodesInCatalog: createServiceStub([]),

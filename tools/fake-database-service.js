@@ -11,11 +11,11 @@ FakeDatabaseService.prototype = {
         return callback(null, {});
     },
 
-    createTable: function(targetTableName, query, callback) {
+    createTable: function(node, callback) {
         return callback(null, {});
     },
 
-    createTableIfNotExists: function(targetTableName, outputQuery, callback) {
+    createTableIfNotExists: function(node, callback) {
         return callback(null, true);
     },
 
