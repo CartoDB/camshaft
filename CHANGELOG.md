@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.52.1
+## 0.53.0
 
-Released 2017-mm-dd
+Released 2017-04-10
+
+ - Now `Node` keeps track of the affected tables #269.
 
 
 ## 0.52.0
