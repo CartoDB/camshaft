@@ -146,6 +146,19 @@ describe('node-creation', function() {
             assert.equal(nullableNode.optional, null);
         });
 
+        it('should accept accept nullable geometry params', function() {
+            var NullableGeometryNode = Node.create('test-geometry-nullable', {
+                mandatory: Node.PARAM.STRING(),
+                optional_node: Node.PARAM.NULLABLE(Node.PARAM.NODE())
+            });
+            var nullableGeometryNode = new NullableGeometryNode(owner, {
+                mandatory: 'wadus_mandatory'
+            });
+
+            assert.equal(nullableGeometryNode.mandatory, 'wadus_mandatory');
+            assert.equal(nullableGeometryNode.optional_node, null);
+        });
+
     });
 
     describe('Node.PARAM.ARRAY', function() {
