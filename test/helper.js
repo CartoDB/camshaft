@@ -40,15 +40,26 @@ function createAnalyses(analyses, config, callback) {
 
 module.exports.createAnalyses = createAnalyses;
 
-function getRows(query, config, callback) {
+function executeQuery(query, config, callback) {
     if (!callback) {
         callback = config;
         config = testConfig;
     }
 
     var queryRunner = new QueryRunner(config.db);
+    queryRunner.run(query, config.readonly || false, callback);
+}
 
-    queryRunner.run(query, function(err, result) {
+module.exports.executeQuery = executeQuery;
+
+function getRows(query, config, callback) {
+    if (!callback) {
+        callback = config;
+        config = testConfig;
+    }
+    config.readonly = true;
+
+    executeQuery(query, config, function(err, result) {
         assert.ok(!err, err);
         assert.ok(result);
         var rows = result.rows;
