@@ -20,7 +20,7 @@ describe('database service', function () {
 
         // See: https://github.com/CartoDB/camshaft/issues/279
         it('should not create invalid date for last_update', function (done) {
-            var originalQueryRunner = this.databaseService.queryRunner;
+            var originalQueryRunner = this.databaseService.queryRunner.run;
             var runQueryStubCalled = false;
             this.databaseService.queryRunner.run = function (sql, readOnly, callback) {
                 runQueryStubCalled = true;
