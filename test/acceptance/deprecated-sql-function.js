@@ -30,7 +30,10 @@ describe('deprecated-sql-function analysis', function () {
     });
 
     after(function(done) {
-        testHelper.executeQuery('DROP FUNCTION test_deprecated_fn(text, numeric, numeric, numeric, text, text, text)', done);
+        testHelper.executeQuery(
+            'DROP FUNCTION test_deprecated_fn(text, numeric, numeric, numeric, text, text, text)',
+            done
+        );
     });
 
     var QUERY_SOURCE = [
