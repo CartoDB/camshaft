@@ -57,6 +57,7 @@ function getRows(query, config, callback) {
         callback = config;
         config = testConfig;
     }
+    config = JSON.parse(JSON.stringify(config));
     config.readonly = true;
 
     executeQuery(query, config, function(err, result) {
