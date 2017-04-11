@@ -11,11 +11,7 @@ FakeDatabaseService.prototype = {
         return callback(null, {});
     },
 
-    createTable: function(node, callback) {
-        return callback(null, {});
-    },
-
-    createTableIfNotExists: function(node, callback) {
+    createCacheTable: function(node, callback) {
         return callback(null, true);
     },
 
