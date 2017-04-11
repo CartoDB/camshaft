@@ -8,7 +8,7 @@ describe('deprecated-sql-function analysis', function () {
     before(function(done) {
         testHelper.executeQuery([
             'CREATE OR REPLACE FUNCTION test_deprecated_fn(',
-            '    query text, a numeric, b numeric, c numeric, table_name text, operation text',
+            '    query text, a numeric, b numeric, c numeric, d text, table_name text, operation text',
             ')',
             'RETURNS VOID AS $$',
             '    BEGIN',
@@ -30,7 +30,7 @@ describe('deprecated-sql-function analysis', function () {
     });
 
     after(function(done) {
-        testHelper.executeQuery('DROP FUNCTION test_deprecated_fn(text, numeric, numeric, numeric, text, text)', done);
+        testHelper.executeQuery('DROP FUNCTION test_deprecated_fn(text, numeric, numeric, numeric, text, text, text)', done);
     });
 
     var QUERY_SOURCE = [
@@ -52,7 +52,7 @@ describe('deprecated-sql-function analysis', function () {
                         query: QUERY_SOURCE
                     }
                 },
-                function_args: fnArgs || [1, 2, 3],
+                function_args: fnArgs || [1, 2, 3, 'wadus'],
             }
         };
     }
@@ -102,7 +102,7 @@ describe('deprecated-sql-function analysis', function () {
     });
 
     it('change extra args', function (done) {
-        var extraArgs = [9, 8, 7];
+        var extraArgs = [9, 8, 7, 'wadus'];
         testHelper.createAnalyses(deprecatedSqlFnDefinition(extraArgs), function(err, result) {
             assert.ifError(err);
             var query = 'select cartodb_id, a, b, c, st_x(the_geom), st_y(the_geom) from (' +
