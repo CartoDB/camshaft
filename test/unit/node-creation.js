@@ -461,7 +461,7 @@ describe('node-creation', function() {
             assert.equal(node.isValid(errors), false);
             assert.equal(errors.length, 3);
             assert.equal(errors[0].message, 'Missing required column `cartodb_id`');
-            assert.equal(errors[1].message, 'Invalid type for column "the_geom": expected `the_geom` got `number`');
+            assert.equal(errors[1].message, 'Invalid type for column "the_geom": expected `geometry` got `number`');
             assert.equal(errors[2].message, 'Missing required column `wadus`');
         });
     });
