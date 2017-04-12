@@ -1,8 +1,15 @@
 # Changelog
 
-## 0.53.1
+## 0.53.2
 
 Released 2017-mm-dd
+
+
+## 0.53.1
+
+Released 2017-04-11
+
+ - Fix issue with an Invalid Date while fetching metadata from affected tables #282.
 
 
 ## 0.53.0
