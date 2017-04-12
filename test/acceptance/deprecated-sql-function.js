@@ -120,4 +120,148 @@ describe('deprecated-sql-function analysis', function () {
         });
     });
 
+    describe('invalid schema', function() {
+
+        function createInvalidDeprecatedFunctionQuery(fnName, tableColumns) {
+            var tKeys = Object.keys(tableColumns);
+            var sep = (tKeys.length > 0) ? ',' : '';
+            var columns = tKeys.map(function(c) { return tableColumns[c]; }).join(',') + sep;
+            var selectAsColumns = tKeys.map(function(c) { return c; }).join(',') + sep;
+            return [
+                'CREATE OR REPLACE FUNCTION ' + fnName + '(',
+                '    query text, buster numeric, table_name text, operation text',
+                ')',
+                'RETURNS VOID AS $$',
+                '    BEGIN',
+                '        IF operation = \'create\' THEN',
+                '            EXECUTE \'CREATE TABLE \' || table_name || \' (', columns, 'a int, b int, c int)\';',
+                '        ELSIF operation = \'populate\' THEN',
+                '            EXECUTE \'INSERT INTO \' || table_name || \' ',
+                '                SELECT', selectAsColumns, '1 as a, 2 as b, 3 as c',
+                '                FROM (\' || query || \') _q\';',
+                '        END IF;',
+                '    END;',
+                '$$ LANGUAGE plpgsql;'
+            ].join('\n');
+        }
+
+        function invalidSchemaDeprecatedSqlFnDefinition(fnName, buster) {
+            return {
+                type: 'deprecated-sql-function',
+                params: {
+                    function_name: fnName,
+                    primary_source: {
+                        type: 'source',
+                        params: {
+                            query: QUERY_SOURCE
+                        }
+                    },
+                    function_args: [buster]
+                }
+            };
+        }
+
+        function mandatoryColumns() {
+            return {
+                cartodb_id: 'cartodb_id numeric',
+                the_geom: 'the_geom geometry'
+            };
+        }
+
+        describe('missing columns', function() {
+            var fnName = 'test_deprecated_fn_invalid_schema';
+
+            afterEach(function(done) {
+                testHelper.executeQuery(
+                    'DROP FUNCTION ' + fnName + '(text, numeric, text, text)',
+                    done
+                );
+            });
+
+            var missingColumnScenarios = [
+                {
+                    columnsToMiss: ['cartodb_id']
+                },
+                {
+                    columnsToMiss: ['the_geom']
+                },
+                {
+                    columnsToMiss: ['cartodb_id', 'the_geom']
+                }
+            ];
+
+            missingColumnScenarios.forEach(function(scenario, buster) {
+                var missingColumns = scenario.columnsToMiss.join(' and ');
+                it('should fail on missing ' + missingColumns, function (done) {
+                    var tableColumns = mandatoryColumns();
+                    scenario.columnsToMiss.forEach(function(columnToMiss) {
+                        delete tableColumns[columnToMiss];
+                    });
+                    var expectedMessage = scenario.columnsToMiss.map(function(columnToMiss) {
+                        return 'Missing required column `' + columnToMiss + '`';
+                    }).join('; ');
+                    testHelper.executeQuery(createInvalidDeprecatedFunctionQuery(fnName, tableColumns), function(err) {
+                        assert.ifError(err);
+                        var def = invalidSchemaDeprecatedSqlFnDefinition(fnName, buster);
+                        testHelper.createAnalyses(def, function(err) {
+                            assert.ok(err);
+                            assert.equal(err.message, 'Validation failed: ' + expectedMessage + '.');
+                            return done();
+                        });
+                    });
+                });
+            });
+        });
+
+        describe('invalid column types', function() {
+            var fnName = 'test_deprecated_fn_invalid_type';
+
+            afterEach(function(done) {
+                testHelper.executeQuery(
+                    'DROP FUNCTION ' + fnName + '(text, numeric, text, text)',
+                    done
+                );
+            });
+
+            var invalidTypeScenarios = [
+                {
+                    column: 'cartodb_id',
+                    expects: 'number',
+                    tableColumns: {
+                        'cartodb_id::text': 'cartodb_id text',
+                        the_geom: 'the_geom geometry'
+                    }
+                },
+                {
+                    column: 'the_geom',
+                    expects: 'geometry',
+                    tableColumns: {
+                        cartodb_id: 'cartodb_id numeric',
+                        'ST_AsText(the_geom)': 'the_geom text'
+                    }
+                }
+            ];
+            invalidTypeScenarios.forEach(function(scenario, index) {
+                it('should fail for ' + scenario.column + ' invalid column type', function (done) {
+                    var createFnQuery = createInvalidDeprecatedFunctionQuery(fnName, scenario.tableColumns);
+                    testHelper.executeQuery(createFnQuery, function(err) {
+                        assert.ifError(err);
+                        var def = invalidSchemaDeprecatedSqlFnDefinition(fnName, index);
+                        testHelper.createAnalyses(def, function(err) {
+                            assert.ok(err);
+                            assert.equal(
+                                err.message,
+                                'Validation failed: Invalid type for column "' +
+                                    scenario.column +
+                                    '": expected `' + scenario.expects +
+                                    '` got `string`.'
+                            );
+                            return done();
+                        });
+                    });
+                });
+            });
+        });
+    });
+
 });
