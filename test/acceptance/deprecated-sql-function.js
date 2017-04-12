@@ -14,7 +14,7 @@ describe('deprecated-sql-function analysis', function () {
             '    BEGIN',
             '        IF operation = \'create\' THEN',
             '            EXECUTE \'CREATE TABLE \' || table_name || \' ',
-        '                    (cartodb_id numeric, the_geom geometry, a int, b int, c int)\';',
+            '                (cartodb_id numeric, the_geom geometry, a int, b int, c int)\';',
             '        ELSIF operation = \'populate\' THEN',
             '            EXECUTE \'INSERT INTO \' || table_name || \' ',
             '                SELECT',
