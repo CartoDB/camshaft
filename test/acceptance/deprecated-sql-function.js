@@ -7,7 +7,7 @@ describe('deprecated-sql-function analysis', function () {
 
     before(function(done) {
         testHelper.executeQuery([
-            'CREATE OR REPLACE FUNCTION test_deprecated_fn(',
+            'CREATE OR REPLACE FUNCTION DEP_EXT_test_deprecated_fn(',
             '    query text, a numeric, b numeric, c numeric, d text, table_name text, operation text',
             ')',
             'RETURNS VOID AS $$',
@@ -31,7 +31,7 @@ describe('deprecated-sql-function analysis', function () {
 
     after(function(done) {
         testHelper.executeQuery(
-            'DROP FUNCTION test_deprecated_fn(text, numeric, numeric, numeric, text, text, text)',
+            'DROP FUNCTION DEP_EXT_test_deprecated_fn(text, numeric, numeric, numeric, text, text, text)',
             done
         );
     });
@@ -48,7 +48,7 @@ describe('deprecated-sql-function analysis', function () {
         return {
             type: 'deprecated-sql-function',
             params: {
-                function_name: 'test_deprecated_fn',
+                function_name: 'DEP_EXT_test_deprecated_fn',
                 primary_source: {
                     type: 'source',
                     params: {
@@ -169,7 +169,7 @@ describe('deprecated-sql-function analysis', function () {
         }
 
         describe('missing columns', function() {
-            var fnName = 'test_deprecated_fn_invalid_schema';
+            var fnName = 'DEP_EXT_test_deprecated_fn_invalid_schema';
 
             afterEach(function(done) {
                 testHelper.executeQuery(
@@ -214,7 +214,7 @@ describe('deprecated-sql-function analysis', function () {
         });
 
         describe('invalid column types', function() {
-            var fnName = 'test_deprecated_fn_invalid_type';
+            var fnName = 'DEP_EXT_test_deprecated_fn_invalid_type';
 
             afterEach(function(done) {
                 testHelper.executeQuery(
