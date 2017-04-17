@@ -8,7 +8,7 @@ describe('deprecated-sql-function analysis', function () {
     before(function(done) {
         testHelper.executeQuery([
             'CREATE OR REPLACE FUNCTION DEP_EXT_test_deprecated_fn(',
-            '    query text, a numeric, b numeric, c numeric, d text, table_name text, operation text',
+            '    query text, columns text[], a numeric, b numeric, c numeric, d text, table_name text, operation text',
             ')',
             'RETURNS VOID AS $$',
             '    BEGIN',
@@ -31,7 +31,7 @@ describe('deprecated-sql-function analysis', function () {
 
     after(function(done) {
         testHelper.executeQuery(
-            'DROP FUNCTION DEP_EXT_test_deprecated_fn(text, numeric, numeric, numeric, text, text, text)',
+            'DROP FUNCTION DEP_EXT_test_deprecated_fn(text, text[], numeric, numeric, numeric, text, text, text)',
             done
         );
     });
@@ -129,7 +129,7 @@ describe('deprecated-sql-function analysis', function () {
             var selectAsColumns = tKeys.map(function(c) { return c; }).join(',') + sep;
             return [
                 'CREATE OR REPLACE FUNCTION ' + fnName + '(',
-                '    query text, buster numeric, table_name text, operation text',
+                '    query text, columns text[], buster numeric, table_name text, operation text',
                 ')',
                 'RETURNS VOID AS $$',
                 '    BEGIN',
@@ -173,7 +173,7 @@ describe('deprecated-sql-function analysis', function () {
 
             afterEach(function(done) {
                 testHelper.executeQuery(
-                    'DROP FUNCTION ' + fnName + '(text, numeric, text, text)',
+                    'DROP FUNCTION ' + fnName + '(text, text[], numeric, text, text)',
                     done
                 );
             });
@@ -218,7 +218,7 @@ describe('deprecated-sql-function analysis', function () {
 
             afterEach(function(done) {
                 testHelper.executeQuery(
-                    'DROP FUNCTION ' + fnName + '(text, numeric, text, text)',
+                    'DROP FUNCTION ' + fnName + '(text, text[], numeric, text, text)',
                     done
                 );
             });

@@ -19,12 +19,16 @@ The word _arbitrary_ gets us into the unrestricted territory. However, functions
  - Funtions must implement two operations:
    1. The creation of a table to store the results.
    2. The population of that very same table.
- - (TBC) Funtions must handle the following signature:
-   * First argument: a _free query_.
-   * Second argument: an optional _free query_.
-   * Second or third, and consecutive arguments: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
+ - (TBC) Funtions must handle, at least, the following signature:
+   * First argument: a _free query_ from the primary source of the analysis.
+   * Second argument: an array of `text` listing all the columns from the _free query_ in the first argument.
+   * Third, and consecutive arguments up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
    * Second-to-last argument: the name of the table to create or populate.
    * Last argument: the operation to perform. Either `create` or `populate` the table.
+ - (TBC) Functions might handle an optional signature where first, second, second-to-last, and last argument are the same as in the previous signature, but:
+   * Third argument: a _free query_ from the secondary source of the analysis.
+   * Forth argument: an array of `text` listing all the columns from the _free query_ in the third argument.
+   * Fith, and consecutive arguments up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
 
 ## Examples
 
