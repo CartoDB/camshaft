@@ -36,7 +36,62 @@ Let's create a couple of examples based on existing analyses.
 
 ### Buffer
 
-TBA.
+In the `buffer` analysis we want to include all existing columns but we want to expand the `the_geom` column with a
+buffer in determined by an in meters `radius` param.
+
+```sql
+CREATE OR REPLACE FUNCTION DEP_EXT_buffer(
+        primary_source_query text, primary_source_columns text[], radius numeric, table_name text, operation text
+    )
+    RETURNS VOID AS $$
+        DECLARE selected_columns TEXT;
+        BEGIN
+            -- We want to drop original `the_geom` column as we are gonna return a different one.
+            SELECT array_to_string(
+              array_cat(
+                array_remove(primary_source_columns, 'the_geom'),
+                -- And we add our new `the_geom` column using the `radius` argument.
+                ARRAY['ST_Buffer(the_geom::geography, ' || radius || ')::geometry AS the_geom']
+              ),
+              ','
+            ) INTO selected_columns;
+            IF operation = 'create' THEN
+                -- In some cases you might want to drop the table.
+                -- EXECUTE 'DROP TABLE ' || table_name || ';';
+                -- We use our prepared columns to select from the original query.
+                EXECUTE 'CREATE TABLE ' || table_name || ' AS SELECT ' || selected_columns || ' FROM (' || primary_source_query || ') _q LIMIT 0';
+            ELSIF operation = 'populate' THEN
+                EXECUTE 'INSERT INTO ' || table_name || ' SELECT ' || selected_columns || ' FROM (' || primary_source_query || ') _q';
+            END IF;
+        END;
+$$ LANGUAGE plpgsql;
+```
+
+The framework, behind the scenes, will call that function in two phases:
+
+1. It call the new function with the `create` operation, so we can create a table, something like:
+
+```sql
+select * from DEP_EXT_buffer(
+  'select 1 as cartodb_id, st_setsrid(st_makepoint(0,0), 4326) as the_geom',
+  ARRAY['cartodb_id', 'the_geom'],
+  1000,
+  'wadus_table',
+  'create'
+);
+```
+
+2. Later, it will invoke the same function but it will do it with `populate` as the operation to perform, like in:
+
+```sql
+select * from DEP_EXT_buffer(
+  'select 1 as cartodb_id, st_setsrid(st_makepoint(0,0), 4326) as the_geom',
+  ARRAY['cartodb_id', 'the_geom'],
+  1000,
+  'wadus_table',
+  'populate'
+);
+```
 
 ### Concave hull
 
