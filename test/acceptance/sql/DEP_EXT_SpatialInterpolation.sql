@@ -10,6 +10,10 @@ CREATE OR REPLACE FUNCTION DEP_EXT_SpatialInterpolation(
     )
     RETURNS VOID AS $$
         BEGIN
+            IF method < 0 OR method > 2 THEN
+                RAISE EXCEPTION 'Invalid method value=%', buster
+                    USING HINT = 'Valid ones are: 0=nearest neighbor, 1=barymetric, 2=IDW';
+            END IF;
             IF operation = 'create' THEN
                 EXECUTE 'CREATE TABLE ' || table_name || ' AS ' ||
                     -- The table will have the schema of target query but with an extra column from the source query.
