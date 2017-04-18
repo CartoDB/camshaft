@@ -266,4 +266,76 @@ describe('deprecated-sql-function analysis', function () {
         });
     });
 
+    describe('throw and catch errors', function() {
+
+        var fnName = 'DEP_EXT_test_deprecated_fn_raising_error';
+
+        before(function(done) {
+            testHelper.executeQuery([
+                'CREATE OR REPLACE FUNCTION ' + fnName + '(',
+                '    query text, columns text[], buster numeric, table_name text, operation text',
+                ')',
+                'RETURNS VOID AS $$',
+                '    BEGIN',
+                '        IF buster < 0 THEN',
+                '            RAISE EXCEPTION \'Invalid buster value=%\', buster',
+                '                USING HINT = \'Please provide a positive value for buster\';',
+                '        END IF;',
+                '        IF operation = \'create\' THEN',
+                '            EXECUTE \'CREATE TABLE \' || table_name || \' (',
+                '                cartodb_id numeric, the_geom geometry, buster numeric',
+                '            )\';',
+                '        ELSIF operation = \'populate\' THEN',
+                '            EXECUTE \'INSERT INTO \' || table_name || \' ',
+                '                SELECT cartodb_id, the_geom, \' || buster || \'',
+                '                FROM (\' || query || \') _q\';',
+                '        END IF;',
+                '    END;',
+                '$$ LANGUAGE plpgsql;'
+            ].join('\n'), done);
+        });
+
+        after(function(done) {
+            testHelper.executeQuery(
+                'DROP FUNCTION ' + fnName + '(text, text[], numeric, text, text)',
+                done
+            );
+        });
+
+        function invalidSchemaDeprecatedSqlFnDefinition(buster) {
+            return {
+                type: 'deprecated-sql-function',
+                params: {
+                    function_name: fnName,
+                    primary_source: {
+                        type: 'source',
+                        params: {
+                            query: QUERY_SOURCE
+                        }
+                    },
+                    function_args: [buster]
+                }
+            };
+        }
+
+        it('should work for valid buster param', function (done) {
+            testHelper.getResult(invalidSchemaDeprecatedSqlFnDefinition(1), function(err, rows) {
+                assert.ok(!err, err);
+                assert.equal(rows.length, 3);
+                rows.forEach(function(row) {
+                    assert.equal(row.buster, 1);
+                });
+                return done();
+            });
+        });
+
+        it('should expose error raised from function', function (done) {
+            testHelper.createAnalyses(invalidSchemaDeprecatedSqlFnDefinition(-1), function(err) {
+                assert.ok(err);
+                assert.equal(err.message, 'Invalid buster value=-1');
+                assert.equal(err.hint, 'Please provide a positive value for buster');
+                return done();
+            });
+        });
+    });
 });
