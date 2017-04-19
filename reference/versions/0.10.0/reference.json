@@ -121,7 +121,8 @@
                     "type": "string"
                 },
                 "denominator_column": {
-                    "type": "string"
+                    "type": "string",
+                    "optional": true
                 },
                 "significance": {
                     "type": "number"
