@@ -20,15 +20,15 @@ The word _arbitrary_ gets us into the unrestricted territory. However, functions
    1. The creation of a table to store the results.
    2. The population of that very same table.
  - Funtions must handle, at least, the following signature:
-   * First argument: the operation to perform. Either `create` or `populate` the table.
-   * Second argument: the name of the table to create or populate.
-   * Third argument: a _free query_ from the primary source of the analysis.
-   * Forth argument: an array of `text` listing all the columns from the _free query_ in the third argument.
-   * Third, and consecutive arguments: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
+   * First parameter: the operation to perform. Either `create` or `populate` the table.
+   * Second parameter: the name of the table to create or populate.
+   * Third parameter: a _free query_ from the primary source of the analysis.
+   * Forth parameter: an array of `text` listing all the columns from the _free query_ in the third parameter.
+   * Third, and consecutive parameters: it can receive an arbitrary number of `string`s and `number`s as extra parameters.
  - Functions might handle an optional signature where first, second, third and forth are the same as in the previous signature, but:
-   * Fifth argument: a _free query_ from the secondary source of the analysis.
-   * Sixth argument: an array of `text` listing all the columns from the _free query_ in the fifth argument.
-   * Seventh, and consecutive arguments up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
+   * Fifth parameter: a _free query_ from the secondary source of the analysis.
+   * Sixth parameter: an array of `text` listing all the columns from the _free query_ in the fifth parameter.
+   * Seventh, and consecutive parameters up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra parameters.
 
 ## Examples
 
