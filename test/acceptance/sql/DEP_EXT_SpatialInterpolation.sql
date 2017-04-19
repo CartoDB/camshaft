@@ -1,12 +1,12 @@
 CREATE OR REPLACE FUNCTION DEP_EXT_SpatialInterpolation(
+        operation text,
+        table_name text,
         source_query text, source_columns text[],
         target_query text, target_columns text[],
         val_column text,
         method numeric, -- 0=nearest neighbor, 1=barymetric, 2=IDW
         number_of_neighbors numeric, -- DEFAULT 0, -- 0=unlimited
-        decay_order numeric, -- DEFAULT 0,
-        table_name text,
-        operation text
+        decay_order numeric -- DEFAULT 0,
     )
     RETURNS VOID AS $$
         BEGIN

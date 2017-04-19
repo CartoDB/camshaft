@@ -12,11 +12,19 @@ describe('deprecated-sql-function analysis', function () {
         'select *, st_x(the_geom) as x, st_y(the_geom) as y from sources'
     ].join('\n');
 
+    var BASIC_SOURCE_NODE = {
+        type: 'source',
+        params: {
+            query: QUERY_SOURCE
+        }
+    };
+
     describe('basics', function() {
         before(function(done) {
             testHelper.executeQuery([
                 'CREATE OR REPLACE FUNCTION DEP_EXT_test_deprecated_fn(',
-                '    query text, columns text[], a numeric, b numeric, c numeric, d text, table_name text, operation text',
+                '    operation text, table_name text, query text, columns text[],',
+                '    a numeric, b numeric, c numeric, d text',
                 ')',
                 'RETURNS VOID AS $$',
                 '    BEGIN',
@@ -39,7 +47,7 @@ describe('deprecated-sql-function analysis', function () {
 
         after(function(done) {
             testHelper.executeQuery(
-                'DROP FUNCTION DEP_EXT_test_deprecated_fn(text, text[], numeric, numeric, numeric, text, text, text)',
+                'DROP FUNCTION DEP_EXT_test_deprecated_fn(text, text, text, text[], numeric, numeric, numeric, text)',
                 done
             );
         });
@@ -49,12 +57,7 @@ describe('deprecated-sql-function analysis', function () {
                 type: 'deprecated-sql-function',
                 params: {
                     function_name: 'DEP_EXT_test_deprecated_fn',
-                    primary_source: {
-                        type: 'source',
-                        params: {
-                            query: QUERY_SOURCE
-                        }
-                    },
+                    primary_source: BASIC_SOURCE_NODE,
                     function_args: fnArgs || [1, 2, 3, 'wadus'],
                 }
             };
@@ -131,7 +134,7 @@ describe('deprecated-sql-function analysis', function () {
             var selectAsColumns = tKeys.map(function(c) { return c; }).join(',') + sep;
             return [
                 'CREATE OR REPLACE FUNCTION ' + fnName + '(',
-                '    query text, columns text[], buster numeric, table_name text, operation text',
+                '    operation text, table_name text, query text, columns text[], buster numeric',
                 ')',
                 'RETURNS VOID AS $$',
                 '    BEGIN',
@@ -152,12 +155,7 @@ describe('deprecated-sql-function analysis', function () {
                 type: 'deprecated-sql-function',
                 params: {
                     function_name: fnName,
-                    primary_source: {
-                        type: 'source',
-                        params: {
-                            query: QUERY_SOURCE
-                        }
-                    },
+                    primary_source: BASIC_SOURCE_NODE,
                     function_args: [buster]
                 }
             };
@@ -175,7 +173,7 @@ describe('deprecated-sql-function analysis', function () {
 
             afterEach(function(done) {
                 testHelper.executeQuery(
-                    'DROP FUNCTION ' + fnName + '(text, text[], numeric, text, text)',
+                    'DROP FUNCTION ' + fnName + '(text, text, text, text[], numeric)',
                     done
                 );
             });
@@ -220,7 +218,7 @@ describe('deprecated-sql-function analysis', function () {
 
             afterEach(function(done) {
                 testHelper.executeQuery(
-                    'DROP FUNCTION ' + fnName + '(text, text[], numeric, text, text)',
+                    'DROP FUNCTION ' + fnName + '(text, text, text, text[], numeric)',
                     done
                 );
             });
@@ -266,6 +264,116 @@ describe('deprecated-sql-function analysis', function () {
         });
     });
 
+    describe('optional arguments', function() {
+
+        var fnName = 'DEP_EXT_test_deprecated_fn_opt_args';
+
+        function formattedOptArgs(optArgs) {
+            return (Array.isArray(optArgs) && optArgs.length > 0) ?
+                ',' + optArgs.join(',') :
+                '';
+        }
+
+        function createOptArgsFnQuery(optArgs) {
+            return [
+                'CREATE OR REPLACE FUNCTION ' + fnName + '(',
+                '    operation text, table_name text, query text, columns text[]' + formattedOptArgs(optArgs),
+                ')',
+                'RETURNS VOID AS $$',
+                '    BEGIN',
+                '        IF operation = \'create\' THEN',
+                '            EXECUTE \'CREATE TABLE \' || table_name || \' (',
+                '                cartodb_id numeric, the_geom geometry',
+                '            )\';',
+                '        ELSIF operation = \'populate\' THEN',
+                '            EXECUTE \'INSERT INTO \' || table_name || \' ',
+                '                SELECT cartodb_id, the_geom',
+                '                FROM (\' || query || \') _q\';',
+                '        END IF;',
+                '    END;',
+                '$$ LANGUAGE plpgsql;'
+            ].join('\n');
+        }
+
+        function dropOptArgsFnQuery(optArgs) {
+            return 'DROP FUNCTION ' + fnName + '(text, text, text, text[]'  + formattedOptArgs(optArgs) + ')';
+        }
+
+        function optArgsDeprecatedSqlFnDefinition(secondarySource, extraArgs) {
+            var def = {
+                type: 'deprecated-sql-function',
+                params: {
+                    function_name: fnName,
+                    primary_source: BASIC_SOURCE_NODE,
+                    function_args: []
+                }
+            };
+
+            if (secondarySource) {
+                def.params.secondary_source = secondarySource;
+            }
+
+            if (extraArgs) {
+                def.params.function_args = extraArgs;
+            }
+
+            return def;
+        }
+
+        var scenarios = [
+            {
+                desc: 'one node and NO extra params',
+                secondarySource: null,
+                extraFnArguments: [],
+                extraFnParams: []
+            },
+            {
+                desc: 'one node and extra param',
+                secondarySource: null,
+                extraFnArguments: ['numeric'],
+                extraFnParams: [5]
+            },
+            {
+                desc: 'one node and extra params',
+                secondarySource: null,
+                extraFnArguments: ['text', 'numeric'],
+                extraFnParams: ['f', 5]
+            },
+            {
+                desc: 'two nodes and NO extra params',
+                secondarySource: BASIC_SOURCE_NODE,
+                extraFnArguments: ['text', 'text []'],
+                extraFnParams: []
+            },
+            {
+                desc: 'two nodes and extra param',
+                secondarySource: BASIC_SOURCE_NODE,
+                extraFnArguments: ['text', 'text []', 'numeric'],
+                extraFnParams: [5]
+            },
+            {
+                desc: 'two nodes and extra params',
+                secondarySource: BASIC_SOURCE_NODE,
+                extraFnArguments: ['text', 'text []', 'text', 'numeric'],
+                extraFnParams: ['f', 5]
+            }
+        ];
+
+        scenarios.forEach(function(scenario) {
+            it('should work with ' + scenario.desc, function(done) {
+                testHelper.executeQuery(createOptArgsFnQuery(scenario.extraFnArguments), function(err) {
+                    assert.ifError(err);
+                    var def = optArgsDeprecatedSqlFnDefinition(scenario.secondarySource, scenario.extraFnParams);
+                    testHelper.getResult(def, function(err, rows) {
+                        assert.ok(!err, err);
+                        assert.equal(rows.length, 3);
+                        testHelper.executeQuery(dropOptArgsFnQuery(scenario.extraFnArguments), done);
+                    });
+                });
+            });
+        });
+    });
+
     describe('throw and catch errors', function() {
 
         var fnName = 'DEP_EXT_test_deprecated_fn_raising_error';
@@ -273,7 +381,7 @@ describe('deprecated-sql-function analysis', function () {
         before(function(done) {
             testHelper.executeQuery([
                 'CREATE OR REPLACE FUNCTION ' + fnName + '(',
-                '    query text, columns text[], buster numeric, table_name text, operation text',
+                '    operation text, table_name text, query text, columns text[], buster numeric',
                 ')',
                 'RETURNS VOID AS $$',
                 '    BEGIN',
@@ -297,7 +405,7 @@ describe('deprecated-sql-function analysis', function () {
 
         after(function(done) {
             testHelper.executeQuery(
-                'DROP FUNCTION ' + fnName + '(text, text[], numeric, text, text)',
+                'DROP FUNCTION ' + fnName + '(text, text, text, text[], numeric)',
                 done
             );
         });
@@ -307,12 +415,7 @@ describe('deprecated-sql-function analysis', function () {
                 type: 'deprecated-sql-function',
                 params: {
                     function_name: fnName,
-                    primary_source: {
-                        type: 'source',
-                        params: {
-                            query: QUERY_SOURCE
-                        }
-                    },
+                    primary_source: BASIC_SOURCE_NODE,
                     function_args: [buster]
                 }
             };

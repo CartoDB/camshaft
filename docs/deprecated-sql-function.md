@@ -19,16 +19,16 @@ The word _arbitrary_ gets us into the unrestricted territory. However, functions
  - Funtions must implement two operations:
    1. The creation of a table to store the results.
    2. The population of that very same table.
- - (TBC) Funtions must handle, at least, the following signature:
-   * First argument: a _free query_ from the primary source of the analysis.
-   * Second argument: an array of `text` listing all the columns from the _free query_ in the first argument.
-   * Third, and consecutive arguments up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
-   * Second-to-last argument: the name of the table to create or populate.
-   * Last argument: the operation to perform. Either `create` or `populate` the table.
- - (TBC) Functions might handle an optional signature where first, second, second-to-last, and last argument are the same as in the previous signature, but:
-   * Third argument: a _free query_ from the secondary source of the analysis.
+ - Funtions must handle, at least, the following signature:
+   * First argument: the operation to perform. Either `create` or `populate` the table.
+   * Second argument: the name of the table to create or populate.
+   * Third argument: a _free query_ from the primary source of the analysis.
    * Forth argument: an array of `text` listing all the columns from the _free query_ in the third argument.
-   * Fith, and consecutive arguments up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
+   * Third, and consecutive arguments: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
+ - Functions might handle an optional signature where first, second, third and forth are the same as in the previous signature, but:
+   * Fifth argument: a _free query_ from the secondary source of the analysis.
+   * Sixth argument: an array of `text` listing all the columns from the _free query_ in the fifth argument.
+   * Seventh, and consecutive arguments up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra arguments.
 
 ## Examples
 
@@ -41,7 +41,7 @@ buffer in determined by an in meters `radius` param.
 
 ```sql
 CREATE OR REPLACE FUNCTION DEP_EXT_buffer(
-        primary_source_query text, primary_source_columns text[], radius numeric, table_name text, operation text
+        operation text, table_name text, primary_source_query text, primary_source_columns text[], radius numeric
     )
     RETURNS VOID AS $$
         DECLARE selected_columns TEXT;
@@ -73,11 +73,11 @@ The framework, behind the scenes, will call that function in two phases:
 
 ```sql
 select * from DEP_EXT_buffer(
-  'select 1 as cartodb_id, st_setsrid(st_makepoint(0,0), 4326) as the_geom',
-  ARRAY['cartodb_id', 'the_geom'],
-  1000,
-  'wadus_table',
-  'create'
+    'create',
+    'wadus_table',
+    'select 1 as cartodb_id, st_setsrid(st_makepoint(0,0), 4326) as the_geom',
+    ARRAY['cartodb_id', 'the_geom'],
+    1000
 );
 ```
 
@@ -85,11 +85,11 @@ select * from DEP_EXT_buffer(
 
 ```sql
 select * from DEP_EXT_buffer(
-  'select 1 as cartodb_id, st_setsrid(st_makepoint(0,0), 4326) as the_geom',
-  ARRAY['cartodb_id', 'the_geom'],
-  1000,
-  'wadus_table',
-  'populate'
+    'populate',
+    'wadus_table',
+    'select 1 as cartodb_id, st_setsrid(st_makepoint(0,0), 4326) as the_geom',
+    ARRAY['cartodb_id', 'the_geom'],
+    1000
 );
 ```
 
@@ -97,14 +97,14 @@ select * from DEP_EXT_buffer(
 
 ```sql
 CREATE OR REPLACE FUNCTION DEP_EXT_SpatialInterpolation(
+        operation text,
+        table_name text,
         source_query text, source_columns text[],
         target_query text, target_columns text[],
         val_column text,
         method numeric, -- 0=nearest neighbor, 1=barymetric, 2=IDW
         number_of_neighbors numeric, -- DEFAULT 0, -- 0=unlimited
-        decay_order numeric, -- DEFAULT 0,
-        table_name text,
-        operation text
+        decay_order numeric -- DEFAULT 0,
     )
     RETURNS VOID AS $$
         BEGIN

@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION DEP_EXT_buffer(
-        primary_source_query text, primary_source_columns text[], radius numeric, table_name text, operation text
+        operation text, table_name text, primary_source_query text, primary_source_columns text[], radius numeric
     )
     RETURNS VOID AS $$
         DECLARE selected_columns TEXT;

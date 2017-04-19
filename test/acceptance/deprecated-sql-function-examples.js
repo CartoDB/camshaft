@@ -23,7 +23,7 @@ describe('deprecated-sql-function examples', function () {
 
         after(function(done) {
             testHelper.executeQuery(
-                'DROP FUNCTION DEP_EXT_buffer(text, text[], numeric, text, text)',
+                'DROP FUNCTION DEP_EXT_buffer(text, text, text, text[], numeric)',
                 done
             );
         });
@@ -90,16 +90,20 @@ describe('deprecated-sql-function examples', function () {
 
         after(function(done) {
             /*
+            operation text, table_name text,
             primary_source_query text, primary_source_columns text[],
             secondary_source_query text, secondary_source_columns text[],
             val_column text,
             method numeric, -- 0=nearest neighbor, 1=barymetric, 2=IDW
             number_of_neighbors numeric DEFAULT 0, -- 0=unlimited
-            decay_order numeric DEFAULT 0,
-            table_name text, operation text
+            decay_order numeric DEFAULT 0
             */
             testHelper.executeQuery(
-                'DROP FUNCTION DEP_EXT_SpatialInterpolation(text, text[], text, text[], text, numeric, numeric, numeric, text, text)',
+                [
+                    'DROP FUNCTION DEP_EXT_SpatialInterpolation(',
+                    '   text, text, text, text[], text, text[], text, numeric, numeric, numeric',
+                    ')'
+                ].join('\n'),
                 done
             );
         });
