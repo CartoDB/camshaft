@@ -193,3 +193,14 @@ SELECT
     p[1]::boolean as has_secondary_node
 FROM fns_meta
 ```
+
+It will return something like:
+
+```
+           fn_name            |                    params_names                     |         params_types          | has_secondary_node
+------------------------------+-----------------------------------------------------+-------------------------------+--------------------
+ dep_ext_buffer               | {radius}                                            | {number}                      | f
+ dep_ext_spatialinterpolation | {val_column,method,number_of_neighbors,decay_order} | {string,number,number,number} | t
+ dep_ext_buffer               | {radius}                                            | {number}                      | f
+(3 rows)
+```
