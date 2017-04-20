@@ -150,4 +150,63 @@ describe('deprecated-sql-function examples', function () {
 
     });
 
+    describe('Python', function() {
+        before(function(done) {
+            readSql('DEP_EXT_python_weak_kmeans.sql', function(err, content) {
+                if (err) {
+                    return done(err);
+                }
+                testHelper.executeQuery(content, done);
+            });
+        });
+
+        after(function(done) {
+            testHelper.executeQuery(
+                [
+                    'DROP FUNCTION DEP_EXT_python_weak_kmeans(',
+                    '   text, text, text, text[], int',
+                    ')'
+                ].join('\n'),
+                done
+            );
+        });
+
+        var QUERY_SOURCE = [
+            'select',
+            '    i as cartodb_id,',
+            '    st_setsrid(st_makepoint(random() * 360 - 180, random() * 170 - 85), 4326) as the_geom',
+            'from generate_series(1,1000) as i',
+        ].join('\n');
+
+        function pyexampleDeprecatedSqlFnDefinition() {
+            return {
+                type: 'deprecated-sql-function',
+                params: {
+                    function_name: 'DEP_EXT_python_weak_kmeans',
+                    primary_source: {
+                        type: 'source',
+                        params: {
+                            query: QUERY_SOURCE
+                        }
+                    },
+                    function_args: [5],
+                }
+            };
+        }
+
+        it('should work with plpythonu', function (done) {
+            testHelper.getResult(pyexampleDeprecatedSqlFnDefinition(), function(err, rows) {
+                assert.ok(!err, err);
+                assert.equal(rows.length, 1000);
+                rows.forEach(function(row) {
+                    assert.ok(row.hasOwnProperty('cluster_no'));
+                    assert.ok(row.cluster_no >= 0);
+                    assert.ok(row.cluster_no <= 4);
+                });
+                return done();
+            });
+        });
+
+    });
+
 });
