@@ -356,6 +356,12 @@ describe('deprecated-sql-function analysis', function () {
                 secondarySource: BASIC_SOURCE_NODE,
                 extraFnArguments: ['text', 'text []', 'text', 'numeric'],
                 extraFnParams: ['f', 5]
+            },
+            {
+                desc: 'one node and boolean extra params',
+                secondarySource: null,
+                extraFnArguments: ['boolean'],
+                extraFnParams: [false]
             }
         ];
 
