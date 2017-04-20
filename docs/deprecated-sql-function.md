@@ -57,8 +57,6 @@ CREATE OR REPLACE FUNCTION DEP_EXT_buffer(
               ','
             ) INTO selected_columns;
             IF operation = 'create' THEN
-                -- In some cases you might want to drop the table.
-                -- EXECUTE 'DROP TABLE ' || table_name || ';';
                 -- We use our prepared columns to select from the original query.
                 EXECUTE format(
                     'CREATE TABLE %I AS SELECT %s FROM (%s) _q LIMIT 0',
