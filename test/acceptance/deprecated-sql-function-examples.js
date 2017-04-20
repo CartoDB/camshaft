@@ -29,11 +29,8 @@ describe('deprecated-sql-function examples', function () {
         });
 
         var QUERY_SOURCE = [
-            'WITH sources AS (',
-            '   select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom',
-            '   from generate_series(1,3) as i',
-            ')',
-            'select *, st_x(the_geom) as x, st_y(the_geom) as y from sources'
+            'select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom',
+            'from generate_series(1,3) as i',
         ].join('\n');
 
         function bufferDeprecatedSqlFnDefinition(radius) {
@@ -109,19 +106,13 @@ describe('deprecated-sql-function examples', function () {
         });
 
         var QUERY_SOURCE = [
-            'WITH sources AS (',
-            '   select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom, i * 100 * random() as wadus',
-            '   from generate_series(1,3) as i',
-            ')',
-            'select *, st_x(the_geom) as x, st_y(the_geom) as y from sources'
+            'select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom, i * 100 * random() as wadus',
+            'from generate_series(1,3) as i',
         ].join('\n');
 
         var QUERY_TARGET = [
-            'WITH targets AS (',
-            '   select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom',
-            '   from generate_series(1,3) as i',
-            ')',
-            'select *, st_x(the_geom) as x, st_y(the_geom) as y from targets'
+            'select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom',
+            'from generate_series(1,3) as i',
         ].join('\n');
 
         function spatialInterpolationDeprecatedSqlFnDefinition() {
