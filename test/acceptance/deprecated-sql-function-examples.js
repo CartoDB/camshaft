@@ -146,7 +146,7 @@ describe('deprecated-sql-function examples', function () {
             };
         }
 
-        it('should create a polygon with the expected area', function (done) {
+        it('should create a table with wadus column from source', function (done) {
             testHelper.getResult(spatialInterpolationDeprecatedSqlFnDefinition(), function(err, rows) {
                 assert.ok(!err, err);
                 assert.equal(rows.length, 3);

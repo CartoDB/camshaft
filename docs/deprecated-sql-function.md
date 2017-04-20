@@ -52,7 +52,7 @@ CREATE OR REPLACE FUNCTION DEP_EXT_buffer(
               array_cat(
                 array_remove(primary_source_columns, 'the_geom'),
                 -- And we add our new `the_geom` column using the `radius` argument.
-                ARRAY['ST_Buffer(the_geom::geography, ' || radius || ')::geometry AS the_geom']
+                ARRAY['ST_Buffer(the_geom::geography, $1)::geometry AS the_geom']
               ),
               ','
             ) INTO selected_columns;
@@ -60,9 +60,15 @@ CREATE OR REPLACE FUNCTION DEP_EXT_buffer(
                 -- In some cases you might want to drop the table.
                 -- EXECUTE 'DROP TABLE ' || table_name || ';';
                 -- We use our prepared columns to select from the original query.
-                EXECUTE 'CREATE TABLE ' || table_name || ' AS SELECT ' || selected_columns || ' FROM (' || primary_source_query || ') _q LIMIT 0';
+                EXECUTE format(
+                    'CREATE TABLE %I AS SELECT %s FROM (%s) _q LIMIT 0',
+                    table_name, selected_columns, primary_source_query
+                ) USING radius;
             ELSIF operation = 'populate' THEN
-                EXECUTE 'INSERT INTO ' || table_name || ' SELECT ' || selected_columns || ' FROM (' || primary_source_query || ') _q';
+                EXECUTE format(
+                    'INSERT INTO %I SELECT %s FROM (%s) _q',
+                    table_name, selected_columns, primary_source_query
+                ) USING radius;
             END IF;
         END;
 $$ LANGUAGE plpgsql;
@@ -114,30 +120,35 @@ CREATE OR REPLACE FUNCTION DEP_EXT_SpatialInterpolation(
                     USING HINT = 'Valid ones are: 0=nearest neighbor, 1=barymetric, 2=IDW';
             END IF;
             IF operation = 'create' THEN
-                EXECUTE 'CREATE TABLE ' || table_name || ' AS ' ||
-                    -- The table will have the schema of target query but with an extra column from the source query.
-                    'SELECT _target.*, _source.' || val_column ||
-                    ' FROM (' || target_query || ') _target, (' || source_query || ') _source LIMIT 0';
+                -- The table will have the schema of target query but with an extra column from the source query.
+                EXECUTE format(
+                    'CREATE TABLE %I AS SELECT _target.*, _source.%I FROM (%s) _target, (%s) _source LIMIT 0',
+                    table_name, val_column, target_query, source_query
+                );
             ELSIF operation = 'populate' THEN
-                EXECUTE 'INSERT INTO ' || table_name || ' ' ||
-                    'WITH ' ||
-                    '_target AS (' || target_query || '),' ||
-                    '_source AS (' ||
-                    '  SELECT array_agg(the_geom) as _geo,' ||
-                    '  array_agg( ' || val_column || '::numeric ) as _values' ||
-                    '  FROM (' || source_query || ') _s' ||
-                    '  WHERE ' || val_column || ' is not null' ||
-                    ')' ||
-                    'SELECT _target.*,' ||
-                    '  cdb_crankshaft.CDB_MockSpatialInterpolation(' ||
-                    '    _source._geo,' ||
-                    '    _source._values,' ||
-                    '    CASE WHEN GeometryType(_target.the_geom) = ''POINT'' THEN _target.the_geom ELSE ST_Centroid(_target.the_geom) END,' ||
-                    '    ' || method || ','
-                    '    ' || number_of_neighbors || ','
-                    '    ' || decay_order || ''
-                    '  ) AS ' || val_column || ' '
-                    'FROM _target, _source';
+                EXECUTE format($populate_query$
+                    INSERT INTO %I
+                    WITH
+                    _target AS (%s),
+                    _source AS (
+                      SELECT array_agg(the_geom) as _geo,
+                      array_agg( %I::numeric ) as _values
+                      FROM (%s) _s
+                      WHERE %I is not null
+                    )
+                    SELECT _target.*,
+                      cdb_crankshaft.CDB_MockSpatialInterpolation(
+                        _source._geo,
+                        _source._values,
+                        CASE WHEN GeometryType(_target.the_geom) = 'POINT' THEN _target.the_geom ELSE ST_Centroid(_target.the_geom) END,
+                        $1,
+                        $2,
+                        $3
+                      ) AS %I
+                    FROM _target, _source
+                    $populate_query$,
+                    table_name, target_query, val_column, source_query, val_column, val_column
+                ) USING method::int, number_of_neighbors, decay_order;
             END IF;
         END;
 $$ LANGUAGE plpgsql;
