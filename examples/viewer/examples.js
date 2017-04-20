@@ -464,6 +464,55 @@ var lineToColumnDefinition = {
 };
 
 var examples = {
+    deprecated_function: {
+        /**
+         * This requires to have a function like:
+CREATE OR REPLACE FUNCTION test_deprecated_fn(
+    query text, a numeric, b numeric, c numeric, table_name text, operation text
+)
+RETURNS VOID AS $$
+    BEGIN
+        IF operation = 'create' THEN
+            EXECUTE 'CREATE TABLE ' || table_name || '
+                    (cartodb_id numeric, the_geom geometry, a int, b int, c int)';
+        ELSIF operation = 'populate' THEN
+            EXECUTE 'INSERT INTO ' || table_name || '
+                SELECT
+                    cartodb_id,
+                    st_setsrid(st_makepoint(st_x(the_geom) + ' || a || ',
+                    st_y(the_geom) + ' || b + c || '), 4326) the_geom,
+                    ' || a || ', ' || b || ', ' || c || '
+                FROM (' || query || ') _q';
+        END IF;
+    END;
+$$ LANGUAGE plpgsql;
+         */
+        name: 'deprecated_function',
+        def: {
+            id: 'deprecated_function',
+            type: 'deprecated-sql-function',
+            params: {
+                function_name: 'test_deprecated_fn',
+                primary_source: {
+                    type: 'source',
+                    params: {
+                        query: [
+                            'WITH sources AS (',
+                            '   select i as cartodb_id, st_setsrid(st_makepoint(i,0), 4326) as the_geom',
+                            '   from generate_series(1,3) as i',
+                            ')',
+                            'select *, st_x(the_geom) as x, st_y(the_geom) as y from sources'
+                        ].join('\n')
+                    }
+                },
+                // secondary_source: null,
+                function_args: [1, 2, 3]
+            }
+        },
+        cartocss: points('green'),
+        center: [5, 2.5],
+        zoom: 6
+    },
     closest: {
         name: 'closest',
         def: {
