@@ -201,6 +201,5 @@ It will return something like:
 ------------------------------+-----------------------------------------------------+-------------------------------+--------------------
  dep_ext_buffer               | {radius}                                            | {number}                      | f
  dep_ext_spatialinterpolation | {val_column,method,number_of_neighbors,decay_order} | {string,number,number,number} | t
- dep_ext_buffer               | {radius}                                            | {number}                      | f
-(3 rows)
+(2 rows)
 ```
