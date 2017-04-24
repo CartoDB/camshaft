@@ -1,6 +1,6 @@
 {
   "name": "camshaft-reference",
-  "version": "0.31.0",
+  "version": "0.32.0",
   "description": "Analyses reference for Camshaft Analysis library",
   "main": "./index.js",
   "keywords": [

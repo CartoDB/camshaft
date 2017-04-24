@@ -1,8 +1,15 @@
 # Changelog
 
-## 0.53.2
+## 0.54.1
 
 Released 2017-mm-dd
+
+
+## 0.54.0
+
+Released 2017-04-20
+
+ - New `deprecated-sql-function` node.
 
 
 ## 0.53.1

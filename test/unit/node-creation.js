@@ -379,4 +379,90 @@ describe('node-creation', function() {
 
     });
 
+    describe('Validator', function() {
+        var SchemaValidatedNode = Node.create('validated-schema', {}, {
+            validators: [new Node.Validator.Schema([
+                {
+                    name: 'cartodb_id',
+                    type: 'number'
+                },
+                {
+                    name: 'the_geom',
+                    type: 'geometry'
+                },
+                {
+                    name: 'wadus',
+                    type: 'number'
+                }
+            ])]
+        });
+
+        it('should work when schema is valid', function() {
+            var node = new SchemaValidatedNode(owner, {});
+            node.setColumns([
+                {
+                    name: 'cartodb_id',
+                    type: 'number'
+                },
+                {
+                    name: 'the_geom',
+                    type: 'geometry'
+                },
+                {
+                    name: 'wadus',
+                    type: 'number'
+                }
+            ]);
+            assert.ok(node.isValid());
+        });
+
+        it('should fail when schema is missing a column', function() {
+            var node = new SchemaValidatedNode(owner, {});
+            node.setColumns([
+                {
+                    name: 'cartodb_id',
+                    type: 'number'
+                },
+                {
+                    name: 'the_geom',
+                    type: 'geometry'
+                }
+            ]);
+            var errors = [];
+            assert.equal(node.isValid(errors), false);
+            assert.equal(errors.length, 1);
+            assert.equal(errors[0].message, 'Missing required column `wadus`');
+        });
+
+        it('should fail when schema is missing more than a column', function() {
+            var node = new SchemaValidatedNode(owner, {});
+            node.setColumns([
+                {
+                    name: 'the_geom',
+                    type: 'geometry'
+                }
+            ]);
+            var errors = [];
+            assert.equal(node.isValid(errors), false);
+            assert.equal(errors.length, 2);
+            assert.equal(errors[0].message, 'Missing required column `cartodb_id`');
+            assert.equal(errors[1].message, 'Missing required column `wadus`');
+        });
+
+        it('should fail when schema type does not match', function() {
+            var node = new SchemaValidatedNode(owner, {});
+            node.setColumns([
+                {
+                    name: 'the_geom',
+                    type: 'number'
+                }
+            ]);
+            var errors = [];
+            assert.equal(node.isValid(errors), false);
+            assert.equal(errors.length, 3);
+            assert.equal(errors[0].message, 'Missing required column `cartodb_id`');
+            assert.equal(errors[1].message, 'Invalid type for column "the_geom": expected `geometry` got `number`');
+            assert.equal(errors[2].message, 'Missing required column `wadus`');
+        });
+    });
 });
