@@ -2,7 +2,7 @@
 
 ## 0.54.1
 
-Released 2017-mm-dd
+Released 2017-04-24
 
  - Improvements over `closest` analysis: guarantee uniqueness of cartodb_id.
 
