@@ -81,7 +81,8 @@ describe('closest analysis', function () {
         testHelper.getResult(closestAnalysisDefinition(), function(err, rows) {
             assert.ifError(err);
             assert.equal(rows.length, 3);
-            testHelper.checkCartoDBIsSorted(rows);
+            testHelper.checkCartodbIdIsSorted(rows);
+            testHelper.checkCartodbIdIsUnique(rows);
 
             assert.equal(rows[0].source_cartodb_id, 1);
             assert.equal(rows[0].x, 1);
@@ -106,7 +107,8 @@ describe('closest analysis', function () {
         testHelper.getResult(closestAnalysisDefinition(2), function(err, rows) {
             assert.ifError(err);
             assert.equal(rows.length, 6);
-            testHelper.checkCartoDBIsSorted(rows);
+            testHelper.checkCartodbIdIsSorted(rows);
+            testHelper.checkCartodbIdIsUnique(rows);
 
             assert.equal(rows[0].source_cartodb_id, 1);
             assert.equal(rows[0].x, 1);
@@ -143,6 +145,7 @@ describe('closest analysis', function () {
         testHelper.getResult(closestAnalysisDefinition(4), function(err, rows) {
             assert.ifError(err);
             assert.equal(rows.length, 12);
+            testHelper.checkCartodbIdIsUnique(rows);
 
             assert.equal(rows[0].source_cartodb_id, 1);
             assert.equal(rows[0].x, 1);
@@ -171,6 +174,7 @@ describe('closest analysis', function () {
             assert.ifError(err);
             // max 9 targets per source
             assert.equal(rows.length, 27);
+            testHelper.checkCartodbIdIsUnique(rows);
             return done();
         });
     });
@@ -180,7 +184,8 @@ describe('closest analysis', function () {
             testHelper.getResult(closestAnalysisDefinition(1, 'category'), function(err, rows) {
                 assert.ifError(err);
                 assert.equal(rows.length, 9);
-                testHelper.checkCartoDBIsSorted(rows);
+                testHelper.checkCartodbIdIsSorted(rows);
+                testHelper.checkCartodbIdIsUnique(rows);
 
                 assert.equal(rows[0].source_cartodb_id, 1);
                 assert.equal(rows[0].x, 1);
@@ -205,6 +210,7 @@ describe('closest analysis', function () {
             testHelper.getResult(closestAnalysisDefinition(2, 'category'), function(err, rows) {
                 assert.ifError(err);
                 assert.equal(rows.length, 18);
+                testHelper.checkCartodbIdIsUnique(rows);
 
                 assert.equal(rows[0].source_cartodb_id, 1);
                 assert.equal(rows[0].x, 1);
@@ -246,6 +252,7 @@ describe('closest analysis', function () {
             testHelper.getResult(closestAnalysisDefinition(4, 'category'), function(err, rows) {
                 assert.ifError(err);
                 assert.equal(rows.length, 27);
+                testHelper.checkCartodbIdIsUnique(rows);
 
                 assert.equal(rows[0].source_cartodb_id, 1);
                 assert.equal(rows[0].x, 1);
