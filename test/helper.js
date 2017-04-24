@@ -87,7 +87,7 @@ function getResult(analysisDefinition, config, callback) {
 
 module.exports.getResult = getResult;
 
-function checkCartoDBIsSorted(rows) {
+function checkCartodbIdIsSorted(rows) {
     var cartodbIds = rows.map(function(row) { return row.cartodb_id; });
 
     var allAreNumeric = cartodbIds.every(Number.isFinite);
@@ -105,4 +105,15 @@ function checkCartoDBIsSorted(rows) {
     assert.ok(isSorted, 'cartodb_id should be in order');
 }
 
-module.exports.checkCartoDBIsSorted = checkCartoDBIsSorted;
+module.exports.checkCartodbIdIsSorted = checkCartodbIdIsSorted;
+
+
+function checkCartodbIdIsUnique(rows) {
+    var cartodbIds = {};
+    rows.forEach(function(row) {
+        assert.equal(cartodbIds.hasOwnProperty(row.cartodb_id), false);
+        cartodbIds[row.cartodb_id] = true;
+    });
+}
+
+module.exports.checkCartodbIdIsUnique = checkCartodbIdIsUnique;
