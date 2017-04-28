@@ -3,7 +3,7 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-describe.only('data-observatory-multiple-measures analysis', function() {
+describe('data-observatory-multiple-measures analysis', function() {
     function doMultipleMeasuresDefinition(numerators, columnNames) {
         return {
             type: 'data-observatory-multiple-measures',
@@ -45,7 +45,6 @@ describe.only('data-observatory-multiple-measures analysis', function() {
         var def = doMultipleMeasuresDefinition(numerators, columnNames);
         testHelper.getResult(def, function(err, rows) {
             assert.ifError(err);
-            console.log(rows);
             rows.forEach(function(row) {
                 columnNames.forEach(function(columnName) {
                     assert.ok(row.hasOwnProperty(columnName), 'Missing ' + columnName + ' column');
