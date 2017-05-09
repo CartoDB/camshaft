@@ -2,7 +2,8 @@
 
 ## 0.54.3
 
-Released 2017-mm-dd
+Released 2017-05-09
+ - Fix reference's graph to handle optional node params.
 
 
 ## 0.54.2
