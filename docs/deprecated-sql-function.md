@@ -29,8 +29,9 @@ The word _arbitrary_ gets us into the unrestricted territory. However, functions
    * Fifth parameter: a _free query_ from the secondary source of the analysis.
    * Sixth parameter: an array of `text` listing all the columns from the _free query_ in the fifth parameter.
    * Seventh, and consecutive parameters up to second-to-last: it can receive an arbitrary number of `string`s and `number`s as extra parameters.
+ - All arbitrary arguments are mandatory, if you need to support optional arguments, it's better to have two functions with two signatures.
  - The supported parameters types are: numeric, text, and boolean.
- - the_geom_webmercator can NOT be used
+ - The `the_geom_webmercator` column can NOT be used.
 
 ## Examples
 
