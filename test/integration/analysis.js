@@ -182,8 +182,7 @@ describe('workflow', function() {
                     done();
                 });
             });
-        })
-
+        });
     });
 });
 
