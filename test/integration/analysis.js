@@ -151,6 +151,39 @@ describe('workflow', function() {
             });
         });
 
+        describe('augment error info with node_id provided by client', function () {
+            it('for unknown analysis error', function (done) {
+                var invalidAnalysis = {
+                    id: 'a0',
+                    type: 'wadus'
+                };
+
+                Analysis.create(testConfig, invalidAnalysis, function(err) {
+                    assert.ok(err);
+                    assert.equal(err.node_id, 'a0');
+                    done();
+                });
+            });
+
+            it('for invalid param error', function (done) {
+                var invalidAnalysis = {
+                    id: 'a0',
+                    type: 'trade-area',
+                    params: {
+                        source: sourceAnalysisDefinition,
+                        kind: TRADE_AREA_WALK,
+                        time: 'text is invalid here',
+                        dissolved: DISSOLVED
+                    }
+                };
+                Analysis.create(testConfig, invalidAnalysis, function(err) {
+                    assert.ok(err);
+                    assert.equal(err.node_id, 'a0');
+                    done();
+                });
+            });
+        })
+
     });
 });
 
