@@ -2,7 +2,7 @@
 
 ## 0.54.4
 
-Released 2017-mm-dd
+Released 2017-05-11
  - Fix missing `node_id` when an error happens on analysis creation
 
 
