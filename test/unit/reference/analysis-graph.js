@@ -167,4 +167,45 @@ describe('camshaft-reference-graph', function() {
         assert.deepEqual(extendedNodes.a1.params.filters, filters);
     });
 
+    it('should work with missing optional nodes', function() {
+        var def = {
+            id: 'a1',
+            type: 'deprecated-sql-function',
+            params: {
+                function_name: 'DEP_EXT_wadus',
+                primary_source: {
+                    id: 'a0',
+                    type: 'source',
+                    params: {
+                        query: 'SELECT * FROM table_name'
+                    }
+                },
+                function_args: [
+                    'x',
+                    'y'
+                ]
+            }
+        };
+
+        var filters = {
+            a1: {
+                range_filter: {
+                    type: 'range',
+                    column: 'y',
+                    params:{
+                        min: 2,
+                        max: 8
+                    }
+                }
+            }
+        };
+
+        var analysisGraph = new reference.AnalysisGraph(def);
+
+        var extendedDef = analysisGraph.getDefinitionWith('a1', { filters: filters });
+        var extendedGraph = new reference.AnalysisGraph(extendedDef);
+        var extendedNodes = extendedGraph.getNodesWithId();
+        assert.deepEqual(extendedNodes.a1.params.filters, filters);
+    });
+
 });

@@ -1,10 +1,28 @@
 # Changelog
 
-## 0.55.0
 
+## 0.55.0
 Released 2017-mm-dd
 
  - New `data-observatory-multiple-measures` node.
+
+
+## 0.54.4
+
+Released 2017-05-11
+ - Fix missing `node_id` when an error happens on analysis creation
+
+
+## 0.54.3
+
+Released 2017-05-09
+ - Fix reference's graph to handle optional node params.
+
+
+## 0.54.2
+
+Released 2017-05-05
+ - Upgrade cartodb-psql to [0.8.0](https://github.com/CartoDB/node-cartodb-psql/releases/tag/0.8.0).
 
 
 ## 0.54.1

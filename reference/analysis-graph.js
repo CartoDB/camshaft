@@ -40,9 +40,11 @@ function extendDefinition(definition, reference, nodeId, extendedWithParams) {
         });
     }
 
-    childNodes(definition.type, reference).forEach(function(childNodeParamName) {
-        extendDefinition(definition.params[childNodeParamName], reference, nodeId, extendedWithParams);
-    });
+    childNodes(definition.type, reference)
+        .filter(filterMissingOptionalNodes(definition, reference))
+        .forEach(function(childNodeParamName) {
+            extendDefinition(definition.params[childNodeParamName], reference, nodeId, extendedWithParams);
+        });
 
     return definition;
 }
@@ -50,9 +52,11 @@ function extendDefinition(definition, reference, nodeId, extendedWithParams) {
 function appendAllNodes(allNodes, definition, reference) {
     allNodes.push(definition);
 
-    childNodes(definition.type, reference).forEach(function(childNodeParamName) {
-        appendAllNodes(allNodes, definition.params[childNodeParamName], reference);
-    });
+    childNodes(definition.type, reference)
+        .filter(filterMissingOptionalNodes(definition, reference))
+        .forEach(function(childNodeParamName) {
+            appendAllNodes(allNodes, definition.params[childNodeParamName], reference);
+        });
     return allNodes;
 }
 
@@ -60,9 +64,11 @@ function reduceById(nodesMap, definition, reference) {
     if (definition.id) {
         nodesMap[definition.id] = definition;
     }
-    childNodes(definition.type, reference).forEach(function(childNodeParamName) {
-        reduceById(nodesMap, definition.params[childNodeParamName], reference);
-    });
+    childNodes(definition.type, reference)
+        .filter(filterMissingOptionalNodes(definition, reference))
+        .forEach(function(childNodeParamName) {
+            reduceById(nodesMap, definition.params[childNodeParamName], reference);
+        });
     return nodesMap;
 }
 
@@ -75,4 +81,16 @@ function childNodes(nodeType, reference) {
         }
         return childNodesNames;
     }, []);
+}
+
+function filterMissingOptionalNodes(definition, reference) {
+    return function(childNodeParamName) {
+        return !isOptionalParam(definition.type, childNodeParamName, reference) ||
+            !!definition.params[childNodeParamName];
+    };
+}
+
+function isOptionalParam(nodeType, paramName, reference) {
+    var nodeRef = reference.analyses[nodeType];
+    return nodeRef.params[paramName].optional;
 }
