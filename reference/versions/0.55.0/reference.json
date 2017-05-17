@@ -312,6 +312,21 @@
                 "numerators": {
                     "type": "array"
                 },
+                "normalizations": {
+                    "type": "array"
+                },
+                "denominators": {
+                    "type": "array",
+                    "optional": true
+                },
+                "geom_ids": {
+                    "type": "array",
+                    "optional": true
+                },
+                "numerator_timespans": {
+                    "type": "array",
+                    "optional": true
+                },
                 "column_names": {
                     "type": "array"
                 }
