@@ -112,4 +112,24 @@ describe('data-observatory-multiple-measures analysis', function() {
         });
     });
 
+    it('should create an analysis with all params allowing null elements for denominators', function (done) {
+        var def = doMultipleMeasuresDefinition({
+            numerators: numerators,
+            denominators: [ null ],
+            normalizations: normalizations,
+            geom_ids: geom_ids,
+            numerator_timespans: numerator_timespans,
+            columnNames: columnNames
+        });
+
+        testHelper.getResult(def, function(err, rows) {
+            assert.ifError(err);
+            rows.forEach(function(row) {
+                columnNames.forEach(function(columnName) {
+                    assert.ok(row.hasOwnProperty(columnName), 'Missing ' + columnName + ' column');
+                });
+            });
+            return done();
+        });
+    });
 });
