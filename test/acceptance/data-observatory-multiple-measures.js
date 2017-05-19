@@ -115,7 +115,7 @@ describe('data-observatory-multiple-measures analysis', function() {
     it('should create an analysis with all params allowing null elements for denominators', function (done) {
         var def = doMultipleMeasuresDefinition({
             numerators: numerators,
-            denominators: [ null ],
+            denominators: [ null, null ],
             normalizations: normalizations,
             geom_ids: geom_ids,
             numerator_timespans: numerator_timespans,
