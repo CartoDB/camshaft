@@ -2,7 +2,7 @@
 
 
 ## 0.55.0
-Released 2017-mm-dd
+Released 2017-05-22
 
  - New `data-observatory-multiple-measures` node.
 
