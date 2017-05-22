@@ -120,6 +120,36 @@ describe('filters', function() {
         });
     });
 
+    var booleanFilter = {
+        bank_category: {
+            type: 'category',
+            column: 'indoor',
+            params: {
+                accept: [true]
+            }
+        }
+    };
+
+    it('should filter using boolean values', function(done) {
+        var indoorAtms = ['BBVA', 'BBVA', 'ING'];
+        var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, booleanFilter);
+        testHelper.createAnalyses(filteredSource, function(err, analysis) {
+            assert.ok(!err, err);
+
+            testHelper.getRows(analysis.getRoot().getQuery(), function(err, rows) {
+                assert.ok(!err, err);
+
+                var banks = rows.map(function(row) {
+                    return row.bank;
+                });
+
+                assert.deepEqual(banks, indoorAtms);
+
+                done();
+            });
+        });
+    });
+
     describe('node-id', function() {
 
         it('should have different id when filter is applied', function(done) {
