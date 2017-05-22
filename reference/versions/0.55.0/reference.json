@@ -316,16 +316,13 @@
                     "type": "array"
                 },
                 "denominators": {
-                    "type": "array",
-                    "optional": true
+                    "type": "array"
                 },
                 "geom_ids": {
-                    "type": "array",
-                    "optional": true
+                    "type": "array"
                 },
                 "numerator_timespans": {
-                    "type": "array",
-                    "optional": true
+                    "type": "array"
                 },
                 "column_names": {
                     "type": "array"
