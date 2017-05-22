@@ -35,6 +35,9 @@ describe('data-observatory-multiple-measures analysis', function() {
         var def = doMultipleMeasuresDefinition({
             numerators: numerators,
             normalizations: normalizations,
+            denominators: [null, null],
+            geom_ids: [null, null],
+            numerator_timespans: [null, null],
             columnNames: []
         });
 
@@ -49,6 +52,9 @@ describe('data-observatory-multiple-measures analysis', function() {
         var def = doMultipleMeasuresDefinition({
             numerators: numerators,
             normalizations: [],
+            denominators: [null, null],
+            geom_ids: [null, null],
+            numerator_timespans: [null, null],
             columnNames: columnNames
         });
 
@@ -63,6 +69,9 @@ describe('data-observatory-multiple-measures analysis', function() {
         var def = doMultipleMeasuresDefinition({
             numerators: [],
             normalizations: normalizations,
+            denominators: [null, null],
+            geom_ids: [null, null],
+            numerator_timespans: [null, null],
             columnNames: columnNames
         });
 
@@ -77,6 +86,9 @@ describe('data-observatory-multiple-measures analysis', function() {
         var def = doMultipleMeasuresDefinition({
             numerators: numerators,
             normalizations: normalizations,
+            denominators: [null, null],
+            geom_ids: [null, null],
+            numerator_timespans: [null, null],
             columnNames: columnNames
         });
 
