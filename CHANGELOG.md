@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.54.5
 
+## 0.55.0
 Released 2017-mm-dd
+
+ - New `data-observatory-multiple-measures` node.
 
 
 ## 0.54.4

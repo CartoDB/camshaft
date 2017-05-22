@@ -255,7 +255,44 @@ describe('node-creation', function() {
                         }
                     );
                 });
+            });
 
+            describe('nullable array element', function() {
+                var NullableStringTypedListNode = Node.create('test-array-string', {
+                    list: Node.PARAM.ARRAY(Node.PARAM.NULLABLE(Node.PARAM.STRING()))
+                });
+
+                it('should work for list with one non null element', function() {
+                    var listNode = new NullableStringTypedListNode(owner, { list: [ 'wadus' ] });
+                    assert.deepEqual(listNode.list, [ 'wadus' ] );
+                });
+
+                it('should work for list with one null element', function() {
+                    var listNode = new NullableStringTypedListNode(owner, { list: [ null ] });
+                    assert.deepEqual(listNode.list, [ null ] );
+                });
+
+                it('should work for list with mixed null and string elements', function() {
+                    var listNode = new NullableStringTypedListNode(owner, { list: [ null, 'wadus' ] });
+                    assert.deepEqual(listNode.list, [ null, 'wadus' ] );
+                });
+
+                it('still should fail for mixed arrays', function() {
+                    var listNode;
+
+                    assert.throws(
+                        function() {
+                            listNode = new NullableStringTypedListNode(owner, { list: [ null, 'wadus', 1 ] });
+                        },
+                        function(err) {
+                            assert.equal(
+                                err.message,
+                                'Invalid type for param "list", expects "array<string>" type, got `[null,"wadus",1]`'
+                            );
+                            return true;
+                        }
+                    );
+                });
             });
         });
     });
