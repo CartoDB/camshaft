@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetMeta(
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._OBS_GetMeta_exception_safe(
   geom_ref Geometry(Geometry, 4326),
   params json,
   max_timespan_rank integer DEFAULT NULL,
@@ -12,7 +12,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.OBS_GetData(
+CREATE OR REPLACE FUNCTION cdb_dataservices_client._OBS_GetData_exception_safe(
   geomvals geomval[],
   params json,
   merge boolean DEFAULT true
