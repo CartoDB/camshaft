@@ -1,7 +1,7 @@
 # Changelog
 
 
-## 0.56.0
+## 0.55.1
 Released 2017-mm-dd
 
 - Removed `target column` parameter from sequenatial routing analysis
