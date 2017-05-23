@@ -6,6 +6,8 @@ Released 2017-mm-dd
 
 - Removed `target column` parameter from sequenatial routing analysis
 - Fixed how we get `the_geom` column in all the routing functions
+- Do not lose original geometries from source when DO does not have data to enrich
+- Use `exception-safe` wrappers for `data-observatory-*` nodes
 
 
 ## 0.55.0
