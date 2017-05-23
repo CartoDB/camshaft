@@ -5,7 +5,7 @@ CREATE OR REPLACE FUNCTION cdb_dataservices_client._cdb_route_with_waypoints_exc
   units text DEFAULT 'kilometers',
   OUT duration integer,
   OUT length real,
-  OUT the_geom geometry)
+  OUT shape geometry)
 AS $$
   SELECT
     trunc(random() * 1000)::integer duration,
