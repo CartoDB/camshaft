@@ -2,7 +2,7 @@
 
 
 ## 0.55.1
-Released 2017-mm-dd
+Released 2017-05-23
 
 - Removed `target column` parameter from sequenatial routing analysis
 - Fixed how we get `the_geom` column in all the routing functions
