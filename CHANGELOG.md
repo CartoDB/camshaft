@@ -1,7 +1,9 @@
 # Changelog
 
 ## 0.55.2
-Released 2017-mm-dd
+Released 2017-05-24
+
+- Fixed issue when passing null as string param ("null") to get metadata from DO.
 
 
 ## 0.55.1
