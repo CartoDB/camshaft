@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.55.3
-Released 2017-mm-dd
+Released 2017-06-06
 
 - Fix issue to not lose original geometries from source when DO does not have data to enrich in legacy DO node analysis #308
 
