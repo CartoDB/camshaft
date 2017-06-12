@@ -464,6 +464,49 @@ var lineToColumnDefinition = {
 };
 
 var examples = {
+    tt: {
+        name: '1000x-tt',
+        def: {
+            type: 'tt-aggregate-intersection',
+            params: {
+                points_source: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from tt_nytdq',
+                        filters: {
+                            fare_amount: {
+                                type: 'range',
+                                column: 'fare_amount',
+                                params: {
+                                    max: 10
+                                }
+                            }
+                        }
+                    }
+                },
+                polygons_target: {
+                    type: 'source',
+                    params: {
+                        query: 'select * from taxi_zones'
+                    }
+                },
+                aggregate_function: 'sum',
+                aggregate_column: 'fare_amount'
+            }
+        },
+        cartocss: [
+            '#layer {',
+            '  polygon-fill: ramp([sum_fare_amount], colorbrewer(Reds));',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.74790720968899, -73.97935867309569],
+        zoom: 12
+    },
     deprecated_function: {
         /**
          * This requires to have a function like:
