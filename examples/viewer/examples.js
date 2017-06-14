@@ -464,6 +464,32 @@ var lineToColumnDefinition = {
 };
 
 var examples = {
+    tt_points: {
+        name: '1000x-tt',
+        def: {
+            type: 'source',
+            params: {
+                query: 'select * from tt_nytdq',
+                filters: {
+                    fare_amount: {
+                        type: 'range',
+                        column: 'fare_amount',
+                        params: {
+                            max: 10
+                        }
+                    }
+                }
+            }
+        },
+        cartocss: [
+            '#layer {',
+            '  dot-fill: ramp([fare_amount], colorbrewer(Reds));',
+            '  dot-width: 2;',
+            '}'
+        ].join('\n'),
+        center: [40.74790720968899, -73.97935867309569],
+        zoom: 12
+    },
     tt: {
         name: '1000x-tt',
         def: {
