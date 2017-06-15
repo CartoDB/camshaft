@@ -1,7 +1,9 @@
 # Changelog
 
 ## 0.55.4
-Released 2017-mm-dd
+Released 2017-06-14
+
+- Fixed issue to filter NULL geometries in the DO node queries because could cause errors in the data calculation from DO #312
 
 
 ## 0.55.3
