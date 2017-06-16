@@ -1,12 +1,12 @@
 # Changelog
 
 ## 0.55.5
-Released 2017-mm-dd
+Released 2017-06-16
 
-
+- Revert change in the DO analysis where geomvals where moved to the _summary CTE to avoid possible problems
 
 ## 0.55.4
-Released 2017-06-14
+Released 2017-06-15
 
 - Fixed issue to filter NULL geometries in the DO node queries because could cause errors in the data calculation from DO #312
 
