@@ -6,13 +6,7 @@ var testHelper = require('../helper');
 
 describe('closest analysis', function () {
 
-    var QUERY_SOURCE = [
-        'WITH sources AS (',
-        '   select i as cartodb_id, st_setsrid(st_makepoint(i,0), 4326) as the_geom',
-        '   from generate_series(1,3) as i',
-        ')',
-        'select *, st_x(the_geom) as x, st_y(the_geom) as y from sources'
-    ].join('\n');
+    var QUERY_SOURCE = 'select * from closest_analysis_source';
     /**
      * cartodb_id,x,y
      * 1,1,0
@@ -20,19 +14,7 @@ describe('closest analysis', function () {
      * 3,3,0
      */
 
-    var QUERY_TARGET = [
-        'WITH s as (',
-        QUERY_SOURCE,
-        '),',
-        'targets AS (',
-        'select',
-        '   row_number() over() as cartodb_id,',
-        '   chr(64 + (i % 4)) as category,',
-        '   st_translate(the_geom, 0, i*.1) as the_geom',
-        'from s, generate_series(1,3) as i',
-        ')',
-        'select *, st_x(the_geom) as x, st_y(the_geom) as y from targets'
-    ].join('\n');
+    var QUERY_TARGET = 'select * from closest_analysis_target';
     /**
      * cartodb_id,category,x,y
      * 1,A,1,0.1

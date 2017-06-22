@@ -38,7 +38,8 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/table/madrid_districts.sql'),
         fs.realpathSync('./test/fixtures/table/atm_machines.sql'),
         fs.realpathSync('./test/fixtures/table/airbnb_rooms.sql'),
-        fs.realpathSync('./test/fixtures/table/postal_codes.sql')
+        fs.realpathSync('./test/fixtures/table/postal_codes.sql'),
+        fs.realpathSync('./test/fixtures/table/closest_analysis.sql')
     ];
 
     async.waterfall(
