@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.55.6
+Released 2017-06-22
+
+- Add limits for "Find closest" (nearest) analysis. See https://github.com/CartoDB/camshaft/issues/290
+
 ## 0.55.5
 Released 2017-06-16
 
