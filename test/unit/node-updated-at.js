@@ -22,8 +22,8 @@ describe('node-updated-at', function() {
     var START_TIME = new Date('1970-01-01T00:00:00.000Z');
 
     var FooSourceNode = Node.create('foo-source', { buster: Node.PARAM.STRING() }, {
-        beforeCreate: function(node) {
-            node.setUpdatedAt(START_TIME);
+        beforeCreate: function() {
+            this.setUpdatedAt(START_TIME);
         }
     });
 
