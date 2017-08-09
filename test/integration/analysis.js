@@ -71,7 +71,7 @@ describe('workflow', function() {
             Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
-                assert.ok(!err, err);
+                assert.ifError(err);
                 assert.ok(enqueueCalled);
 
                 var rootNode = analysis.getRoot();
@@ -99,7 +99,7 @@ describe('workflow', function() {
             Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
-                assert.ok(!err, err);
+                assert.ifError(err);
                 assert.ok(enqueueCalled);
 
                 var nodeBuffer = analysis.getNodes()[0];
@@ -123,7 +123,7 @@ describe('workflow', function() {
             Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
-                assert.ok(!err, err);
+                assert.ifError(err);
                 assert.ok(enqueueCalled);
                 assert.ok(invalidateQuery.match(
                     new RegExp('select cdb_invalidate_varnish\\(\'public.atm_machines\'\\)', 'i')
@@ -145,15 +145,15 @@ describe('workflow', function() {
             };
 
             Analysis.create(testConfig, doAnalysisDefinition, function(err) {
-                assert.ok(!err, err);
+                assert.ifError(err);
                 BatchClient.prototype.enqueue = enqueueFn;
                 assert.ok(enqueueCalled);
                 var expectedPreCheckQuery = [
                     'BEGIN;SET TRANSACTION READ ONLY;',
                     'SELECT cdb_dataservices_client._OBS_PreCheck(\'select * from atm_machines\',',
-                    ' \'{"numer_id": "test.numerator","denom_id": "test.denominator",',
-                    '"normalization": "prenormalized","geom_id": "test.geoids",',
-                    '"numer_timespan": "test.timespan"}\'::jsonb);COMMIT;'
+                    ' \'[{"numer_id":"test.numerator","denom_id":"test.denominator",',
+                    '"normalization":"prenormalized","geom_id":"test.geoids",',
+                    '"numer_timespan":"test.timespan"}]\'::json);COMMIT;'
                 ].join('');
                 assert.equal(lastEnqueuedQuery,expectedPreCheckQuery);
 
@@ -266,7 +266,7 @@ describe('operations', function() {
 
     it('should return two nodes', function(done) {
         Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
-            assert.ok(!err, err);
+            assert.ifError(err);
             assert.equal(analysis.getNodes().length, 2);
             done();
         });
@@ -274,7 +274,7 @@ describe('operations', function() {
 
     it('should return just one node', function(done) {
         Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
-            assert.ok(!err, err);
+            assert.ifError(err);
             assert.equal(analysis.getNodes().length, 1);
             done();
         });
