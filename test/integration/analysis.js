@@ -11,9 +11,6 @@ var Factory = require('../../lib/workflow/factory');
 var testConfig = require('../test-config');
 var testHelper = require('../helper');
 
-var testHelper = require('../helper');
-
-
 describe('workflow', function() {
 
     describe('create', function() {
