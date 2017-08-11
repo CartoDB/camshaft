@@ -7,6 +7,8 @@ var Analysis = require('../../lib/analysis');
 var BatchClient = require('../../lib/postgresql/batch-client');
 
 var testConfig = require('../test-config');
+var testHelper = require('../helper');
+var DataObservatoryMultipleMeasures = require('../../lib/node/nodes/data-observatory-multiple-measures');
 
 var testHelper = require('../helper');
 
@@ -161,6 +163,33 @@ describe('workflow', function() {
                 assert.equal(lastEnqueuedQuery,expectedPreCheckQuery);
 
                 done();
+            });
+        });
+
+        it.only('PRECHECK query should be inside a read-only transaction', function(done) {
+            var enqueueFn = BatchClient.prototype.enqueue;
+
+            var enqueueCalled = false;
+            var preCheckEnqueuedQuery = null;
+            BatchClient.prototype.enqueue = function(query, callback) {
+                enqueueCalled = true;
+                preCheckEnqueuedQuery = query[2].query;
+                return callback(null, {status: 'ok'});
+            };
+
+            DataObservatoryMultipleMeasures.prototype.preCheckQuery = function() {
+                return 'INSERT INTO airbnb_rooms VALUES (999, NULL, NULL, 100)';
+            };
+
+            Analysis.create(testConfig, doAnalysisDefinition, function(err) {
+                assert.ifError(err);
+                BatchClient.prototype.enqueue = enqueueFn;
+                assert.ok(enqueueCalled);
+                testHelper.executeQuery(preCheckEnqueuedQuery, function(err) {
+                    assert.ok(err, 'Should return error for DB write operations in precheck queries');
+                    assert.equal(err.message, 'cannot execute INSERT in a read-only transaction');
+                    done();
+                });
             });
         });
 
