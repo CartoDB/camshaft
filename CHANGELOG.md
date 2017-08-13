@@ -3,7 +3,7 @@
 ## 0.55.7
 Released 2017-mm-dd
 
-- Fixed xxx
+- Upgrade cartodb-psql to [0.10.1](https://github.com/CartoDB/node-cartodb-psql/releases/tag/0.10.1).
 
 
 ## 0.55.6
