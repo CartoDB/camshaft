@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.55.7
-Released 2017-mm-dd
+Released 2017-08-13
 
 - Upgrade cartodb-psql to [0.10.1](https://github.com/CartoDB/node-cartodb-psql/releases/tag/0.10.1).
 
