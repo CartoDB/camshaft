@@ -16,8 +16,8 @@ See [docs/INTERNALS.md](docs/INTERNALS.md).
 
 ## Dependencies
 
- * Node >=0.10
- * npm >=2.x
+ * Node >=6.x
+ * npm >=3.x
 
 ## Install
 
