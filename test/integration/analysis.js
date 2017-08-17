@@ -166,7 +166,7 @@ describe('workflow', function() {
             });
         });
 
-        it.only('PRECHECK query should be inside a read-only transaction', function(done) {
+        it('PRECHECK query should be inside a read-only transaction', function(done) {
             var enqueueFn = BatchClient.prototype.enqueue;
 
             var enqueueCalled = false;
