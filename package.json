@@ -1,6 +1,6 @@
 {
   "name": "camshaft",
-  "version": "0.55.7",
+  "version": "0.55.8",
   "description": "Analysis library to create data views from queries",
   "main": "./lib/analysis.js",
   "scripts": {
@@ -25,7 +25,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "bunyan": "1.8.1",
-    "cartodb-psql": "0.8.0",
+    "cartodb-psql": "^0.10.1",
     "debug": "^2.2.0",
     "dot": "^1.0.3",
     "request": "^2.69.0"

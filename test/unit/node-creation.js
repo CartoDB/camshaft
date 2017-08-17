@@ -300,8 +300,8 @@ describe('node-creation', function() {
     describe('Node custom validate', function() {
         var validList = [1, 2, 3, 4];
         var CustomValidationNode = Node.create('test-custom-validation', { list: Node.PARAM.ARRAY() }, {
-            beforeCreate: function(node) {
-                assert.deepEqual(node.list, validList, 'Custom validation throws this');
+            beforeCreate: function() {
+                assert.deepEqual(this.list, validList, 'Custom validation throws this');
             }
         });
 
@@ -329,8 +329,8 @@ describe('node-creation', function() {
         var ANode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING() });
         var ABNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING(), b: Node.PARAM.STRING() });
         var AIgnoredBNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING(), b: Node.PARAM.STRING() }, {
-            beforeCreate: function(node) {
-                node.ignoreParamForId('b');
+            beforeCreate: function() {
+                this.ignoreParamForId('b');
             }
         });
 

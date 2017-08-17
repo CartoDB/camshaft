@@ -8,7 +8,7 @@ CREATE OR REPLACE FUNCTION cdb_dataservices_client._OBS_GetMeta_exception_safe(
 RETURNS json
 AS $$
 BEGIN
-  RETURN '{}'::json;
+  RETURN '[]'::json;
 END;
 $$ LANGUAGE plpgsql;
 
