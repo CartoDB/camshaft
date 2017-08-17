@@ -5,10 +5,11 @@ var assert = require('assert');
 var Analysis = require('../../lib/analysis');
 
 var BatchClient = require('../../lib/postgresql/batch-client');
+var Node = require('../../lib/node/node');
+var Factory = require('../../lib/workflow/factory');
 
 var testConfig = require('../test-config');
 var testHelper = require('../helper');
-var DataObservatoryMultipleMeasures = require('../../lib/node/nodes/data-observatory-multiple-measures');
 
 var testHelper = require('../helper');
 
@@ -38,19 +39,6 @@ describe('workflow', function() {
                 time: TRADE_AREA_15M,
                 isolines: ISOLINES,
                 dissolved: DISSOLVED
-            }
-        };
-
-        var doAnalysisDefinition = {
-            type: 'data-observatory-multiple-measures',
-            params: {
-                source: sourceAnalysisDefinition,
-                numerators: ['test.numerator'],
-                normalizations: ['prenormalized'],
-                denominators: ['test.denominator'],
-                geom_ids: ['test.geoids'],
-                numerator_timespans: ['test.timespan'],
-                column_names: ['test_column']
             }
         };
 
@@ -138,61 +126,47 @@ describe('workflow', function() {
             });
         });
 
-        it('should execute PRECHECK query if defined in the analysis node', function(done) {
-            var enqueueFn = BatchClient.prototype.enqueue;
-
-            var enqueueCalled = false;
-            var lastEnqueuedQuery = null;
-            BatchClient.prototype.enqueue = function(query, callback) {
-                enqueueCalled = true;
-                lastEnqueuedQuery = query[2].query;
-                return callback(null, {status: 'ok'});
+        it('PRECHECK query should be inside a read-only transaction', function(done) {
+            var TEST_SOURCE_TYPE = 'test-source';
+            var TestSource = Node.create(TEST_SOURCE_TYPE, {
+                table: Node.PARAM.STRING()
+            }, {cache: true});
+            TestSource.prototype.sql = function() {
+                return 'select * from ' + this.table;
+            };
+            TestSource.prototype.preCheckQuery = function() {
+                return 'INSERT INTO ' + this.table + ' VALUES (999, NULL, NULL, 100)';
             };
 
-            Analysis.create(testConfig, doAnalysisDefinition, function(err) {
-                assert.ifError(err);
-                BatchClient.prototype.enqueue = enqueueFn;
-                assert.ok(enqueueCalled);
-                var expectedPreCheckQuery = [
-                    'BEGIN;SET TRANSACTION READ ONLY;',
-                    'SELECT cdb_dataservices_client._OBS_PreCheck(\'select * from atm_machines\',',
-                    ' \'[{"numer_id":"test.numerator","denom_id":"test.denominator",',
-                    '"normalization":"prenormalized","geom_id":"test.geoids",',
-                    '"numer_timespan":"test.timespan"}]\'::json);COMMIT;'
-                ].join('');
-                assert.equal(lastEnqueuedQuery,expectedPreCheckQuery);
+            var supportsTypeFn = Factory.prototype._supportsType;
+            var getNodeClassFn = Factory.prototype.getNodeClass;
 
+            Factory.prototype._supportsType = function() {
+                return true;
+            };
+
+            Factory.prototype.getNodeClass = function() {
+                return TestSource;
+            };
+
+            var definition = {
+                type: TEST_SOURCE_TYPE,
+                params: {
+                    table: 'airbnb_rooms'
+                }
+            };
+            var config = testConfig.create({ batch: { inlineExecution: true } });
+            testHelper.createAnalyses(definition, config, function(err, analysis) {
+                Factory.prototype._supportsType = supportsTypeFn;
+                Factory.prototype.getNodeClass = getNodeClassFn;
+                assert.ifError(err);
+                assert.equal(
+                    analysis.getRoot().getErrorMessage(),
+                    'cannot execute INSERT in a read-only transaction'
+                );
                 done();
             });
         });
-
-        it('PRECHECK query should be inside a read-only transaction', function(done) {
-            var enqueueFn = BatchClient.prototype.enqueue;
-
-            var enqueueCalled = false;
-            var preCheckEnqueuedQuery = null;
-            BatchClient.prototype.enqueue = function(query, callback) {
-                enqueueCalled = true;
-                preCheckEnqueuedQuery = query[2].query;
-                return callback(null, {status: 'ok'});
-            };
-
-            DataObservatoryMultipleMeasures.prototype.preCheckQuery = function() {
-                return 'INSERT INTO airbnb_rooms VALUES (999, NULL, NULL, 100)';
-            };
-
-            Analysis.create(testConfig, doAnalysisDefinition, function(err) {
-                assert.ifError(err);
-                BatchClient.prototype.enqueue = enqueueFn;
-                assert.ok(enqueueCalled);
-                testHelper.executeQuery(preCheckEnqueuedQuery, function(err) {
-                    assert.ok(err, 'Should return error for DB write operations in precheck queries');
-                    assert.equal(err.message, 'cannot execute INSERT in a read-only transaction');
-                    done();
-                });
-            });
-        });
-
 
         it('should fail for invalid types', function(done) {
             var analysisType = 'wadus';
