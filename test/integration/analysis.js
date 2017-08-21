@@ -8,6 +8,9 @@ var BatchClient = require('../../lib/postgresql/batch-client');
 
 var testConfig = require('../test-config');
 
+var testHelper = require('../helper');
+
+
 describe('workflow', function() {
 
     describe('create', function() {
@@ -150,6 +153,33 @@ describe('workflow', function() {
                 done();
             });
         });
+
+        it('should have different cartodb_id using multiple isolines', function(done) {
+            const definition = {
+                type: 'buffer',
+                params: {
+                    source: {
+                        type: 'source',
+                        params: {
+                            query:  QUERY_ATM_MACHINES
+                        },
+                    },
+                    isolines: ISOLINES,
+                    dissolved: DISSOLVED,
+                    radius: 100
+                }
+            };
+            
+            testHelper.getResult(definition, function (err, rows) {
+                assert.ok(!err, err);
+                assert.ok(rows.length > 0, true);
+                
+                testHelper.checkCartodbIdIsUnique(rows);
+                
+                done();
+            });
+        });
+    
 
         describe('augment error info with node_id provided by client', function () {
             it('for unknown analysis error', function (done) {
