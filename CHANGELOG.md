@@ -1,7 +1,14 @@
 # Changelog
 
-## 0.55.8
+
+## 0.55.9
 Released 2017-mm-dd
+
+
+## 0.55.8
+Released 2017-08-22
+
+- Ensure unique cartodb using multiple isolines in analysis. See https://github.com/CartoDB/cartodb/issues/11916
 
 
 ## 0.55.7
