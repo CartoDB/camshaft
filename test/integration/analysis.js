@@ -5,8 +5,11 @@ var assert = require('assert');
 var Analysis = require('../../lib/analysis');
 
 var BatchClient = require('../../lib/postgresql/batch-client');
+var Node = require('../../lib/node/node');
+var Factory = require('../../lib/workflow/factory');
 
 var testConfig = require('../test-config');
+var testHelper = require('../helper');
 
 var testHelper = require('../helper');
 
@@ -61,9 +64,9 @@ describe('workflow', function() {
             Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
+                assert.ifError(err);
                 assert.ok(enqueueCalled);
 
-                assert.ok(!err, err);
                 var rootNode = analysis.getRoot();
                 assert.ok(analysis.getQuery().match(new RegExp('select\\s\\*\\sfrom ' + rootNode.getTargetTable())));
 
@@ -89,8 +92,8 @@ describe('workflow', function() {
             Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
+                assert.ifError(err);
                 assert.ok(enqueueCalled);
-                assert.ok(!err, err);
 
                 var nodeBuffer = analysis.getNodes()[0];
                 assert.ok(lastEnqueuedQuery.match(new RegExp('ANALYZE ' + nodeBuffer.getTargetTable() + ';')));
@@ -113,8 +116,8 @@ describe('workflow', function() {
             Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
+                assert.ifError(err);
                 assert.ok(enqueueCalled);
-                assert.ok(!err, err);
                 assert.ok(invalidateQuery.match(
                     new RegExp('select cdb_invalidate_varnish\\(\'public.atm_machines\'\\)', 'i')
                 ));
@@ -123,6 +126,47 @@ describe('workflow', function() {
             });
         });
 
+        it('PRECHECK query should be inside a read-only transaction', function(done) {
+            var TEST_SOURCE_TYPE = 'test-source';
+            var TestSource = Node.create(TEST_SOURCE_TYPE, {
+                table: Node.PARAM.STRING()
+            }, {cache: true});
+            TestSource.prototype.sql = function() {
+                return 'select * from ' + this.table;
+            };
+            TestSource.prototype.preCheckQuery = function() {
+                return 'INSERT INTO ' + this.table + ' VALUES (999, NULL, NULL, 100)';
+            };
+
+            var supportsTypeFn = Factory.prototype._supportsType;
+            var getNodeClassFn = Factory.prototype.getNodeClass;
+
+            Factory.prototype._supportsType = function() {
+                return true;
+            };
+
+            Factory.prototype.getNodeClass = function() {
+                return TestSource;
+            };
+
+            var definition = {
+                type: TEST_SOURCE_TYPE,
+                params: {
+                    table: 'airbnb_rooms'
+                }
+            };
+            var config = testConfig.create({ batch: { inlineExecution: true } });
+            testHelper.createAnalyses(definition, config, function(err, analysis) {
+                Factory.prototype._supportsType = supportsTypeFn;
+                Factory.prototype.getNodeClass = getNodeClassFn;
+                assert.ifError(err);
+                assert.equal(
+                    analysis.getRoot().getErrorMessage(),
+                    'cannot execute INSERT in a read-only transaction'
+                );
+                done();
+            });
+        });
 
         it('should fail for invalid types', function(done) {
             var analysisType = 'wadus';
@@ -255,7 +299,7 @@ describe('operations', function() {
 
     it('should return two nodes', function(done) {
         Analysis.create(testConfig, tradeAreaAnalysisDefinition, function(err, analysis) {
-            assert.ok(!err, err);
+            assert.ifError(err);
             assert.equal(analysis.getNodes().length, 2);
             done();
         });
@@ -263,7 +307,7 @@ describe('operations', function() {
 
     it('should return just one node', function(done) {
         Analysis.create(testConfig, sourceAnalysisDefinition, function(err, analysis) {
-            assert.ok(!err, err);
+            assert.ifError(err);
             assert.equal(analysis.getNodes().length, 1);
             done();
         });
