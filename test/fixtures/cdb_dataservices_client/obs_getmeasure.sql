@@ -8,6 +8,9 @@ CREATE OR REPLACE FUNCTION cdb_dataservices_client._OBS_GetMeta_exception_safe(
 RETURNS json
 AS $$
 BEGIN
+  IF json_array_length(params) > 0 AND params->0->>'numer_id' = 'test.cast.text' THEN
+    RETURN '[{"numer_id": "test.cast.text", "numer_type": "Text"}]'::json;
+  END IF;
   RETURN '[]'::json;
 END;
 $$ LANGUAGE plpgsql;

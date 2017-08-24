@@ -144,4 +144,34 @@ describe('data-observatory-multiple-measures analysis', function() {
             return done();
         });
     });
+
+    it('should cast columns based on OBS_GetMeta result', function (done) {
+        const numerators = ['test.cast.text', 'es.ine.t1_1'];
+        const normalizations = ['denominated', 'denominated'];
+        const columnNames = ['text_col', 'numeric_col'];
+
+        const def = doMultipleMeasuresDefinition({
+            numerators: numerators,
+            normalizations: normalizations,
+            denominators: [null, null],
+            geom_ids: [null, null],
+            numerator_timespans: [null, null],
+            columnNames: columnNames
+        });
+
+        testHelper.createAnalyses(def, (err, analysisResult) => {
+            assert.ifError(err);
+            testHelper.executeQuery(analysisResult.getRoot().getQuery(), (err, result) => {
+                assert.ifError(err);
+
+                const textColField = result.fields.find(field => field.name === 'text_col');
+                const numericColField = result.fields.find(field => field.name === 'numeric_col');
+
+                assert.equal(textColField.type, 'string');
+                assert.equal(numericColField.type, 'number');
+
+                return done();
+            });
+        });
+    });
 });

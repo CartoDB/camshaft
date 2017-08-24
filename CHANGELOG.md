@@ -1,14 +1,16 @@
 # Changelog
 
-## 0.56.1
-Released 2017-mm-dd
+## 0.57.0
+Released 2017-08-24
 
+- Add beforeCreate hook for the analysis in order to let the analyses execute some arbitrary
+  async function at instantiation time. See https://github.com/CartoDB/camshaft/pull/326
 
 ## 0.56.0
 Released 2017-08-23
 
-- Add precheck and preexecute hooks for the analysis in order to let the analyses execute some arbitrary
-  condition at instantiation and execution time. See https://github.com/CartoDB/camshaft/pull/317
+- Add preexecute hooks for the analysis in order to let the analyses execute some arbitrary
+  condition at execution time. See https://github.com/CartoDB/camshaft/pull/317
 
 
 ## 0.55.8

@@ -11,9 +11,6 @@ var Factory = require('../../lib/workflow/factory');
 var testConfig = require('../test-config');
 var testHelper = require('../helper');
 
-var testHelper = require('../helper');
-
-
 describe('workflow', function() {
 
     describe('create', function() {
@@ -213,17 +210,17 @@ describe('workflow', function() {
                     radius: 100
                 }
             };
-            
+
             testHelper.getResult(definition, function (err, rows) {
                 assert.ok(!err, err);
                 assert.ok(rows.length > 0, true);
-                
+
                 testHelper.checkCartodbIdIsUnique(rows);
-                
+
                 done();
             });
         });
-    
+
 
         describe('augment error info with node_id provided by client', function () {
             it('for unknown analysis error', function (done) {
