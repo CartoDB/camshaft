@@ -22,7 +22,7 @@ _cdb_analysis_isochrones_spread AS (
 SELECT
   row_number() over() as cartodb_id,
   data_range,
-  ST_Union(the_geom) the_geom
+  ST_Union(ST_CollectionExtract(ST_MakeValid(the_geom), 3)) the_geom
 FROM
   _cdb_analysis_isochrones_spread
 GROUP BY data_range
