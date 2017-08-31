@@ -1,7 +1,14 @@
 # Changelog
 
-## 0.57.1
-Released 2017-mm-dd
+## 0.58.0
+Released 2017-08-31
+
+- Changes in limits (https://github.com/CartoDB/camshaft/pull/327)
+  - Added new kind of limit that takes into account numer of input rows multiplied
+    by the number of possible categories
+  - Added logging for all the limit errors
+  - Change the closest analysis limit to take into account the following formula
+    number of imput rows * categories * number of results.
 
 
 ## 0.57.0
