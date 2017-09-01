@@ -1,7 +1,10 @@
 # Changelog
 
 ## 0.58.1
-Released 2017-mm-dd
+Released 2017-09-01
+
+- Fixed postal geocoding analysis making it use points as the default output geometry
+  which has far better coverage
 
 
 ## 0.58.0
