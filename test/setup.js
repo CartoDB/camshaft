@@ -11,6 +11,7 @@ var async = require('async');
 var debug = require('../lib/util/debug')('test-setup');
 
 var DATABASE_NAME = testConfig.db.dbname;
+var DATABASE_USER = testConfig.db.user;
 
 before(function setupTestDatabase(done) {
     var fixturePaths = [
@@ -46,17 +47,17 @@ before(function setupTestDatabase(done) {
     async.waterfall(
         [
             function dropDatabaseIfExists(callback) {
-                exec('dropdb ' + DATABASE_NAME, function(/*ignore error*/) {
+                exec('dropdb -U ' + DATABASE_USER + ' ' + DATABASE_NAME, function(/*ignore error*/) {
                     return callback(null);
                 });
             },
             function createDatabase(callback) {
-                exec('createdb -EUTF8 ' + DATABASE_NAME, callback);
+                exec('createdb -U ' + DATABASE_USER + ' -EUTF8 ' + DATABASE_NAME, callback);
             },
             function applyFixtures(stdout, stderr, callback) {
                 async.eachSeries(fixturePaths, function (path, callback) {
                     debug('Loading SQL script: %s', path);
-                    exec('psql -d ' + DATABASE_NAME + ' -f ' + path, callback);
+                    exec('psql -U ' + DATABASE_USER + ' -d ' + DATABASE_NAME + ' -f ' + path, callback);
                 }, callback);
             }
         ],
