@@ -99,18 +99,9 @@ describe('aggregate-intersection analysis', function() {
                 aggregate_column: UNIQUE_COLUMN
             }
         };
-        var countRoomsAnalysisDefinition2 = {
-            type: 'aggregate-intersection',
-            params: {
-                source: countRoomsAnalysisDefinition,
-                target: sourceAirbnbRooms,
-                aggregate_function: COUNT_FUNCTION,
-                aggregate_column: UNIQUE_COLUMN
-            }
-        };
 
         it('should create an analysis and get reaggregations with their counted rooms', function (done) {
-            testHelper.createAnalyses(countRoomsAnalysisDefinition2, function(err, countRoomsAnalysis) {
+            testHelper.createAnalyses(countRoomsAnalysisDefinition, function(err, countRoomsAnalysis) {
                 assert.ifError(err);
 
                 var rootNode = countRoomsAnalysis.getRoot();
@@ -140,9 +131,18 @@ describe('aggregate-intersection analysis', function() {
                 aggregate_column: UNIQUE_COLUMN
             }
         };
+        var countRoomsAnalysisDefinition2 = {
+            type: 'aggregate-intersection',
+            params: {
+                source: countRoomsAnalysisDefinition,
+                target: sourceAirbnbRooms,
+                aggregate_function: COUNT_FUNCTION,
+                aggregate_column: UNIQUE_COLUMN
+            }
+        };
 
         it('should create not fail because of duplicate column names', function (done) {
-            testHelper.createAnalyses(countRoomsAnalysisDefinition, function(err, countRoomsAnalysis) {
+            testHelper.createAnalyses(countRoomsAnalysisDefinition2, function(err, countRoomsAnalysis) {
                 assert.ifError(err);
 
                 var rootNode = countRoomsAnalysis.getRoot();
