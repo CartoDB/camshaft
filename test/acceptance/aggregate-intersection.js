@@ -99,8 +99,49 @@ describe('aggregate-intersection analysis', function() {
                 aggregate_column: UNIQUE_COLUMN
             }
         };
+        var countRoomsAnalysisDefinition2 = {
+            type: 'aggregate-intersection',
+            params: {
+                source: countRoomsAnalysisDefinition,
+                target: sourceAirbnbRooms,
+                aggregate_function: COUNT_FUNCTION,
+                aggregate_column: UNIQUE_COLUMN
+            }
+        };
 
-        it('should create an analysis and get districts with their counted rooms', function (done) {
+        it('should create an analysis and get reaggregations with their counted rooms', function (done) {
+            testHelper.createAnalyses(countRoomsAnalysisDefinition2, function(err, countRoomsAnalysis) {
+                assert.ifError(err);
+
+                var rootNode = countRoomsAnalysis.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    rows.forEach(function(row) {
+                        assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.the_geom === 'string');
+                        assert.ok(typeof row.count_vals === 'number');
+                    });
+
+                    return done();
+                });
+            });
+        });
+    });
+
+
+    describe('chained analysis', function  () {
+        var countRoomsAnalysisDefinition = {
+            type: 'aggregate-intersection',
+            params: {
+                source: sourceAirbnbRooms,
+                target: sourceMadridDistrict,
+                aggregate_function: COUNT_FUNCTION,
+                aggregate_column: UNIQUE_COLUMN
+            }
+        };
+
+        it('should create not fail because of duplicate column names', function (done) {
             testHelper.createAnalyses(countRoomsAnalysisDefinition, function(err, countRoomsAnalysis) {
                 assert.ifError(err);
 
