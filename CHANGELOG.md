@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.59.0
+Released 2017-mm-dd
+
+- Allow zoom, x, y, bbox query variables.
+
+
 ## 0.58.1
 Released 2017-09-01
 

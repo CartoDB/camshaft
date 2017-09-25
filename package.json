@@ -1,6 +1,6 @@
 {
   "name": "camshaft",
-  "version": "0.58.1",
+  "version": "0.59.0",
   "description": "Analysis library to create data views from queries",
   "main": "./lib/analysis.js",
   "scripts": {
