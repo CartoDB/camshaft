@@ -150,9 +150,9 @@ describe('aggregate-intersection analysis', function() {
                 testHelper.getRows(rootNode.getQuery(), function(err, rows) {
                     assert.ifError(err);
                     rows.forEach(function(row) {
-                        assert.ok(typeof row.cartodb_id === 'number');
-                        assert.ok(typeof row.the_geom === 'string');
-                        assert.ok(typeof row.count_vals === 'number');
+                        assert.equal(typeof row.cartodb_id, 'number');
+                        assert.equal(typeof row.the_geom, 'string');
+                        assert.equal(typeof row.count_vals, 'number');
                     });
 
                     return done();
