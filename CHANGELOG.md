@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.59.1
+Released 2017-09-25
+
+- Fix duplicate column names in aggregate-intersection
+
 ## 0.59.0
 Released 2017-09-25
 
