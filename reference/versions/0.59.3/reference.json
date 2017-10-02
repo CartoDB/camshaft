@@ -438,11 +438,11 @@
                 "column": {
                     "type": "string"
                 },
-                "minOrEqual": {
+                "min_or_equal": {
                     "type": "number",
                     "optional": true
                 },
-                "maxOrEqual": {
+                "max_or_equal": {
                     "type": "number",
                     "optional": true
                 },
