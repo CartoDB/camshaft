@@ -60,7 +60,8 @@ describe('filter-range', function() {
             function(err) {
                 assert.equal(
                     err.message,
-                    'Range filter expect to have at least one value in min_or_equal, max_or_equal, min, or max numeric params'
+                    'Range filter expect to have at least one value in min_or_equal, max_or_equal, min, or max ' +
+                    'numeric params'
                 );
                 return true;
             }
