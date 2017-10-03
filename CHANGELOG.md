@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.59.2
-Released 2017-mm-dd
+Released 2017-10-03
 
 - Upgrade debug to 3.x.
 
