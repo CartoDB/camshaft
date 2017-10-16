@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.59.3
+Released 2017-10-16
+
+- Extended filter-range analyses, splitting "is greater than", and "is less than" with inclusive and exclusive options
+
 ## 0.59.2
 Released 2017-10-03
 

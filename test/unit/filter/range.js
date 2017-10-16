@@ -17,8 +17,42 @@ describe('range-filter', function () {
         });
     });
 
-    describe('with min value', function () {
+    describe('with min_or_equal value', function () {
         var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age >= 18';
+
+        beforeEach(function () {
+            this.column = { name: 'age' };
+            this.filterParams = {
+                min_or_equal: 18
+            };
+            this.range = new Range(this.column, this.filterParams);
+        });
+
+        it('should retrieve a filtered query', function() {
+            var rangeSql = this.range.sql('select age from population');
+            assert.equal(rangeSql, EXPECTED_RANGE_SQL);
+        });
+    });
+
+    describe('with max_or_equal value', function () {
+        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age <= 65';
+
+        beforeEach(function () {
+            this.column = { name: 'age' };
+            this.filterParams = {
+                max_or_equal: 65
+            };
+            this.range = new Range(this.column, this.filterParams);
+        });
+
+        it('should retrieve a filtered query', function() {
+            var rangeSql = this.range.sql('select age from population');
+            assert.equal(rangeSql, EXPECTED_RANGE_SQL);
+        });
+    });
+
+    describe('with min value', function () {
+        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age > 18';
 
         beforeEach(function () {
             this.column = { name: 'age' };
@@ -35,7 +69,7 @@ describe('range-filter', function () {
     });
 
     describe('with max value', function () {
-        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age <= 65';
+        var EXPECTED_RANGE_SQL = 'SELECT * FROM (select age from population) _camshaft_range_filter WHERE age < 65';
 
         beforeEach(function () {
             this.column = { name: 'age' };
