@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.59.5
+Released 2017-mm-dd
+
 ## 0.59.4
 Released 2017-10-18
 
