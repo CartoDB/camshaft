@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.59.4
+Released 2017-10-18
+
+- Extended filter-range analyses with new params:
+  - greater than or equal (equivalent to min)
+  - less than or equal (equivalent to max)
+
 ## 0.59.3
 Released 2017-10-16
 
