@@ -13,7 +13,6 @@ _cdb_analysis_isochrones AS (
   FROM _cdb_analysis_source_points
 )
 SELECT
-  (isochrone).center,
   (isochrone).data_range,
   (isochrone).the_geom,
   {{=it.columnsQuery}}
