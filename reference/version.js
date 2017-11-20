@@ -1,19 +1,19 @@
 'use strict';
 
 var versions = require('./versions');
-var availableVersions = Object.keys(versions).filter(function(version) {
-    return version !== 'latest';
-});
 
 module.exports.getVersion = function (version) {
-    if (!versions.hasOwnProperty(version)) {
+    if (version === 'latest') {
+      version = versions[versions.length - 1];
+    }
+    else if (!versions.includes(version)) {
         throw new Error(
                 'Invalid camshaft-reference version: "' + version + '". ' +
-                'Valid versions are: ' + availableVersions.join(', ') + '.'
+                'Valid versions are: ' + versions.join(', ') + '.'
         );
     }
 
-    return versions[version];
+    return require('./versions/' + version + '/reference.json');
 };
 
-module.exports.versions = availableVersions;
+module.exports.versions = versions;
