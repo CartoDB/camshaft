@@ -1,4 +1,4 @@
-var versions = [
+module.exports.versions = [
   '0.1.0',
   '0.2.0',
   '0.3.0',
@@ -40,4 +40,4 @@ var versions = [
   '0.59.4'
 ];
 
-module.exports = versions;
+module.exports.target = '0.59.4';

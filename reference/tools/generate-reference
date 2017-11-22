@@ -64,14 +64,14 @@ var allVersions = existingVersions.map(function(version) {
 }).join(',\n');
 
 var VERSIONS_TEMPLATE = [
-    'var versions = [',
+    'module.exports.versions = [',
     '%s',
     '];',
     '',
-    'module.exports = versions;',
+    'module.exports.target = \'%s\';',
     ''
 ].join('\n');
-var versionsFileContents = util.format(VERSIONS_TEMPLATE, allVersions);
+var versionsFileContents = util.format(VERSIONS_TEMPLATE, allVersions, targetVersion);
 fs.writeFileSync('./versions/index.js', versionsFileContents, {encoding: 'utf8'});
 
 
