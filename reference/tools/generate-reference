@@ -30,7 +30,7 @@ var existingVersions = fs.readdirSync('./versions').filter(function(path) {
     return fs.statSync('./versions/' + path).isDirectory();
 }).sort(semver.compare);
 if (existingVersions.length > 0) {
-    console.info('Existing versions are: %s.', existingVersions.join(', '));
+    console.info('Existing versions are: %s', existingVersions.join(', '));
 }
 
 var reference = require('../current-reference');
@@ -55,26 +55,24 @@ var targetVersionReferencePath = targetVersionPath + '/reference.json';
 fs.writeFileSync(targetVersionReferencePath, JSON.stringify(reference, null, 4), {encoding: 'utf8'});
 console.info('Reference file "%s" %s.', targetVersionReferencePath, (targetVersionPathExists ? 'updated' : 'created'));
 
-var VERSION_TEMPLATE = '    "%s": require("./%s/reference.json")';
+var VERSION_TEMPLATE = '  \'%s\'';
 if (!targetVersionPathExists) {
     existingVersions.push(targetVersion);
 }
 var allVersions = existingVersions.map(function(version) {
-    return util.format(VERSION_TEMPLATE, version, version);
+    return util.format(VERSION_TEMPLATE, version);
 }).join(',\n');
 
 var VERSIONS_TEMPLATE = [
-    'var versions = {',
+    'var versions = [',
     '%s',
-    '};',
+    '];',
     '',
-    'versions.latest = versions["%s"];',
-
     'module.exports = versions;',
     ''
 ].join('\n');
-var versionsFileContents = util.format(VERSIONS_TEMPLATE, allVersions, targetVersion);
+var versionsFileContents = util.format(VERSIONS_TEMPLATE, allVersions);
 fs.writeFileSync('./versions/index.js', versionsFileContents, {encoding: 'utf8'});
 
 
-console.info('New versions are     : %s.', existingVersions.join(', '));
+console.info('New versions are : %s', existingVersions.join(', '));
