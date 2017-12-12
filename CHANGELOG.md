@@ -1,7 +1,9 @@
 # Changelog
 
-## 0.59.5
-Released 2017-mm-dd
+## 0.60.0
+Released 2017-12-12
+ - Using a partial index over the geometry column of the cached table #346.
+
 
 ## 0.59.4
 Released 2017-10-18
