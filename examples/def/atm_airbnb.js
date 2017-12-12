@@ -21,7 +21,9 @@ var tradeAreaDefinition = {
     params: {
         source: sourceAtmDef,
         kind: TRADE_AREA_WALK,
-        time: TRADE_AREA_15M
+        time: TRADE_AREA_15M,
+        isolines: 1,
+        dissolved: false
     }
 };
 

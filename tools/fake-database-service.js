@@ -20,7 +20,10 @@ FakeDatabaseService.prototype = {
     },
 
     getMetadataFromAffectedTables: function(node, skip, callback) {
-        return callback(null, 0);
+        return callback(null, {
+            last_update: 0,
+            affected_tables: []
+        });
     },
 
     queueAnalysisOperations: function(analysis, callback) {
