@@ -57,7 +57,12 @@ before(function setupTestDatabase(done) {
             function applyFixtures(stdout, stderr, callback) {
                 async.eachSeries(fixturePaths, function (path, callback) {
                     debug('Loading SQL script: %s', path);
-                    exec('psql -U ' + DATABASE_USER + ' -d ' + DATABASE_NAME + ' -f ' + path, callback);
+                    exec('psql -U ' + DATABASE_USER + ' -d ' + DATABASE_NAME + ' -f ' + path, (err, stdout, stderr) => {
+                        if (stderr && stderr.match(/ERROR/i)) {
+                            return callback(new Error(stderr));
+                        }
+                        return callback(err);
+                    });
                 }, callback);
             }
         ],
