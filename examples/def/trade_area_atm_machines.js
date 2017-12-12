@@ -16,7 +16,8 @@ var tradeAreaDefinition = {
         source: sourceAtmDef,
         kind: TRADE_AREA_WALK,
         time: TRADE_AREA_TIME,
-        isolines: ISOLINES
+        isolines: ISOLINES,
+        dissolved: false
     }
 };
 
