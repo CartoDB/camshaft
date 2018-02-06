@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.61.1
-Released 2017-mm-dd
+Released 2017-02-06
+  - Revert adding the_geom_webmercator to merge node query
 
 ## 0.61.0
 Released 2017-02-02
