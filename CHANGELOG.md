@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.61.2
-Released 2017-mm-dd
+Released 2017-02-08
   - Fix: compute line-sequential length properly as geodesic distance in meters
 
 ## 0.61.1
