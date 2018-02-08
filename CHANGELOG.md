@@ -2,6 +2,7 @@
 
 ## 0.61.2
 Released 2017-mm-dd
+  - Fix: compute line-sequential length properly as geodesic distance in meters
 
 ## 0.61.1
 Released 2017-02-06
