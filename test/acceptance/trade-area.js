@@ -46,6 +46,16 @@ describe('trade-area analysis', function() {
                 });
             });
         });
+
+        it('should return unique cartodb_ids', function (done) {
+            testHelper.getResult(tradeAreaDefinition, function(err, result) {
+                assert.ifError(err);
+                const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
+                assert.equal(uniqueIds.length, result.length);
+
+                return done();
+            });
+        });
     });
 
     describe('trade area analysis dissolved', function () {
@@ -69,8 +79,7 @@ describe('trade-area analysis', function() {
                 testHelper.getRows(rootNode.getQuery(), function(err, rows) {
                     assert.ifError(err);
                     rows.forEach(function(row) {
-                        // FIXME: should return cartodb_id
-                        // assert.ok(typeof row.cartodb_id === 'number');
+                        assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.data_range === 'number');
                     });
