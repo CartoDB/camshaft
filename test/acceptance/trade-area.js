@@ -50,10 +50,9 @@ describe('trade-area analysis', function() {
         it('should return unique cartodb_ids', function (done) {
             testHelper.getResult(tradeAreaDefinition, function(err, result) {
                 assert.ifError(err);
-                result.sort(function(a,b) {
-                    assert.ok(a.cartodb_id !== b.cartodb_id);
-                    return a.cartodb_id < b.cartodb_id;
-                });
+                const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
+                assert.equal(uniqueIds.length, result.length);
+
                 return done();
             });
         });
