@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.61.3
+Released 2017-03-12
+  - TradeArea: Make sure the output 'cartodb_id' is unique 
+
 ## 0.61.2
 Released 2017-02-08
   - Fix: compute line-sequential length properly as geodesic distance in meters
