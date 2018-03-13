@@ -9,6 +9,7 @@ var QueryParser = require('../../lib/postgresql/query-parser');
 var DatabaseService = require('../../lib/service/database');
 
 var testConfig = require('../test-config');
+var testHelper = require('../helper');
 
 describe('nodes', function() {
 
@@ -519,5 +520,36 @@ describe('nodes', function() {
                 done();
             });
         });
+
+        it('merge should return unique cartodb_ids', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'bank',
+                    right_source_column: 'bank',
+                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id'],
+                    right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
+                }
+            };
+
+            testHelper.createAnalyses(merge, function(err, results) {
+                assert.ifError(err);
+
+                var rootNode = results.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    const uniqueIds = [...new Set(rows.map(r => r.cartodb_id))];
+                    assert.equal(uniqueIds.length, rows.length);
+
+                    return done();
+                });
+            });
+
+        });
+
+
     });
 });
