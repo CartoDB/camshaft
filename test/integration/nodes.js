@@ -550,6 +550,58 @@ describe('nodes', function() {
 
         });
 
+        it('merge should allow chained merges', function(done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'bank',
+                    right_source_column: 'bank',
+                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id', 'bank'],
+                    right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
+                }
+            };
+
+            var merge2 = {
+                type: 'merge',
+                params: {
+                    left_source: merge,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'bank',
+                    right_source_column: 'bank',
+                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id', 'bank'],
+                    right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
+                }
+            };
+
+            var merge3 = {
+                type: 'merge',
+                params: {
+                    left_source: merge2,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'bank',
+                    right_source_column: 'bank',
+                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id', 'bank'],
+                    right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
+                }
+            };
+
+            testHelper.createAnalyses(merge3, function(err, results) {
+                assert.ifError(err);
+
+                var rootNode = results.getRoot();
+
+                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                    assert.ifError(err);
+                    const uniqueIds = [...new Set(rows.map(r => r.cartodb_id))];
+                    assert.equal(uniqueIds.length, rows.length);
+
+                    return done();
+                });
+            });
+        });
+
 
     });
 });

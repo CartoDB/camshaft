@@ -2,6 +2,7 @@
 ## 0.61.4
 Released 2017-03-13
   - Merge: Make sure the output 'cartodb_id' is unique
+  - Merge: Allow chained merge analyses
 
 ## 0.61.3
 Released 2017-03-12
