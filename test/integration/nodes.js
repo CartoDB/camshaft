@@ -558,7 +558,6 @@ describe('nodes', function() {
                     right_source: SOURCE_ATM_MACHINES_DEF,
                     left_source_column: 'bank',
                     right_source_column: 'bank',
-                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id', 'bank'],
                     right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
                 }
             };
@@ -568,9 +567,9 @@ describe('nodes', function() {
                 params: {
                     left_source: merge,
                     right_source: SOURCE_ATM_MACHINES_DEF,
+                    join_operator: 'left',
                     left_source_column: 'bank',
                     right_source_column: 'bank',
-                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id', 'bank'],
                     right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
                 }
             };
@@ -580,14 +579,26 @@ describe('nodes', function() {
                 params: {
                     left_source: merge2,
                     right_source: SOURCE_ATM_MACHINES_DEF,
+                    join_operator: 'right',
                     left_source_column: 'bank',
                     right_source_column: 'bank',
-                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id', 'bank'],
                     right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
                 }
             };
 
-            testHelper.createAnalyses(merge3, function(err, results) {
+            var merge4 = {
+                type: 'merge',
+                params: {
+                    left_source: merge2,
+                    right_source: merge3,
+                    join_operator: 'inner',
+                    left_source_column: 'bank',
+                    right_source_column: 'bank',
+                    right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
+                }
+            };
+
+            testHelper.createAnalyses(merge4, function(err, results) {
                 assert.ifError(err);
 
                 var rootNode = results.getRoot();
