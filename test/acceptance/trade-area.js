@@ -56,6 +56,39 @@ describe('trade-area analysis', function() {
                 return done();
             });
         });
+
+        it('should allow chained analyses', function (done) {
+            var tradeAreaDefinition2 = {
+                type: 'trade-area',
+                params: {
+                    source: tradeAreaDefinition,
+                    kind: KIND,
+                    time: TIME,
+                    isolines: ISOLINES,
+                    dissolved: false
+                }
+            };
+
+            var tradeAreaDefinition3 = {
+                type: 'trade-area',
+                params: {
+                    source: tradeAreaDefinition2,
+                    kind: KIND,
+                    time: TIME,
+                    isolines: ISOLINES,
+                    dissolved: false
+                }
+            };
+
+            testHelper.getResult(tradeAreaDefinition3, function(err, result) {
+                assert.ifError(err);
+                const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
+                assert.equal(uniqueIds.length, result.length);
+
+                return done();
+            });
+        });
+
     });
 
     describe('trade area analysis dissolved', function () {
@@ -88,5 +121,38 @@ describe('trade-area analysis', function() {
                 });
             });
         });
+
+        it('should allow chained analyses', function (done) {
+            var tradeAreaDefinition2 = {
+                type: 'trade-area',
+                params: {
+                    source: tradeAreaDefinition,
+                    kind: KIND,
+                    time: TIME,
+                    isolines: ISOLINES,
+                    dissolved: true
+                }
+            };
+
+            var tradeAreaDefinition3 = {
+                type: 'trade-area',
+                params: {
+                    source: tradeAreaDefinition2,
+                    kind: KIND,
+                    time: TIME,
+                    isolines: ISOLINES,
+                    dissolved: true
+                }
+            };
+
+            testHelper.getResult(tradeAreaDefinition3, function(err, result) {
+                assert.ifError(err);
+                const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
+                assert.equal(uniqueIds.length, result.length);
+
+                return done();
+            });
+        });
+
     });
 });
