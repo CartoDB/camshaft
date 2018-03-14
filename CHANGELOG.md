@@ -1,25 +1,29 @@
 # Changelog
+## 0.61.5
+Released 2018-XX-XX
+  -
+
 ## 0.61.4
-Released 2017-03-14
+Released 2018-03-14
   - Merge: Make sure the output 'cartodb_id' is unique
   - Merge: Allow chained merge analyses
   - TradeArea: Allow chained analyses
   - Update request to 2.85.0
 
 ## 0.61.3
-Released 2017-03-12
+Released 2018-03-12
   - TradeArea: Make sure the output 'cartodb_id' is unique
 
 ## 0.61.2
-Released 2017-02-08
+Released 2018-02-08
   - Fix: compute line-sequential length properly as geodesic distance in meters
 
 ## 0.61.1
-Released 2017-02-06
+Released 2018-02-06
   - Revert adding the_geom_webmercator to merge node query
 
 ## 0.61.0
-Released 2017-02-02
+Released 2018-02-02
   - Adding the_geom_webmercator to merge node query
 
 ## 0.60.0
