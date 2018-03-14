@@ -1,6 +1,6 @@
 {
   "name": "camshaft",
-  "version": "0.61.3",
+  "version": "0.61.4",
   "description": "Analysis library to create data views from queries",
   "main": "./lib/analysis.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "cartodb-psql": "^0.10.1",
     "debug": "^3.1.0",
     "dot": "^1.0.3",
-    "request": "^2.69.0"
+    "request": "2.85.0"
   },
   "devDependencies": {
     "cartodb-redis": "^0.13.0",
