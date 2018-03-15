@@ -1,7 +1,7 @@
 # Changelog
 ## 0.61.6
-Released 2018-XX-XX
-  -
+Released 2018-03-15
+  - Merge: Update version
 
 ## 0.61.5
 Released 2018-03-15
