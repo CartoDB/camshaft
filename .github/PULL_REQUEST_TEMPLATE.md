@@ -1,3 +1,8 @@
+For modified analyses:
+
+- [ ] If it modifies the output columns, updates the analysis version
+- [ ] Has tests to validate the result is the expected one.
+
 For new analysis use the following checklist:
 
 - [ ] Uses `the_geom geometry(Geometry, 4326)` column for all geospatial operations.
