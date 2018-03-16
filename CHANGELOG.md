@@ -1,4 +1,8 @@
 # Changelog
+## 0.61.8
+Released 2018-03-16:
+  - Republish for npm
+
 ## 0.61.7
 Released 2018-03-16:
   - Revert: `Merge: Update version` (0.61.6)
