@@ -2,7 +2,7 @@
 ## 0.61.7
 Released 2018-03-16:
   - Revert: `Merge: Update version` (0.61.6)
-
+  - Revert: `Merge: Avoid issues when mixing left and right joins` (0.61.4)
 
 ## 0.61.6
 Released 2018-03-15
