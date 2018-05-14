@@ -36,6 +36,7 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/cdb_crankshaft/cdb_mockspatialinterpolation.sql'),
         fs.realpathSync('./test/fixtures/cdb_crankshaft/cdb_gravity.sql'),
         fs.realpathSync('./test/fixtures/cdb_crankshaft/cdb_contour.sql'),
+        fs.realpathSync('./test/fixtures/cdb_crankshaft/cdb_spatialinterpolation.sql'),
 
         fs.realpathSync('./test/fixtures/table/madrid_districts.sql'),
         fs.realpathSync('./test/fixtures/table/atm_machines.sql'),
