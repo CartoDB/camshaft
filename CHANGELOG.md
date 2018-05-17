@@ -1,4 +1,8 @@
 # Changelog
+## 0.61.9
+Released 2018-05-17:
+  - Use Dollar-Quoted String Constants to avoid Syntax Error while running moran analyses.
+
 ## 0.61.8
 Released 2018-03-16:
   - Republish for npm
