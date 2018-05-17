@@ -3,7 +3,7 @@ FROM ({{=it._query}}) input_query,
 (
   SELECT * FROM
   cdb_crankshaft.CDB_AreasOfInterestLocalRate(
-    '{{=it._query}}',
+    $cdb_aoilr_source_query${{=it._query}}$cdb_aoilr_source_query$,
     '{{=it._numeratorColumn}}',
     '{{=it._denominatorColumn}}',
     '{{=it._wType}}',
