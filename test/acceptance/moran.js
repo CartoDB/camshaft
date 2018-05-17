@@ -36,7 +36,7 @@ describe('moran analysis', function () {
         }
     };
 
-    it.only('should create the moran analyses when the query uses "\'" at some point', function (done) {
+    it('should create the moran analyses when the query uses "\'" at some point', function (done) {
         testHelper.createAnalyses(moranDefinition, function(err, moran) {
             assert.ifError(err);
 
