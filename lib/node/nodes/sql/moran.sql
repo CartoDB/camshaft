@@ -2,7 +2,7 @@ SELECT input_query.*, m.quads, m.significance, m.moran, m.vals
 FROM ({{=it._query}}) input_query, (
   SELECT * FROM
   cdb_crankshaft.CDB_AreasOfInterestLocal(
-    $moran_source_query${{=it._query}}$moran_source_query$,
+    $cdb_aoil_source_query${{=it._query}}$cdb_aoil_source_query$,
     '{{=it._numeratorColumn}}',
     '{{=it._wType}}',
     {{=it._neighbours}},
