@@ -20,4 +20,4 @@ BEGIN
     EXECUTE subquery;
     SELECT 1, 'QUADS', 0.01, 1, 1;
 END
-$$ LANGUAGE plpgsql VOLATILE PARALLEL UNSAFE;
+$$ LANGUAGE plpgsql;
