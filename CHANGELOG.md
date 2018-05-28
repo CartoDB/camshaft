@@ -1,4 +1,9 @@
 # Changelog
+
+## 0.61.10
+Released 2018-05-28:
+  - Update `cartodb-psql` to 0.11.0
+
 ## 0.61.9
 Released 2018-05-17:
   - Use Dollar-Quoted String Constants to avoid Syntax Error while running moran analyses.
