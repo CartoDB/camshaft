@@ -2,7 +2,8 @@ CREATE TABLE reserved_words (
     cartodb_id integer NOT NULL,
     the_geom geometry(Geometry,4326),
     the_geom_webmercator geometry(Geometry,3857),
-    "window" text
+    "window" text,
+    "zone" text
 );
 
 ALTER TABLE ONLY reserved_words
