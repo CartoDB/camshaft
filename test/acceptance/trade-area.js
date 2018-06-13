@@ -57,6 +57,34 @@ describe('trade-area analysis', function() {
             });
         });
 
+        it('should not fail with Postgres reserved words', function (done) {
+            const QUERY = 'select * from reserved_words limit 2';
+
+            const sourceReservedWords = {
+                type: 'source',
+                params: {
+                    query: QUERY
+                }
+            };
+
+            const tradeAreaDefinition = {
+                type: 'trade-area',
+                params: {
+                    source: sourceReservedWords,
+                    kind: KIND,
+                    time: TIME,
+                    isolines: ISOLINES,
+                    dissolved: false
+                }
+            };
+
+            testHelper.getResult(tradeAreaDefinition, function (err) {
+                assert.ifError(err);
+
+                return done();
+            });
+        });
+
         it('should allow chained analyses', function (done) {
             var tradeAreaDefinition2 = {
                 type: 'trade-area',
