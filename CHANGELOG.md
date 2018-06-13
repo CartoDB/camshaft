@@ -1,4 +1,7 @@
 # Changelog
+## 0.61.11
+Released 2018-06-14:
+  - Quote name columns when performing trade area analysis to avoid Syntax Errors
 
 ## 0.61.10
 Released 2018-05-28:
