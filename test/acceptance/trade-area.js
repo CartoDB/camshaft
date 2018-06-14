@@ -58,7 +58,7 @@ describe('trade-area analysis', function() {
         });
 
         it('should not fail with Postgres reserved words', function (done) {
-            const QUERY = 'select * from reserved_words limit 2';
+            const QUERY = 'select * from postgres_special_words';
 
             const sourceReservedWords = {
                 type: 'source',

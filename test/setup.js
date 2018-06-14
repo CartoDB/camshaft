@@ -43,7 +43,7 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/table/airbnb_rooms.sql'),
         fs.realpathSync('./test/fixtures/table/postal_codes.sql'),
         fs.realpathSync('./test/fixtures/table/closest_analysis.sql'),
-        fs.realpathSync('./test/fixtures/table/postgres_reserved_words.sql')
+        fs.realpathSync('./test/fixtures/table/postgres_special_words.sql')
     ];
 
     async.waterfall(
