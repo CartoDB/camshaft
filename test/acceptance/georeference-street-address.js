@@ -6,18 +6,34 @@ var testHelper = require('../helper');
 describe('georeference-street-address analysis', function() {
 
     function quoteColumn(address, column) {
-        return '\'' + address[column] + '\'::text AS ' + column;
+        var value = address[column];
+        if(typeof value !== 'number') {
+            value = '\'' + value + '\'::text ';
+        }
+        return value + ' AS ' + column;
     }
 
-    function addressSourceNode(address) {
+    function addressQuery(address) {
         address = address || {};
-        var columns = ['1 as cartodb_id'].concat(Object.keys(address).map(function(column) {
+        if(!address.cartodb_id) {
+            address.cartodb_id = 1;
+        }
+        var columns = Object.keys(address).map(function (column) {
             return quoteColumn(address, column);
-        }));
+        });
+        return 'SELECT ' + columns.join(', ');
+    }
+
+    function addressesQuery(addressRows) {
+        var addressesQueries = addressRows.map((row) => addressQuery(row));
+        return 'select * from (' + addressesQueries.join(' union all ') + ') aqua';
+    }
+
+    function addressSourceNode(query) {
         return {
             type: 'source',
             params: {
-                query: 'SELECT ' + columns.join(', ')
+                query: query
             }
         };
     }
@@ -34,7 +50,7 @@ describe('georeference-street-address analysis', function() {
         var georeferenceStreetAddressDefinition = {
             type: 'georeference-street-address',
             params: {
-                source: addressSourceNode({street_name: ''})
+                source: addressSourceNode(addressQuery({street_name: ''}))
             }
         };
         testHelper.createAnalyses(georeferenceStreetAddressDefinition, function(err) {
@@ -50,75 +66,116 @@ describe('georeference-street-address analysis', function() {
     var scenarios = [
         {
             desc: 'column',
-            addressNode: addressSourceNode({
-                street_name: 'W 26th Street'
-            }),
             column: 'street_name',
-            x: -74.990425,
-            y: 40.744131
+            addresses: [{
+                street_name: 'W 26th Street',
+                point: {
+                    x: -74.990425,
+                    y: 40.744131
+                }
+            }]
         },
         {
             desc: 'basic template',
-            addressNode: addressSourceNode({
-                street_name: 'W 26th Street'
-            }),
             template: '{{street_name}}',
-            x: -74.990425,
-            y: 40.744131
+            addresses: [{
+                street_name: 'W 26th Street',
+                point: {
+                    x: -74.990425,
+                    y: 40.744131
+                }
+            }]
         },
         {
             desc: 'template with two columns',
-            addressNode: addressSourceNode({
-                city: 'Madrid',
-                country: 'Spain'
-            }),
             template: '{{city}}, {{country}}',
-            x: -3.669245,
-            y: 40.429913
+            addresses: [{
+                city: 'Madrid',
+                country: 'Spain',
+                point: {
+                    x: -3.669245,
+                    y: 40.429913
+                }
+            }]
         },
         {
             desc: 'template with column and free text',
-            addressNode: addressSourceNode({
-                city: 'Logroño'
-            }),
             template: '{{city}}, Argentina',
-            x: -61.69614,
-            y: -29.50347
+            addresses: [{
+                city: 'Logroño',
+                point: {
+                    x: -61.69614,
+                    y: -29.50347
+                }
+            }],
         },
         {
             desc: 'template with spaces in token',
-            addressNode: addressSourceNode({
-                city: 'Logroño'
-            }),
             template: '{{ city }}, Argentina',
-            x: -61.69614,
-            y: -29.50347
+            addresses: [{
+                city: 'Logroño',
+                point: {
+                    x: -61.69614,
+                    y: -29.50347
+                }
+            }],
         },
         {
             desc: 'with column and more free text',
-            addressNode: addressSourceNode({
-                city: 'Logroño'
-            }),
             template: '{{city}}, La Rioja, Spain',
-            x: -2.517555,
-            y: 42.302939
+            addresses: [{
+                city: 'Logroño',
+                point: {
+                    x: -2.517555,
+                    y: 42.302939
+                }
+            }]
         },
         {
             desc: 'with several columns and free text',
-            addressNode: addressSourceNode({
-                city: 'Logroño',
-                state: 'La Rioja'
-            }),
             template: '{{city}}, {{state}}, Spain',
-            x: -2.517555,
-            y: 42.302939
+            addresses: [{
+                city: 'Logroño',
+                state: 'La Rioja',
+                point: {
+                    x: -2.517555,
+                    y: 42.302939
+                }
+            }]
         },
         {
             desc: 'with only free text',
-            addressNode: addressSourceNode(),
             template: 'Logroño, La Rioja, Spain',
-            x: -2.517555,
-            y: 42.302939
+            addresses: [{
+                point: {
+                    x: -2.517555,
+                    y: 42.302939
+                }
+            }]
+        },
+        {
+            desc: 'multiple rows',
+            addresses: [
+                {
+                    cartodb_id: 1,
+                    street_name: 'W 26th Street',
+                    point:
+                        {
+                            x: -74.990425,
+                            y: 40.744131
+                        }
+                },
+                {
+                    cartodb_id: 2,
+                    street_name: '1900 amphitheatre parkway, mountain view, ca, us',
+                    point:
+                        {
+                            x: -122.0875324,
+                            y: 37.4227968
+                        }
+                }
+            ],
+            column: 'street_name'
         }
     ];
 
@@ -135,7 +192,7 @@ describe('georeference-street-address analysis', function() {
             var definition = {
                 type: 'georeference-street-address',
                 params: {
-                    source: scenario.addressNode
+                    source: addressSourceNode(addressesQuery(scenario.addresses))
                 }
             };
 
@@ -154,14 +211,21 @@ describe('georeference-street-address analysis', function() {
 
                 testHelper.getRows(wrapQueryWithXY(rootNode), function(err, rows) {
                     assert.ifError(err);
-                    assert.equal(rows.length, 1);
-                    var row = rows[0];
+                    assert.equal(rows.length, scenario.addresses.length);
+                    for(let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        const address = scenario.addresses[i];
 
-                    assert.notEqual(row.x, 0, 'X coordinate should not be default=0. Review your scenario.');
-                    assert.notEqual(row.y, 0, 'Y coordinate should not be default=0. Review your scenario.');
+                        assert.notEqual(row.x, 0, 'X coordinate should not be default=0. Review your scenario.');
+                        assert.notEqual(row.y, 0, 'Y coordinate should not be default=0. Review your scenario.');
 
-                    assert.equal(row.x, scenario.x);
-                    assert.equal(row.y, scenario.y);
+                        assert.equal(row.x, address.point.x);
+                        assert.equal(row.y, address.point.y);
+
+                        if(row.street_name) {
+                            assert.equal(row.street_name, address.street_name);
+                        }
+                    }
 
                     return done();
                 });

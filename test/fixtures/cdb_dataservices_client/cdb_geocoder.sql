@@ -112,3 +112,27 @@ RETURNS Geometry AS $$
     END;
 $$
 LANGUAGE SQL;
+
+CREATE TYPE cdb_dataservices_client.geocoding AS (
+    cartodb_id integer,
+    the_geom geometry(Multipolygon,4326),
+    metadata jsonb
+);
+
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_bulk_geocode_street_point(searchtext jsonb)
+RETURNS SETOF cdb_dataservices_client.geocoding AS $$
+SELECT
+  id,
+  CASE
+    WHEN address = 'W 26th Street' THEN ST_SetSRID(ST_MakePoint(-74.990425, 40.744131), 4326)
+    WHEN address = 'Madrid, Spain' THEN ST_SetSRID(ST_MakePoint(-3.669245, 40.429913), 4326)
+    WHEN address = 'Logroño, Argentina' THEN ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)
+    WHEN address = 'Logroño, La Rioja, Spain' THEN ST_SetSRID(ST_MakePoint(-2.517555, 42.302939), 4326)
+    WHEN address = '1900 amphitheatre parkway, mountain view, ca, us' THEN ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326)
+    ELSE ST_SetSRID(ST_MakePoint(0, 0), 4326)
+  END,
+  '{}'::jsonb
+FROM
+  jsonb_to_recordset(searchtext) as x(id integer, address text)
+$$
+LANGUAGE SQL;
