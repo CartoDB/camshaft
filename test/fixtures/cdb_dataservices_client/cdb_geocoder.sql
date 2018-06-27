@@ -115,24 +115,90 @@ LANGUAGE SQL;
 
 CREATE TYPE cdb_dataservices_client.geocoding AS (
     cartodb_id integer,
-    the_geom geometry(Multipolygon,4326),
+    the_geom geometry,
     metadata jsonb
 );
 
-CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_bulk_geocode_street_point(searchtext jsonb)
+DROP TABLE IF EXISTS geocoding_fixture;
+CREATE TABLE geocoding_fixture (the_address text, the_geom geometry(Point, 4326));
+insert into geocoding_fixture (the_address, the_geom) values
+  ('W 26th Street', ST_SetSRID(ST_MakePoint(-74.990425, 40.744131), 4326)),
+  ('street_name', ST_SetSRID(ST_MakePoint(-74.990425, 40.744131), 4326)),
+  ('Madrid, Spain', ST_SetSRID(ST_MakePoint(-3.669245, 40.429913), 4326)),
+  ('Puerta del Sol, Madrid, Spain', ST_SetSRID(ST_MakePoint(-3.669245, 40.429913), 4326)),
+  ('Puerta del Sol', ST_SetSRID(ST_MakePoint(-3.669245, 40.429913), 4326)),
+  ('Logroño, Argentina', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
+  ('Logroño', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
+  ('Plaza Mayor, Logroño, Argentina', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
+  ('Plaza Mayor', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
+  ('Logroño, La Rioja, Spain', ST_SetSRID(ST_MakePoint(-2.517555, 42.302939), 4326)),
+  ('1900 amphitheatre parkway, mountain view, ca, us', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326)),
+  ('1900 amphitheatre parkway', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326));
+
+DROP TABLE IF EXISTS georeference_street_address_fixture;
+CREATE TABLE georeference_street_address_fixture (cartodb_id INTEGER PRIMARY KEY , address text, city text, state text, country text, the_geom geometry(Geometry, 4326));
+insert into georeference_street_address_fixture (cartodb_id, address, city, state, country) values
+  (1, 'W 26th Street', null , null , null),
+  (2, null, 'Madrid', null , 'Spain'),
+  (3, null, 'Logroño', null , 'Argentina'),
+  (4, null, 'Logroño', 'La Rioja', 'Spain'),
+  (5, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us'),
+  (6, 'Logroño', null, null, null);
+
+DROP TABLE IF EXISTS georeference_street_full_address_fixture;
+CREATE TABLE georeference_street_full_address_fixture (cartodb_id INTEGER PRIMARY KEY , address text, city text, state text, country text, the_geom geometry(Geometry, 4326));
+insert into georeference_street_full_address_fixture (cartodb_id, address, city, state, country) values
+  (1, 'W 26th Street', null , null , null),
+  (2, 'Puerta del Sol', 'Madrid', null , 'Spain'),
+  (3, 'Plaza Mayor', 'Logroño', null , 'Argentina'),
+  (4, 'Logroño', 'La Rioja', null, 'Spain'),
+  (5, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us');
+
+DROP TABLE IF EXISTS cdb_bulk_geocode_street_point_trace;
+CREATE TABLE cdb_bulk_geocode_street_point_trace (
+  query text,
+  street_column text, city_column text, state_column text, country_column text,
+  street_match text,
+  created_at timestamp  default now());
+
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_bulk_geocode_street_point (query text,
+    street_column text, city_column text default null, state_column text default null, country_column text default null)
 RETURNS SETOF cdb_dataservices_client.geocoding AS $$
-SELECT
-  id,
-  CASE
-    WHEN address = 'W 26th Street' THEN ST_SetSRID(ST_MakePoint(-74.990425, 40.744131), 4326)
-    WHEN address = 'Madrid, Spain' THEN ST_SetSRID(ST_MakePoint(-3.669245, 40.429913), 4326)
-    WHEN address = 'Logroño, Argentina' THEN ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)
-    WHEN address = 'Logroño, La Rioja, Spain' THEN ST_SetSRID(ST_MakePoint(-2.517555, 42.302939), 4326)
-    WHEN address = '1900 amphitheatre parkway, mountain view, ca, us' THEN ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326)
-    ELSE ST_SetSRID(ST_MakePoint(0, 0), 4326)
-  END,
-  '{}'::jsonb
-FROM
-  jsonb_to_recordset(searchtext) as x(id integer, address text)
+DECLARE
+  street_match text;
+BEGIN
+
+select string_agg(the_param, ', ')
+from (
+  select unnest(ARRAY[street_column, city_column, state_column, country_column]) as the_param
+  ) _x
+where _x.the_param is not null
+into street_match;
+
+insert into cdb_bulk_geocode_street_point_trace (
+  query,
+  street_column, city_column, state_column, country_column,
+  street_match
+) values (
+  query,
+  street_column, city_column, state_column, country_column,
+  street_match
+);
+
+IF 'city || '''', '''' || state || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with several columns and free text'
+OR '''''Logroño'''' || '''', '''' || ''''La Rioja'''' || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with only free text' and 'template with spaces in token'
+OR 'city || '''', '''' || ''''La Rioja'''' || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with column and more free text'
+OR 'city || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with column and free text'
+OR 'city || '''', '''' || country' = street_match -- Fixture for 'with two columns'
+THEN
+  street_match := '''Logroño, La Rioja, Spain''';
+ELSIF 'street_name' = street_match THEN -- Fixture for 'column' and 'basic template'
+  street_match := '''street_name''';
+END IF;
+
+RETURN QUERY EXECUTE format('SELECT cartodb_id, f.the_geom, ''{}''::jsonb ' ||
+ 'FROM geocoding_fixture f inner join (%s) _x ON %s = f.the_address ',
+ query, street_match);
+END;
 $$
-LANGUAGE SQL;
+LANGUAGE 'plpgsql';

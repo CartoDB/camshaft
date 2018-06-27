@@ -5,35 +5,18 @@ var testHelper = require('../helper');
 
 describe('georeference-street-address analysis', function() {
 
-    function quoteColumn(address, column) {
-        var value = address[column];
-        if(typeof value !== 'number') {
-            value = '\'' + value + '\'::text ';
-        }
-        return value + ' AS ' + column;
-    }
-
-    function addressQuery(address) {
-        address = address || {};
-        if(!address.cartodb_id) {
-            address.cartodb_id = 1;
-        }
-        var columns = Object.keys(address).map(function (column) {
-            return quoteColumn(address, column);
-        });
-        return 'SELECT ' + columns.join(', ');
-    }
-
-    function addressesQuery(addressRows) {
-        var addressesQueries = addressRows.map((row) => addressQuery(row));
-        return 'select * from (' + addressesQueries.join(' union all ') + ') aqua';
-    }
-
-    function addressSourceNode(query) {
+    function georeferenceStreetAddressNode(query, streetColumn, template) {
         return {
-            type: 'source',
+            type: 'georeference-street-address',
             params: {
-                query: query
+                source: {
+                    type: 'source',
+                    params: {
+                        query: query
+                    }
+                },
+                street_address_column: streetColumn,
+                street_address_template: template
             }
         };
     }
@@ -47,12 +30,7 @@ describe('georeference-street-address analysis', function() {
     }
 
     it('should check either street_address_column or street_address_column are provided', function (done) {
-        var georeferenceStreetAddressDefinition = {
-            type: 'georeference-street-address',
-            params: {
-                source: addressSourceNode(addressQuery({street_name: ''}))
-            }
-        };
+        var georeferenceStreetAddressDefinition = georeferenceStreetAddressNode('select 1 as cartodb_id', null);
         testHelper.createAnalyses(georeferenceStreetAddressDefinition, function(err) {
             assert.ok(err);
             assert.equal(
@@ -67,6 +45,7 @@ describe('georeference-street-address analysis', function() {
         {
             desc: 'column',
             column: 'street_name',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 1',
             addresses: [{
                 street_name: 'W 26th Street',
                 point: {
@@ -78,6 +57,7 @@ describe('georeference-street-address analysis', function() {
         {
             desc: 'basic template',
             template: '{{street_name}}',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 1',
             addresses: [{
                 street_name: 'W 26th Street',
                 point: {
@@ -89,40 +69,44 @@ describe('georeference-street-address analysis', function() {
         {
             desc: 'template with two columns',
             template: '{{city}}, {{country}}',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
-                city: 'Madrid',
+                city: 'Logroño',
                 country: 'Spain',
                 point: {
-                    x: -3.669245,
-                    y: 40.429913
+                    x: -2.517555,
+                    y: 42.302939
                 }
             }]
         },
         {
             desc: 'template with column and free text',
-            template: '{{city}}, Argentina',
+            template: '{{city}}, Spain',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
                 city: 'Logroño',
                 point: {
-                    x: -61.69614,
-                    y: -29.50347
+                    x: -2.517555,
+                    y: 42.302939
                 }
             }],
         },
         {
             desc: 'template with spaces in token',
-            template: '{{ city }}, Argentina',
+            template: '{{ city  }}, La Rioja, Spain',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
                 city: 'Logroño',
                 point: {
-                    x: -61.69614,
-                    y: -29.50347
+                    x: -2.517555,
+                    y: 42.302939
                 }
             }],
         },
         {
             desc: 'with column and more free text',
             template: '{{city}}, La Rioja, Spain',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
                 city: 'Logroño',
                 point: {
@@ -134,9 +118,8 @@ describe('georeference-street-address analysis', function() {
         {
             desc: 'with several columns and free text',
             template: '{{city}}, {{state}}, Spain',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 4',
             addresses: [{
-                city: 'Logroño',
-                state: 'La Rioja',
                 point: {
                     x: -2.517555,
                     y: 42.302939
@@ -146,36 +129,22 @@ describe('georeference-street-address analysis', function() {
         {
             desc: 'with only free text',
             template: 'Logroño, La Rioja, Spain',
-            addresses: [{
-                point: {
-                    x: -2.517555,
-                    y: 42.302939
-                }
-            }]
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 1',
+            addresses: [
+                { cartodb_id: 1, point: { x: -2.517555, y: 42.302939 } }
+            ]
         },
         {
             desc: 'multiple rows',
+            column: 'address',
+            query: 'select * from georeference_street_full_address_fixture',
             addresses: [
-                {
-                    cartodb_id: 1,
-                    street_name: 'W 26th Street',
-                    point:
-                        {
-                            x: -74.990425,
-                            y: 40.744131
-                        }
-                },
-                {
-                    cartodb_id: 2,
-                    street_name: '1900 amphitheatre parkway, mountain view, ca, us',
-                    point:
-                        {
-                            x: -122.0875324,
-                            y: 37.4227968
-                        }
-                }
-            ],
-            column: 'street_name'
+                { cartodb_id: 1, point: { x: -74.990425, y: 40.744131 } },
+                { cartodb_id: 2, point: { x: -3.669245, y: 40.429913 } },
+                { cartodb_id: 3, point: { x: -61.69614, y: -29.50347 } },
+                { cartodb_id: 4, point: { x: -61.69614, y: -29.50347 } },
+                { cartodb_id: 5, point: { x: -122.0875324, y: 37.4227968 } }
+            ]
         }
     ];
 
@@ -189,12 +158,7 @@ describe('georeference-street-address analysis', function() {
         }
 
         testFn('should work from ' + scenario.desc, function (done) {
-            var definition = {
-                type: 'georeference-street-address',
-                params: {
-                    source: addressSourceNode(addressesQuery(scenario.addresses))
-                }
-            };
+            var definition = georeferenceStreetAddressNode(scenario.query, scenario.column, scenario.template);
 
             if (scenario.column) {
                 definition.params.street_address_column = scenario.column;
@@ -219,7 +183,7 @@ describe('georeference-street-address analysis', function() {
                         assert.notEqual(row.x, 0, 'X coordinate should not be default=0. Review your scenario.');
                         assert.notEqual(row.y, 0, 'Y coordinate should not be default=0. Review your scenario.');
 
-                        assert.equal(row.x, address.point.x);
+                        assert.equal(row.x, address.point.x, row.x + ' != ' + address.point.x + ' at ' + i);
                         assert.equal(row.y, address.point.y);
 
                         if(row.street_name) {
