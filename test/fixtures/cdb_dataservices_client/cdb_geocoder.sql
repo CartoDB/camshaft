@@ -137,24 +137,25 @@ insert into geocoding_fixture (the_address, the_geom) values
   ('1900 amphitheatre parkway', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326));
 
 DROP TABLE IF EXISTS georeference_street_address_fixture;
-CREATE TABLE georeference_street_address_fixture (cartodb_id INTEGER PRIMARY KEY , address text, city text, state text, country text, the_geom geometry(Geometry, 4326));
-insert into georeference_street_address_fixture (cartodb_id, address, city, state, country) values
-  (1, 'W 26th Street', null , null , null),
-  (2, null, 'Madrid', null , 'Spain'),
-  (3, null, 'Logroño', null , 'Argentina'),
-  (4, null, 'Logroño', 'La Rioja', 'Spain'),
-  (5, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us'),
-  (6, 'Logroño', null, null, null),
-  (7, 'Plaza Mayor', null, null, 'Spain');
+CREATE TABLE georeference_street_address_fixture (cartodb_id INTEGER PRIMARY KEY , street_number text, street_name text, city text, state text, country text, the_geom geometry(Geometry, 4326));
+insert into georeference_street_address_fixture (cartodb_id, street_number, street_name, city, state, country) values
+  (1, null, 'W 26th Street', null , null , null),
+  (2, null, null, 'Madrid', null , 'Spain'),
+  (3, null, null, 'Logroño', null , 'Argentina'),
+  (4, null, null, 'Logroño', 'La Rioja', 'Spain'),
+  (5, null, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us'),
+  (6, null, 'Logroño', null, null, null),
+  (7, null, 'Plaza Mayor', null, null, 'Spain'),
+  (8, '2', 'Calle Santiago Rusiñol', null, null, null);
 
 DROP TABLE IF EXISTS georeference_street_full_address_fixture;
-CREATE TABLE georeference_street_full_address_fixture (cartodb_id INTEGER PRIMARY KEY , address text, city text, state text, country text, the_geom geometry(Geometry, 4326));
-insert into georeference_street_full_address_fixture (cartodb_id, address, city, state, country) values
-  (1, 'W 26th Street', null , null , null),
-  (2, 'Puerta del Sol', 'Madrid', null , 'Spain'),
-  (3, 'Plaza Mayor', 'Logroño', null , 'Argentina'),
-  (4, 'Logroño', 'La Rioja', null, 'Spain'),
-  (5, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us');
+CREATE TABLE georeference_street_full_address_fixture (cartodb_id INTEGER PRIMARY KEY , full_address text, the_geom geometry(Geometry, 4326));
+insert into georeference_street_full_address_fixture (cartodb_id, full_address) values
+  (1, 'W 26th Street'),
+  (2, 'Puerta del Sol'),
+  (3, 'Plaza Mayor'),
+  (4, 'Logroño'),
+  (5, '1900 amphitheatre parkway');
 
 DROP TABLE IF EXISTS cdb_bulk_geocode_street_point_trace;
 CREATE TABLE cdb_bulk_geocode_street_point_trace (

@@ -75,6 +75,7 @@ describe('georeference-street-address analysis', function() {
             template: '{{city}}, {{country}}',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
+                street_name: 'Logroño',
                 city: 'Logroño',
                 country: 'Spain',
                 point: {
@@ -88,11 +89,12 @@ describe('georeference-street-address analysis', function() {
             template: '{{city}}, Spain',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
+                street_name: 'Logroño',
                 city: 'Logroño',
                 point: {
                     x: -2.517555,
                     y: 42.302939
-                }
+                },
             }],
         },
         {
@@ -100,11 +102,12 @@ describe('georeference-street-address analysis', function() {
             template: '{{ city  }}, La Rioja, Spain',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
+                street_name: 'Logroño',
                 city: 'Logroño',
                 point: {
                     x: -2.517555,
                     y: 42.302939
-                }
+                },
             }],
         },
         {
@@ -112,11 +115,12 @@ describe('georeference-street-address analysis', function() {
             template: '{{city}}, La Rioja, Spain',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
             addresses: [{
+                street_name: 'Logroño',
                 city: 'Logroño',
                 point: {
                     x: -2.517555,
                     y: 42.302939
-                }
+                },
             }]
         },
         {
@@ -135,31 +139,31 @@ describe('georeference-street-address analysis', function() {
             template: 'Logroño, La Rioja, Spain',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 1',
             addresses: [
-                { cartodb_id: 1, point: { x: -2.517555, y: 42.302939 } }
+                { cartodb_id: 1, point: { x: -2.517555, y: 42.302939 }, street_name: 'W 26th Street' }
             ]
         },
         {
             desc: 'multiple rows',
-            column: 'address',
+            column: 'full_address',
             query: 'select * from georeference_street_full_address_fixture',
             addresses: [
-                { cartodb_id: 1, point: { x: -74.990425, y: 40.744131 } },
-                { cartodb_id: 2, point: { x: -3.669245, y: 40.429913 } },
-                { cartodb_id: 3, point: { x: -61.69614, y: -29.50347 } },
-                { cartodb_id: 4, point: { x: -61.69614, y: -29.50347 } },
-                { cartodb_id: 5, point: { x: -122.0875324, y: 37.4227968 } }
+                { cartodb_id: 1, point: { x: -74.990425, y: 40.744131 }, street_name: 'W 26th Street' },
+                { cartodb_id: 2, point: { x: -3.669245, y: 40.429913 }, street_name: 'Puerta del Sol' },
+                { cartodb_id: 3, point: { x: -61.69614, y: -29.50347 }, street_name: 'Plaza Mayor' },
+                { cartodb_id: 4, point: { x: -61.69614, y: -29.50347 }, street_name: 'Logroño' },
+                { cartodb_id: 5, point: { x: -122.0875324, y: 37.4227968 }, street_name: '1900 amphiteatre parkway' }
             ]
         },
         {
             desc: 'column literals',
-            column: 'address',
+            column: 'street_name',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 7',
             params: {
                 city: 'Valladolid',
                 country_column: 'country'
             },
             addresses: [
-                { cartodb_id: 1, point: { x: -61.666, y: -29.555 } }
+                { cartodb_id: 1, point: { x: -61.666, y: -29.555 }, street_name: 'Plaza Mayor' }
             ]
         }
     ];
