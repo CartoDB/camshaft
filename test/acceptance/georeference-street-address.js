@@ -85,6 +85,16 @@ describe('georeference-street-address analysis', function() {
             }]
         },
         {
+            desc: 'template with columns without all commas',
+            template: 'Paseo Zorrilla {{cartodb_id}}, Valladolid, Spain',
+            query: 'select * from georeference_street_address_fixture where cartodb_id between 1 and 3',
+            addresses: [
+                { point: { x: -61.1, y: -29.1 } },
+                { point: { x: -61.2, y: -29.2 } },
+                { point: { x: -61.3, y: -29.3 } }
+            ]
+        },
+        {
             desc: 'template with column and free text',
             template: '{{city}}, Spain',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 6',
@@ -199,7 +209,7 @@ describe('georeference-street-address analysis', function() {
                         assert.equal(row.x, address.point.x, row.x + ' != ' + address.point.x + ' at ' + i);
                         assert.equal(row.y, address.point.y);
 
-                        if(row.street_name) {
+                        if(row.street_name && address.street_name) {
                             assert.equal(row.street_name, address.street_name);
                         }
                     }

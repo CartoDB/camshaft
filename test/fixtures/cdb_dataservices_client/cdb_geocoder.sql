@@ -134,7 +134,10 @@ insert into geocoding_fixture (the_address, the_geom) values
   ('Plaza Mayor, Valladolid, Spain', ST_SetSRID(ST_MakePoint(-61.666, -29.555), 4326)),
   ('Logroño, La Rioja, Spain', ST_SetSRID(ST_MakePoint(-2.517555, 42.302939), 4326)),
   ('1900 amphitheatre parkway, mountain view, ca, us', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326)),
-  ('1900 amphitheatre parkway', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326));
+  ('1900 amphitheatre parkway', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326)),
+  ('Paseo Zorrilla 1, Valladolid, Spain', ST_SetSRID(ST_MakePoint(-61.1, -29.1), 4326)),
+  ('Paseo Zorrilla 2, Valladolid, Spain', ST_SetSRID(ST_MakePoint(-61.2, -29.2), 4326)),
+  ('Paseo Zorrilla 3, Valladolid, Spain', ST_SetSRID(ST_MakePoint(-61.3, -29.3), 4326));
 
 DROP TABLE IF EXISTS georeference_street_address_fixture;
 CREATE TABLE georeference_street_address_fixture (cartodb_id INTEGER PRIMARY KEY , street_number text, street_name text, city text, state text, country text, the_geom geometry(Geometry, 4326));
@@ -189,10 +192,10 @@ insert into cdb_bulk_geocode_street_point_trace (
 );
 
 IF 'city || '''', '''' || state || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with several columns and free text'
-OR '''''Logroño'''' || '''', '''' || ''''La Rioja'''' || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with only free text' and 'template with spaces in token'
-OR 'city || '''', '''' || ''''La Rioja'''' || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with column and more free text'
-OR 'city || '''', '''' || ''''Spain''''' = street_match -- Fixture for 'with column and free text'
-OR 'city || '''', '''' || country' = street_match -- Fixture for 'with two columns'
+OR '''Logroño, La Rioja, Spain''' = street_match -- Fixture for 'with only free text'
+OR 'city || '', La Rioja, Spain''' = street_match -- Fixture for 'with column and more free text' and 'with spaces in token'
+OR 'city || '', Spain''' = street_match -- Fixture for 'with column and free text'
+OR 'city || '', '' || country' = street_match -- Fixture for 'with two columns'
 THEN
   street_match := '''Logroño, La Rioja, Spain''';
 ELSIF 'street_name' = street_match THEN -- Fixture for 'column' and 'basic template'
