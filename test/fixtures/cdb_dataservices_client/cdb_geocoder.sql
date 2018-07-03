@@ -131,6 +131,7 @@ insert into geocoding_fixture (the_address, the_geom) values
   ('Logroño', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
   ('Plaza Mayor, Logroño, Argentina', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
   ('Plaza Mayor', ST_SetSRID(ST_MakePoint(-61.69614, -29.50347), 4326)),
+  ('Plaza Mayor, Valladolid, Spain', ST_SetSRID(ST_MakePoint(-61.666, -29.555), 4326)),
   ('Logroño, La Rioja, Spain', ST_SetSRID(ST_MakePoint(-2.517555, 42.302939), 4326)),
   ('1900 amphitheatre parkway, mountain view, ca, us', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326)),
   ('1900 amphitheatre parkway', ST_SetSRID(ST_MakePoint(-122.0875324, 37.4227968), 4326));
@@ -143,7 +144,8 @@ insert into georeference_street_address_fixture (cartodb_id, address, city, stat
   (3, null, 'Logroño', null , 'Argentina'),
   (4, null, 'Logroño', 'La Rioja', 'Spain'),
   (5, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us'),
-  (6, 'Logroño', null, null, null);
+  (6, 'Logroño', null, null, null),
+  (7, 'Plaza Mayor', null, null, 'Spain');
 
 DROP TABLE IF EXISTS georeference_street_full_address_fixture;
 CREATE TABLE georeference_street_full_address_fixture (cartodb_id INTEGER PRIMARY KEY , address text, city text, state text, country text, the_geom geometry(Geometry, 4326));
@@ -162,13 +164,13 @@ CREATE TABLE cdb_bulk_geocode_street_point_trace (
   created_at timestamp  default now());
 
 CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_bulk_geocode_street_point (query text,
-    street_column text, city_column text default null, state_column text default null, country_column text default null)
+    street_column text, city_column text default null, state_column text default null, country_column text default null, batch_size integer DEFAULT 100)
 RETURNS SETOF cdb_dataservices_client.geocoding AS $$
 DECLARE
   street_match text;
 BEGIN
 
-select string_agg(the_param, ', ')
+select string_agg(the_param, ' || '', '' || ')
 from (
   select unnest(ARRAY[street_column, city_column, state_column, country_column]) as the_param
   ) _x

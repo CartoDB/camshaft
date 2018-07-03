@@ -5,8 +5,8 @@ var testHelper = require('../helper');
 
 describe('georeference-street-address analysis', function() {
 
-    function georeferenceStreetAddressNode(query, streetColumn, template) {
-        return {
+    function georeferenceStreetAddressNode(query, streetColumn, template, extraParams) {
+        const definition = {
             type: 'georeference-street-address',
             params: {
                 source: {
@@ -19,6 +19,10 @@ describe('georeference-street-address analysis', function() {
                 street_address_template: template
             }
         };
+
+        Object.assign(definition.params, extraParams);
+
+        return definition;
     }
 
     function wrapQueryWithXY(node) {
@@ -145,6 +149,18 @@ describe('georeference-street-address analysis', function() {
                 { cartodb_id: 4, point: { x: -61.69614, y: -29.50347 } },
                 { cartodb_id: 5, point: { x: -122.0875324, y: 37.4227968 } }
             ]
+        },
+        {
+            desc: 'column literals',
+            column: 'address',
+            query: 'select * from georeference_street_address_fixture where cartodb_id = 7',
+            params: {
+                city: 'Valladolid',
+                country_column: 'country'
+            },
+            addresses: [
+                { cartodb_id: 1, point: { x: -61.666, y: -29.555 } }
+            ]
         }
     ];
 
@@ -158,15 +174,8 @@ describe('georeference-street-address analysis', function() {
         }
 
         testFn('should work from ' + scenario.desc, function (done) {
-            var definition = georeferenceStreetAddressNode(scenario.query, scenario.column, scenario.template);
-
-            if (scenario.column) {
-                definition.params.street_address_column = scenario.column;
-            } else if (scenario.template) {
-                definition.params.street_address_template = scenario.template;
-            } else {
-                return done(new Error('Test scenario is missing `column` and `template`'));
-            }
+            var definition = georeferenceStreetAddressNode(scenario.query,
+                scenario.column, scenario.template, scenario.params);
 
             testHelper.createAnalyses(definition, function(err, result) {
                 assert.ifError(err);
