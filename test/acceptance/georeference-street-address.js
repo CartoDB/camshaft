@@ -95,6 +95,16 @@ describe('georeference-street-address analysis', function() {
             ]
         },
         {
+            desc: 'template with two columns without commas',
+            template: '{{street_name}} {{street_number}}, {{city}}, Spain',
+            query: 'select * from georeference_street_address_fixture where cartodb_id between 8 and 10',
+            addresses: [
+                { point: { x: -61.1, y: -29.1 } },
+                { point: { x: -61.2, y: -29.2 } },
+                { point: { x: -61.3, y: -29.3 } }
+            ]
+        },
+        {
             desc: 'template with column and free text',
             template: '{{city}}, Spain',
             query: 'select * from georeference_street_address_fixture where cartodb_id = 6',

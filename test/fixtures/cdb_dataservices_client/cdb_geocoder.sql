@@ -149,7 +149,9 @@ insert into georeference_street_address_fixture (cartodb_id, street_number, stre
   (5, null, '1900 amphitheatre parkway', 'mountain view', 'ca', 'us'),
   (6, null, 'Logroño', null, null, null),
   (7, null, 'Plaza Mayor', null, null, 'Spain'),
-  (8, '2', 'Calle Santiago Rusiñol', null, null, null);
+  (8, '1', 'Paseo Zorrilla', 'Valladolid', null, null),
+  (9, '2', 'Paseo Zorrilla', 'Valladolid', null, null),
+  (10, '3', 'Paseo Zorrilla', 'Valladolid', null, null);
 
 DROP TABLE IF EXISTS georeference_street_full_address_fixture;
 CREATE TABLE georeference_street_full_address_fixture (cartodb_id INTEGER PRIMARY KEY , full_address text, the_geom geometry(Geometry, 4326));
