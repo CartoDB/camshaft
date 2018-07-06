@@ -1,4 +1,8 @@
 # Changelog
+## 0.61.12
+Release 2018-mm-dd
+  - Add a .npmignore to reduce size of npm package.
+
 ## 0.61.11
 Released 2018-06-19:
   - Quote name columns when performing trade area analysis to avoid Syntax Errors
