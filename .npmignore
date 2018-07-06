@@ -2,7 +2,6 @@
 # https://docs.npmjs.com/misc/developers#keeping-files-out-of-your-package
 
 # Biggest dirs not needed in npm package
-reference/
 test/
 examples/
 
