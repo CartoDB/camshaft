@@ -210,3 +210,7 @@ RETURN QUERY EXECUTE format('SELECT cartodb_id, f.the_geom, ''{}''::jsonb ' ||
 END;
 $$
 LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION jsonb_array_casttext(jsonb) RETURNS text[] AS $f$
+    SELECT array_agg(x) || ARRAY[]::text[] FROM jsonb_array_elements_text($1) t(x);
+$f$ LANGUAGE sql IMMUTABLE;
