@@ -211,6 +211,6 @@ END;
 $$
 LANGUAGE 'plpgsql';
 
-CREATE OR REPLACE FUNCTION jsonb_array_casttext(jsonb) RETURNS text[] AS $f$
+CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_jsonb_array_casttext(jsonb) RETURNS text[] AS $f$
     SELECT array_agg(x) || ARRAY[]::text[] FROM jsonb_array_elements_text($1) t(x);
 $f$ LANGUAGE sql IMMUTABLE;
