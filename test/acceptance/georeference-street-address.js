@@ -33,7 +33,7 @@ describe('georeference-street-address analysis', function() {
         ].join('');
     }
 
-    it('should check either street_address_column or street_address_column are provided', function (done) {
+    it('should check either street_address_column or street_address_template are provided', function (done) {
         var georeferenceStreetAddressDefinition = georeferenceStreetAddressNode('select 1 as cartodb_id', null);
         testHelper.createAnalyses(georeferenceStreetAddressDefinition, function(err) {
             assert.ok(err);
@@ -165,7 +165,7 @@ describe('georeference-street-address analysis', function() {
         {
             desc: 'multiple rows',
             column: 'full_address',
-            query: 'select * from georeference_street_full_address_fixture',
+            query: 'select * from georeference_street_full_address_fixture order by cartodb_id',
             addresses: [
                 { cartodb_id: 1, point: { x: -74.990425, y: 40.744131 }, street_name: 'W 26th Street' },
                 { cartodb_id: 2, point: { x: -3.669245, y: 40.429913 }, street_name: 'Puerta del Sol' },
