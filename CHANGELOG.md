@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.62.0
-Release 2018-mm-dd
+Release 2018-07-19
   - Add a .npmignore to reduce size of npm package.
   - Add support for batch street-level geocoding analysis.
 
