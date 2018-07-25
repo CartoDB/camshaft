@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.62.1
+Release 2018-07-25
+  - Remove metadata columns from street level geocoding.
+
+
 ## 0.62.0
 Release 2018-07-19
   - Add a .npmignore to reduce size of npm package.
