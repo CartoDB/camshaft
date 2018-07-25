@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.62.2
+Release 2018-mm-dd
+
+
 ## 0.62.1
 Release 2018-07-25
   - Remove metadata columns from street level geocoding.
