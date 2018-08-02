@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.62.3
+Release 2018-mm-dd
+
 ## 0.62.2
 Release 2018-08-02
   - Compute node's output columns from cached tables instead of final query to avoid missing columns when the schema of any analysis changes.
