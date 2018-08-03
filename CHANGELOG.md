@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.62.3
-Release 2018-mm-dd
+Release 2018-08-03
+  - Added metadata columns from street level geocoding.
 
 ## 0.62.2
 Release 2018-08-02
