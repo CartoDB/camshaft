@@ -174,6 +174,7 @@ CREATE OR REPLACE FUNCTION cdb_dataservices_client.cdb_bulk_geocode_street_point
 RETURNS SETOF cdb_dataservices_client.geocoding AS $$
 DECLARE
   street_match text;
+  metadata_mock text;
 BEGIN
 
 select string_agg(the_param, ' || '', '' || ')
@@ -204,9 +205,11 @@ ELSIF 'street_name' = street_match THEN -- Fixture for 'column' and 'basic templ
   street_match := '''street_name''';
 END IF;
 
-RETURN QUERY EXECUTE format('SELECT cartodb_id, f.the_geom, ''{}''::jsonb ' ||
+metadata_mock := '{"relevance": 1, "precision": "precise", "match_types": ["locality"]}';
+
+RETURN QUERY EXECUTE format('SELECT cartodb_id, f.the_geom, ''%s''::jsonb ' ||
  'FROM geocoding_fixture f inner join (%s) _x ON %s = f.the_address ',
- query, street_match);
+ metadata_mock, query, street_match);
 END;
 $$
 LANGUAGE 'plpgsql';

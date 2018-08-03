@@ -26,11 +26,11 @@ describe('georeference-street-address analysis', function() {
     }
 
     function wrapQueryWithXY(node) {
-        return [
-            'SELECT *, ST_X(the_geom) AS x, ST_Y(the_geom) AS Y FROM (',
-            node.getQuery(),
-            ') _q'
-        ].join('');
+        return `
+            SELECT *, ST_X(the_geom) AS x, ST_Y(the_geom) AS Y
+            FROM (
+                ${node.getQuery()}
+            ) _q`;
     }
 
     it('should check either street_address_column or street_address_template are provided', function (done) {
@@ -222,6 +222,11 @@ describe('georeference-street-address analysis', function() {
                         if(row.street_name && address.street_name) {
                             assert.equal(row.street_name, address.street_name);
                         }
+
+                        assert.equal(row.__geocoding_meta_relevance, 1);
+                        assert.equal(row.__geocoding_meta_precision, 'precise');
+                        assert.equal(row.__geocoding_meta_match_types.length, 1);
+                        assert.equal(row.__geocoding_meta_match_types[0], 'locality');
                     }
 
                     return done();
