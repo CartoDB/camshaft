@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.62.4
+Release 2018-mm-dd
+  - Make all modules to use strict mode semantics.
+
 ## 0.62.3
 Release 2018-08-03
   - Added metadata columns from street level geocoding.
