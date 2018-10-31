@@ -9,7 +9,7 @@ env:
 node_js:
   - "6"
   - "8"
-
+  - "10"
 
 before_install:
   - sudo service postgresql stop;
