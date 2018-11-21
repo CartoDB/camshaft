@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.62.5
+## 0.63.0
 Release 2018-mm-dd
-
+  - Support Node.js 10
+  - Add package.json
 
 ## 0.62.4
 Release 2018-10-26
