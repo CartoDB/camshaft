@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.63.1
-Release 2018-12-dd
+Release 2018-12-13
   - Update cartodb-psql to 0.13.1
 
 ## 0.63.0
