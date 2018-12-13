@@ -1,9 +1,15 @@
 # Changelog
 
 ## 0.63.1
+Release 2018-12-dd
+  - Update cartodb-psql to 0.13.1
+
+## 0.63.0
 Release 2018-11-21
   - Support Node.js 10
   - Add package.json
+  - Update cartodb-psql@0.13.0
+  - Support package-lock.json
 
 ## 0.62.4
 Release 2018-10-26
