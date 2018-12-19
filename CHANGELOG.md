@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.63.2
+Release 2018-12-19
+  - Specific error message for exceeded batch SQL API payload size
+
 ## 0.63.1
 Release 2018-12-13
   - Update cartodb-psql to 0.13.1
