@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.63.3
-Release 2019-02-dd
+Release 2019-02-12
   - Improve error message for exceeded batch SQL API payload size: add suggestions about what the user can do about it.
 
 ## 0.63.2
