@@ -1,7 +1,8 @@
 # Changelog
 
 ## 0.63.4
-Release yyyy-mm-dd
+Release 2019-02-13
+  - Fix for unhandled exception introduced on some errors in 0.63.2
 
 ## 0.63.3
 Release 2019-02-12
