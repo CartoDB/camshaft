@@ -2,6 +2,8 @@
 
 ## 0.63.5
 Release yyyy-mm-dd
+  - Fix `uncaught exception` while building node's query
+  - Refresh file streams in logger when a signal hang up received, fixes #383
 
 ## 0.63.4
 Release 2019-02-13
