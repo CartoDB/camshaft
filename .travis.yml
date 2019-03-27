@@ -3,12 +3,9 @@ sudo: false
 dist: trusty
 
 env:
-    - POSTGRESQL_VERSION="9.5"
     - POSTGRESQL_VERSION="10"
 
 node_js:
-  - "6"
-  - "8"
   - "10"
 
 before_install:
