@@ -4,7 +4,6 @@ dist: trusty
 
 env:
     - POSTGRESQL_VERSION="10"
-    - POSTGRESQL_VERSION="11"
 
 node_js:
   - "10"
