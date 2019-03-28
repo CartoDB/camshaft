@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.63.5
+## 0.64.0
 Release yyyy-mm-dd
   - Drop support for Node.js 6 and 8
   - Drop support for Postgres 9.5
