@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.64.0
-Release yyyy-mm-dd
+Release 2019-03-29
   - Drop support for Node.js 6 and 8
   - Drop support for Postgres 9.5
   - Fix `uncaught exception` while building node's query
