@@ -18,6 +18,7 @@ before(function setupTestDatabase(done) {
         fs.realpathSync('./test/fixtures/postgis_extension.sql'),
         fs.realpathSync('./test/fixtures/plpythonu_extension.sql'),
 
+        fs.realpathSync('./test/fixtures/cdb_querytablestext.sql'),
         fs.realpathSync('./test/fixtures/cdb_querytables_updated_at.sql'),
         fs.realpathSync('./test/fixtures/cdb_analysis_catalog.sql'),
         fs.realpathSync('./test/fixtures/cdb_analysischeck.sql'),
