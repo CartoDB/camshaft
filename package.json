@@ -25,7 +25,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "bunyan": "1.8.1",
-    "cartodb-psql": "0.13.1",
+    "cartodb-psql": "github:algunenano/node-cartodb-psql#query_timeout",
     "cartodb-query-tables": "github:algunenano/node-cartodb-query-tables#pg_test",
     "debug": "^3.1.0",
     "dot": "^1.0.3",
