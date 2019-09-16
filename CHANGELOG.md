@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.64.2
+Release 2019-09-13
+
+- Update `cartodb-query-tables` to version [`0.6.1`](https://github.com/CartoDB/node-cartodb-query-tables/blob/8dda0e1fb7292840c4ac381f9be2eb3976d180a1/NEWS.md#version-061).
+
 ## 0.64.1
 Release 2019-09-13
 
