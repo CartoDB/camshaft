@@ -17,8 +17,8 @@ describe('nodes', function() {
         Analysis.create(testConfig, definition, callback);
     }
 
-    var QUERY_ATM_MACHINES = 'select * from atm_machines';
-    var QUERY_POSTAL_CODES = 'select * from postal_codes';
+    var QUERY_ATM_MACHINES = 'select 0 as begin, * from atm_machines';
+    var QUERY_POSTAL_CODES = 'select 1 as desc, * from postal_codes';
 
     var SOURCE_ATM_MACHINES_DEF = {
         type: 'source',
