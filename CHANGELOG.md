@@ -4,6 +4,7 @@
 Release 2019-XX-XX
 
 - Update `request` to `^2.85.0`.
+- Use plpython3u when testing against PG12+.
 
 ## 0.64.2
 Release 2019-09-13
