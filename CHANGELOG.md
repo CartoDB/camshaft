@@ -1,11 +1,12 @@
 # Changelog
 
-## 0.64.3
-Release 2019-XX-XX
+## 0.65.0
+Release 2019-11-25
 
 - Update `request` to `^2.85.0`.
 - Use plpython3u when testing against PG12+.
 - Use quoted identifiers for column names.
+- package-lock.json: Minor updates.
 
 ## 0.64.2
 Release 2019-09-13
