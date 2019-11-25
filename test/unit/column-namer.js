@@ -27,4 +27,10 @@ describe('column-namer', function() {
         assert.equal(namer.uniqueName('col4'), 'col4');
     });
 
+    it('should work with quoted columns', function() {
+        var namer = new ColumnNamer(['"col1"', '"col2"' ]);
+        assert.equal(namer.uniqueName('"col1"'), '"col1_2"');
+        assert.equal(namer.uniqueName('"col2"'), '"col2_2"');
+    });
+
 });

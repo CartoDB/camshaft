@@ -44,15 +44,4 @@ describe('query-parser', function() {
         });
     });
 
-    it('should return a list of columns names', function(done) {
-        var query = 'select cartodb_id, the_geom_webmercator from atm_machines';
-        queryParser.getColumnNames(query, function(err, columnNames) {
-            assert.ok(!err, err);
-
-            assert.deepEqual(columnNames, ['cartodb_id', 'the_geom_webmercator']);
-
-            done();
-        });
-    });
-
 });
