@@ -1,7 +1,7 @@
 # Changelog
 
-## 0.66.0
-Release XXXX-XX-XX
+## 0.65.1
+Release 2019-12-02
 
 - Enforce the usage of cartodb schema.
 
