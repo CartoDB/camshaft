@@ -1,4 +1,5 @@
-CREATE OR REPLACE FUNCTION CDB_QueryTables_Updated_At(query text)
+CREATE SCHEMA IF NOT EXISTS cartodb;
+CREATE OR REPLACE FUNCTION cartodb.CDB_QueryTables_Updated_At(query text)
     RETURNS TABLE(dbname text, schema_name text, table_name text, updated_at timestamptz)
 AS $$
     WITH query_tables AS (

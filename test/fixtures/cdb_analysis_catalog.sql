@@ -1,5 +1,7 @@
-drop table if exists cdb_analysis_catalog;
-create table cdb_analysis_catalog (
+-- Creates cartodb.cdb_analysis_catalog without installing the cartodb extension
+CREATE SCHEMA IF NOT EXISTS cartodb;
+drop table if exists cartodb.cdb_analysis_catalog;
+create table cartodb.cdb_analysis_catalog (
     -- useful for multi account deployments
     username text,
     -- md5 hex hash
