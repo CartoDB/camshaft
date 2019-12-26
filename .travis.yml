@@ -23,11 +23,6 @@ jobs:
       node_js: "12"
     - env: POSTGRESQL_VERSION="12" POSTGIS_VERSION="3"
       node_js: "12"
-  allow_failures:
-    - env: POSTGRESQL_VERSION="11" POSTGIS_VERSION="2.5"
-      node_js: "12"
-    - env: POSTGRESQL_VERSION="12" POSTGIS_VERSION="3"
-      node_js: "12"
 
 before_install:
   - sudo service postgresql stop;
