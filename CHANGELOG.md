@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.65.2
+Release 2020-02-17
+
+- Fix uncatched error during sqlWrappedNode.createTableQuery (#397)
+
 ## 0.65.1
 Release 2019-12-02
 
