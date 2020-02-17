@@ -32,7 +32,7 @@ describe('factory', function() {
             table: Node.PARAM.STRING()
         }, { cache: true });
         TestSource.prototype.sql = function() {
-            return 'select * from ' + this.table;
+            return `select * from ${this.table}`;
         };
 
         var definition = {
@@ -63,7 +63,7 @@ describe('factory', function() {
             table: Node.PARAM.STRING()
         }, { cache: true });
         TestSource.prototype.sql = function() {
-            return 'select * from ' + this.table;
+            return `select * from ${this.table}`;
         };
 
         const invalidFilters = {
