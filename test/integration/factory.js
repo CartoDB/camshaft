@@ -6,6 +6,7 @@ var Node = require('../../lib/node/node');
 var DatabaseService = require('../../lib/service/database');
 var Factory = require('../../lib/workflow/factory');
 var Sampling = require('../../lib/node/nodes/sampling');
+var Source = require('../../lib/node/nodes/source');
 
 var TestConfig = require('../test-config');
 
@@ -101,41 +102,6 @@ describe('factory', function() {
         const typeNodeMap = {};
         typeNodeMap[TEST_SOURCE_TYPE] = TestSource;
         typeNodeMap.sampling = Sampling;
-
-        const factory = new Factory(this.configuration.user, this.databaseService, typeNodeMap);
-        factory.create(definition, function(err) {
-            assert.equal(err.message, RANGE_FILTERS_ERROR_MESSAGE);
-            return done();
-        });
-    });
-
-    it('invalid filters in getColumns', function(done) {
-        const TEST_SOURCE_TYPE = 'test-source';
-        const TestSource = Node.create(TEST_SOURCE_TYPE, {
-            table: Node.PARAM.STRING()
-        }, { cache: true });
-        TestSource.prototype.sql = function() {
-            return 'select * from ' + this.table;
-        };
-
-        const invalid_filters = {
-            price: {
-                type: 'range',
-                column: 'price',
-                params: {
-                }
-            }
-        };
-        const definition = {
-            type: TEST_SOURCE_TYPE,
-            params: {
-                table: 'airbnb_rooms',
-                filters: invalid_filters
-            }
-        };
-
-        const typeNodeMap = {};
-        typeNodeMap[TEST_SOURCE_TYPE] = TestSource;
 
         const factory = new Factory(this.configuration.user, this.databaseService, typeNodeMap);
         factory.create(definition, function(err) {
