@@ -66,7 +66,7 @@ describe('factory', function() {
             return 'select * from ' + this.table;
         };
 
-        const invalid_filters = {
+        const invalidFilters = {
             price: {
                 type: 'range',
                 column: 'price',
@@ -86,7 +86,7 @@ describe('factory', function() {
                 source: sourceDefinition,
                 sampling: 1,
                 seed: 12345,
-                filters: invalid_filters
+                filters: invalidFilters
             }
         };
         const definition = {
