@@ -6,7 +6,6 @@ var Node = require('../../lib/node/node');
 var DatabaseService = require('../../lib/service/database');
 var Factory = require('../../lib/workflow/factory');
 var Sampling = require('../../lib/node/nodes/sampling');
-var Source = require('../../lib/node/nodes/source');
 
 var TestConfig = require('../test-config');
 
