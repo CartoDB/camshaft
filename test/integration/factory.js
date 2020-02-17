@@ -5,8 +5,13 @@ var assert = require('assert');
 var Node = require('../../lib/node/node');
 var DatabaseService = require('../../lib/service/database');
 var Factory = require('../../lib/workflow/factory');
+var Sampling = require('../../lib/node/nodes/sampling');
 
 var TestConfig = require('../test-config');
+
+const RANGE_FILTERS_ERROR_MESSAGE = 'Range filter expect to have at least one value in ' +
+                                    'greater_than, greater_than_or_equal, ' +
+                                    'less_than, less_than_or_equal, min, or max numeric params';
 
 describe('factory', function() {
 
@@ -48,6 +53,58 @@ describe('factory', function() {
             assert.equal(rootNode.sql(), 'select * from airbnb_rooms');
             assert.ok(rootNode.getQuery().match(/^select \* from analysis_/));
 
+            return done();
+        });
+    });
+
+    it('invalid filters in createCacheTable', function(done) {
+        const TEST_SOURCE_TYPE = 'test-source';
+        const TestSource = Node.create(TEST_SOURCE_TYPE, {
+            table: Node.PARAM.STRING()
+        }, { cache: true });
+        TestSource.prototype.sql = function() {
+            return 'select * from ' + this.table;
+        };
+
+        const invalid_filters = {
+            price: {
+                type: 'range',
+                column: 'price',
+                params: {
+                }
+            }
+        };
+        const sourceDefinition = {
+            type: TEST_SOURCE_TYPE,
+            params: {
+                table: 'airbnb_rooms',
+            }
+        };
+        const samplingDefinition = {
+            type: 'sampling',
+            params: {
+                source: sourceDefinition,
+                sampling: 1,
+                seed: 12345,
+                filters: invalid_filters
+            }
+        };
+        const definition = {
+            type: 'sampling',
+            params: {
+                source: samplingDefinition,
+                sampling: 1,
+                seed: 12345,
+            }
+        };
+
+        const typeNodeMap = {};
+        typeNodeMap[TEST_SOURCE_TYPE] = TestSource;
+        typeNodeMap.sampling = Sampling;
+
+        const factory = new Factory(this.configuration.user, this.databaseService, typeNodeMap);
+        factory.create(definition, function(err) {
+            assert.equal(err.message, RANGE_FILTERS_ERROR_MESSAGE);
             return done();
         });
     });
