@@ -35,6 +35,7 @@ before_install:
   - sudo rm -rf /etc/postgresql/$POSTGRESQL_VERSION /var/lib/postgresql/$POSTGRESQL_VERSION
   - sudo pg_createcluster -u postgres $POSTGRESQL_VERSION main -- --auth-local trust
   - sudo /etc/init.d/postgresql start $POSTGRESQL_VERSION || sudo journalctl -xe
+  - sudo systemctl status postgresql
 
 after_failure:
   - pg_lsclusters
