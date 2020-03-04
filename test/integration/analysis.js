@@ -303,7 +303,7 @@ describe('operations', function () {
         Analysis.create(testConfig, sourceAnalysisDefinition, function (err, analysis) {
             BatchClient.prototype.enqueue = enqueueFn;
             assert.ifError(err);
-            assert.ok(enqueueCalled);
+            assert.equal(enqueueCalled, false);
             assert.equal(analysis.getNodes().length, 1);
             done();
         });
