@@ -6,7 +6,10 @@
   "scripts": {
     "lint:fix": "eslint --fix \"lib/**/*.js\" \"test/**/*.js\"",
     "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\"",
-    "test": "make test-all"
+    "pretest": "npm run lint",
+    "test": "NODE_ENV=test mocha -t 5000 --exit --recursive test/setup.js test/acceptance test/integration test/unit",
+    "test:performance": "NODE_ENV=test mocha -t 5000 --exit test/setup.js test/acceptance/performance.js",
+    "cover": "nyc --reporter=lcov npm test"
   },
   "keywords": [
     "cartodb",
