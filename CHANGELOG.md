@@ -3,13 +3,9 @@
 ## 0.65.3
 Release 2020-03-dd
 
+- Removed `jshint` as linter in favour of `eslint` to check syntax, find problems, and enforce code style.
 - Fix noisy message logs while checking analyses' limits.
 - Fix CI setup, explicit use of PGPORT while creating the PostgreSQL cluster.
-
-## 0.65.2
-Release 2020-03-dd
-
-- Removed `jshint` as linter in favour of `eslint` to check syntax, find problems, and enforce code style.
 
 ## 0.65.2
 Release 2020-02-17
