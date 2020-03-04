@@ -4,6 +4,7 @@
 Release 2020-03-dd
 
 - Fix noisy message logs while checking analyses' limits.
+- Fix CI setup, explicit use of PGPORT while creating the PostgreSQL cluster.
 
 ## 0.65.2
 Release 2020-02-17
