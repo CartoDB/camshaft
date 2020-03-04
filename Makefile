@@ -6,8 +6,8 @@ all:
 clean:
 	@rm -rf ./node_modules
 
-jshint:
-	@./node_modules/.bin/jshint lib/ test/
+eslint:
+	@./node_modules/.bin/eslint "lib/**/*.js" "test/**/*.js"
 
 TEST_SUITE := $(shell find test/{acceptance,integration,unit} -name "*.js")
 TEST_SUITE_UNIT := $(shell find test/unit -name "*.js")
@@ -23,7 +23,7 @@ test-unit:
 test-performance:
 	./node_modules/.bin/mocha --exit -u bdd -t $(MOCHA_TIMEOUT) test/setup.js test/acceptance/performance.js ${MOCHA_ARGS}
 
-test-all: test jshint
+test-all: test eslint
 
 coverage:
 	./node_modules/nyc/bin/nyc.js --reporter=lcov npm test
