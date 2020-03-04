@@ -18,7 +18,6 @@ describe('spatial-markov-trend', function () {
             '  m.trend_up,',
             '  m.trend_down,',
             '  m.volatility',
-            /* jshint multistr: true */
             'FROM cdb_crankshaft.CDB_SpatialMarkovTrend(\'select * from table\', Array[\'year0\',\'year1\'], 5, \'knn\', 5, 0, \'the_geom\', \'cartodb_id\') As m',
             'JOIN (select * from table) input_query',
             'ON input_query.cartodb_id = m.rowid\n'
@@ -41,7 +40,6 @@ describe('spatial-markov-trend', function () {
             '  m.trend_up,',
             '  m.trend_down,',
             '  m.volatility',
-            /* jshint multistr: true */
             'FROM cdb_crankshaft.CDB_SpatialMarkovTrend(\'select * from table\', Array[\'year0\',\'year1\'], 5, \'queen\', 5, 21, \'geom\', \'cartodb_id\') As m',
             'JOIN (select * from table) input_query',
             'ON input_query.cartodb_id = m.rowid\n'
