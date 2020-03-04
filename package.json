@@ -21,7 +21,13 @@
     "postgresql",
     "postgis"
   ],
-  "author": "Raul Ochoa <rochoa@cartodb.com>",
+  "author": "CARTO (https://carto.com)",
+  "contributors": [
+    "Raúl Ochoa <rochoa@carto.com>",
+    "Daniel García Aubert <dgaubert@carto.com>",
+    "Javier Goizueta <jgoizueta@carto.com>",
+    "Raúl Marín <rmrodriguez@carto.com>"
+  ],
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
