@@ -11,9 +11,8 @@ var DatabaseService = require('../../lib/service/database');
 var testConfig = require('../test-config');
 var testHelper = require('../helper');
 
-describe('nodes', function() {
-
-    function create(definition, callback) {
+describe('nodes', function () {
+    function create (definition, callback) {
         Analysis.create(testConfig, definition, callback);
     }
 
@@ -42,21 +41,20 @@ describe('nodes', function() {
         }
     };
 
-    describe('source', function() {
-
+    describe('source', function () {
         var getColumnsFn;
-        beforeEach(function() {
+        beforeEach(function () {
             getColumnsFn = QueryParser.prototype.getColumns;
-            QueryParser.prototype.getColumns = function(query, callback) {
+            QueryParser.prototype.getColumns = function (query, callback) {
                 return callback(null, []);
             };
         });
-        afterEach(function() {
+        afterEach(function () {
             QueryParser.prototype.getColumns = getColumnsFn;
         });
 
-        it('should have same ids for same queries', function(done) {
-            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+        it('should have same ids for same queries', function (done) {
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -68,9 +66,8 @@ describe('nodes', function() {
             });
         });
 
-
-        it('should have different ids for different queries', function(done) {
-            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_POSTAL_CODES_DEF], create, function(err, results) {
+        it('should have different ids for different queries', function (done) {
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_POSTAL_CODES_DEF], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -80,12 +77,12 @@ describe('nodes', function() {
             });
         });
 
-        it('should have different ids for same query but columns changing', function(done) {
+        it('should have different ids for same query but columns changing', function (done) {
             var called = false;
-            QueryParser.prototype.getColumns = function(query, callback) {
-                var columns = [{name: 'a'}, {name: 'b'}, {name: 'c'}];
+            QueryParser.prototype.getColumns = function (query, callback) {
+                var columns = [{ name: 'a' }, { name: 'b' }, { name: 'c' }];
                 if (called) {
-                    columns = [{name: 'x'}, {name: 'y'}, {name: 'z'}];
+                    columns = [{ name: 'x' }, { name: 'y' }, { name: 'z' }];
                 }
                 if (!called) {
                     called = true;
@@ -93,7 +90,7 @@ describe('nodes', function() {
                 return callback(null, columns);
             };
 
-            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+            async.map([SOURCE_ATM_MACHINES_DEF, SOURCE_ATM_MACHINES_DEF], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -102,36 +99,34 @@ describe('nodes', function() {
                 done();
             });
         });
-
     });
 
-    describe('source last updated at affecting node.id', function() {
-
+    describe('source last updated at affecting node.id', function () {
         var enqueueCalled = 0;
         var enqueueFn;
         var getLastUpdatedTimeFromAffectedTablesFn;
-        beforeEach(function() {
+        beforeEach(function () {
             enqueueFn = BatchClient.prototype.enqueue;
-            BatchClient.prototype.enqueue = function(query, callback) {
+            BatchClient.prototype.enqueue = function (query, callback) {
                 enqueueCalled += 1;
-                return callback(null, {status: 'ok'});
+                return callback(null, { status: 'ok' });
             };
             getLastUpdatedTimeFromAffectedTablesFn =
                 DatabaseService.prototype.getMetadataFromAffectedTables;
         });
-        afterEach(function() {
+        afterEach(function () {
             assert.ok(enqueueCalled > 0);
             BatchClient.prototype.enqueue = enqueueFn;
             DatabaseService.prototype.getMetadataFromAffectedTables =
                 getLastUpdatedTimeFromAffectedTablesFn;
         });
 
-        it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function(done) {
+        it('should have different ids for same query but different CDB_QueryTables_Updated_At result', function (done) {
             var called = false;
-            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
-            callback) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function (node, skip,
+                callback) {
                 if (node.type !== 'source' || node.getUpdatedAt() !== null) {
-                    return callback(null, {'last_update': node.getUpdatedAt(), 'affected_tables': []});
+                    return callback(null, { last_update: node.getUpdatedAt(), affected_tables: [] });
                 }
                 var lastUpdatedTimeFromAffectedTables = new Date('2016-07-01');
                 if (called) {
@@ -140,10 +135,10 @@ describe('nodes', function() {
                 if (!called) {
                     called = true;
                 }
-                return callback(null, {'last_update': lastUpdatedTimeFromAffectedTables, 'affected_tables': []});
+                return callback(null, { last_update: lastUpdatedTimeFromAffectedTables, affected_tables: [] });
             };
 
-            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
+            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -152,12 +147,12 @@ describe('nodes', function() {
                 var bufferB = results[1].rootNode;
 
                 assert.notEqual(bufferA.source.id(), bufferB.source.id(),
-                        'Sources for buffer should have different id(): "' +
+                    'Sources for buffer should have different id(): "' +
                         bufferA.source.id() + '" != "' + bufferB.source.id() + '"'
                 );
 
                 assert.notEqual(bufferA.id(), bufferB.id(),
-                        'Buffers, as dependant nodes, should also have a different id(): "' +
+                    'Buffers, as dependant nodes, should also have a different id(): "' +
                         bufferA.id() + '" != "' + bufferB.id() + '"'
                 );
 
@@ -165,13 +160,13 @@ describe('nodes', function() {
             });
         });
 
-        it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function(done) {
-            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+        it('should have same ids for same query and same CDB_QueryTables_Updated_At result', function (done) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function (node, skip,
                 callback) {
-                return callback(null, {'last_update': new Date('2016-07-01'), 'affected_tables': []});
+                return callback(null, { last_update: new Date('2016-07-01'), affected_tables: [] });
             };
 
-            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function(err, results) {
+            async.map([BUFFER_OVER_SOURCE, BUFFER_OVER_SOURCE], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -180,12 +175,12 @@ describe('nodes', function() {
                 var bufferB = results[1].rootNode;
 
                 assert.equal(bufferA.source.id(), bufferB.source.id(),
-                        'Sources for buffer should have same id(): "' +
+                    'Sources for buffer should have same id(): "' +
                         bufferA.source.id() + '" == "' + bufferB.source.id() + '"'
                 );
 
                 assert.equal(bufferA.id(), bufferB.id(),
-                        'Buffers, as dependant nodes, should also have same id(): "' +
+                    'Buffers, as dependant nodes, should also have same id(): "' +
                         bufferA.id() + '" == "' + bufferB.id() + '"'
                 );
 
@@ -193,15 +188,17 @@ describe('nodes', function() {
             });
         });
 
-        it('should store the affected tables for the source node', function(done) {
-            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+        it('should store the affected tables for the source node', function (done) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function (node, skip,
                 callback) {
-                return callback(null, {'last_update': new Date('2016-07-01'),
-                                       'affected_tables': [
-                                           {'schema': 'public', 'table':'atm_machines'}
-                                        ]});
+                return callback(null, {
+                    last_update: new Date('2016-07-01'),
+                    affected_tables: [
+                        { schema: 'public', table: 'atm_machines' }
+                    ]
+                });
             };
-            async.map([SOURCE_ATM_MACHINES_DEF], create, function(err, results) {
+            async.map([SOURCE_ATM_MACHINES_DEF], create, function (err, results) {
                 assert.ok(!err, err);
                 assert.equal(results.length, 1);
                 var sourceNode = results[0].rootNode;
@@ -210,13 +207,15 @@ describe('nodes', function() {
             });
         });
 
-        it('should store the affected tables for the non-source node', function(done) {
-            DatabaseService.prototype.getMetadataFromAffectedTables = function(node, skip,
+        it('should store the affected tables for the non-source node', function (done) {
+            DatabaseService.prototype.getMetadataFromAffectedTables = function (node, skip,
                 callback) {
-                return callback(null, {'last_update': new Date('2016-07-01'),
-                                       'affected_tables': []});
+                return callback(null, {
+                    last_update: new Date('2016-07-01'),
+                    affected_tables: []
+                });
             };
-            async.map([BUFFER_OVER_SOURCE], create, function(err, results) {
+            async.map([BUFFER_OVER_SOURCE], create, function (err, results) {
                 assert.ok(!err, err);
                 assert.equal(results.length, 1);
                 var sourceNode = results[0].rootNode;
@@ -224,11 +223,9 @@ describe('nodes', function() {
                 done();
             });
         });
-
     });
 
-    describe('operation', function() {
-
+    describe('operation', function () {
         var TRADE_AREA_WALK = 'walk';
         var TRADE_AREA_15M = 900;
         var ISOLINES = 4;
@@ -236,20 +233,20 @@ describe('nodes', function() {
 
         var enqueueFn;
         var enqueueCalled;
-        before(function() {
+        before(function () {
             enqueueFn = BatchClient.prototype.enqueue;
             enqueueCalled = 0;
-            BatchClient.prototype.enqueue = function(query, callback) {
+            BatchClient.prototype.enqueue = function (query, callback) {
                 enqueueCalled += 1;
-                return callback(null, {status: 'ok'});
+                return callback(null, { status: 'ok' });
             };
         });
-        after(function() {
+        after(function () {
             assert.ok(enqueueCalled > 0);
             BatchClient.prototype.enqueue = enqueueFn;
         });
 
-        it('should have same ids for same params', function(done) {
+        it('should have same ids for same params', function (done) {
             var tradeArea15m = {
                 type: 'trade-area',
                 params: {
@@ -272,7 +269,7 @@ describe('nodes', function() {
                 }
             };
 
-            async.map([tradeArea15m, tradeArea15mOther], create, function(err, results) {
+            async.map([tradeArea15m, tradeArea15mOther], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -283,7 +280,7 @@ describe('nodes', function() {
             });
         });
 
-        it('should have different ids for different params', function(done) {
+        it('should have different ids for different params', function (done) {
             var tradeArea15m = {
                 type: 'trade-area',
                 params: {
@@ -305,7 +302,7 @@ describe('nodes', function() {
                 }
             };
 
-            async.map([tradeArea15m, tradeArea30m], create, function(err, results) {
+            async.map([tradeArea15m, tradeArea30m], create, function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -316,7 +313,7 @@ describe('nodes', function() {
             });
         });
 
-        it('should have different ids for same params but different owner', function(done) {
+        it('should have different ids for same params but different owner', function (done) {
             var tradeArea15m = {
                 type: 'trade-area',
                 params: {
@@ -330,18 +327,18 @@ describe('nodes', function() {
 
             async.parallel(
                 [
-                    function(callback) {
+                    function (callback) {
                         var clonedTestConfig = JSON.parse(JSON.stringify(testConfig));
                         clonedTestConfig.user = 'user1';
                         Analysis.create(clonedTestConfig, tradeArea15m, callback);
                     },
-                    function(callback) {
+                    function (callback) {
                         var clonedTestConfig = JSON.parse(JSON.stringify(testConfig));
                         clonedTestConfig.user = 'user2';
                         Analysis.create(clonedTestConfig, tradeArea15m, callback);
                     }
                 ],
-                function(err, results) {
+                function (err, results) {
                     assert.ok(!err, err);
 
                     assert.equal(results.length, 2);
@@ -351,10 +348,9 @@ describe('nodes', function() {
                     done();
                 }
             );
-
         });
 
-        it('should calculate and return one input node for a node', function(done) {
+        it('should calculate and return one input node for a node', function (done) {
             var tradeArea15m = {
                 type: 'trade-area',
                 params: {
@@ -366,7 +362,7 @@ describe('nodes', function() {
                 }
             };
 
-            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+            Analysis.create(testConfig, tradeArea15m, function (err, analysis) {
                 assert.ok(!err, err);
                 var rootNode = analysis.getRoot();
                 var inputNodes = rootNode.getAllInputNodes();
@@ -375,7 +371,7 @@ describe('nodes', function() {
             });
         });
 
-        it('should calculate and return two input nodes, not just the direct ones', function(done) {
+        it('should calculate and return two input nodes, not just the direct ones', function (done) {
             var tradeArea15m = {
                 type: 'trade-area',
                 params: {
@@ -387,7 +383,7 @@ describe('nodes', function() {
                 }
             };
 
-            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+            Analysis.create(testConfig, tradeArea15m, function (err, analysis) {
                 assert.ok(!err, err);
                 var rootNode = analysis.getRoot();
                 var inputNodes = rootNode.getAllInputNodes();
@@ -396,7 +392,7 @@ describe('nodes', function() {
             });
         });
 
-        it('should calculate and return three input nodes, not just the direct ones', function(done) {
+        it('should calculate and return three input nodes, not just the direct ones', function (done) {
             var merge = {
                 type: 'merge',
                 params: {
@@ -418,11 +414,11 @@ describe('nodes', function() {
                 }
             };
 
-            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+            Analysis.create(testConfig, tradeArea15m, function (err, analysis) {
                 assert.ok(!err, err);
                 var rootNode = analysis.getRoot();
                 var inputNodes = rootNode.getAllInputNodes();
-                var types = inputNodes.reduce(function(list, node){
+                var types = inputNodes.reduce(function (list, node) {
                     list[node.getType()] = ++list[node.getType()] || 1;
                     return list;
                 }, {});
@@ -433,7 +429,7 @@ describe('nodes', function() {
             });
         });
 
-        it('should return a set of input nodes, removing duplicates', function(done) {
+        it('should return a set of input nodes, removing duplicates', function (done) {
             var merge = {
                 type: 'merge',
                 params: {
@@ -443,7 +439,6 @@ describe('nodes', function() {
                     right_source_column: 'cartodb_id'
                 }
             };
-
 
             var tradeArea15m = {
                 type: 'trade-area',
@@ -466,11 +461,11 @@ describe('nodes', function() {
                 }
             };
 
-            Analysis.create(testConfig, mergeSourceAndTradeArea, function(err, analysis) {
+            Analysis.create(testConfig, mergeSourceAndTradeArea, function (err, analysis) {
                 assert.ok(!err, err);
                 var rootNode = analysis.getRoot();
                 var inputNodes = rootNode.getAllInputNodes();
-                var types = inputNodes.reduce(function(list, node){
+                var types = inputNodes.reduce(function (list, node) {
                     list[node.getType()] = ++list[node.getType()] || 1;
                     return list;
                 }, {});
@@ -482,7 +477,7 @@ describe('nodes', function() {
             });
         });
 
-        it('should filter and return only source nodes for all the input nodes', function(done) {
+        it('should filter and return only source nodes for all the input nodes', function (done) {
             var merge = {
                 type: 'merge',
                 params: {
@@ -504,13 +499,13 @@ describe('nodes', function() {
                 }
             };
 
-            Analysis.create(testConfig, tradeArea15m, function(err, analysis) {
+            Analysis.create(testConfig, tradeArea15m, function (err, analysis) {
                 assert.ok(!err, err);
                 var rootNode = analysis.getRoot();
-                var inputNodes = rootNode.getAllInputNodes(function(node) {
+                var inputNodes = rootNode.getAllInputNodes(function (node) {
                     return node.getType() === 'source';
                 });
-                var types = inputNodes.reduce(function(list, node){
+                var types = inputNodes.reduce(function (list, node) {
                     list[node.getType()] = ++list[node.getType()] || 1;
                     return list;
                 }, {});
@@ -521,7 +516,7 @@ describe('nodes', function() {
             });
         });
 
-        it('merge should return unique cartodb_ids', function(done) {
+        it('merge should return unique cartodb_ids', function (done) {
             var merge = {
                 type: 'merge',
                 params: {
@@ -534,12 +529,12 @@ describe('nodes', function() {
                 }
             };
 
-            testHelper.createAnalyses(merge, function(err, results) {
+            testHelper.createAnalyses(merge, function (err, results) {
                 assert.ifError(err);
 
                 var rootNode = results.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
                     const uniqueIds = [...new Set(rows.map(r => r.cartodb_id))];
                     assert.equal(uniqueIds.length, rows.length);
@@ -547,10 +542,9 @@ describe('nodes', function() {
                     return done();
                 });
             });
-
         });
 
-        it('merge should allow chained merges', function(done) {
+        it('merge should allow chained merges', function (done) {
             var merge = {
                 type: 'merge',
                 params: {
@@ -587,12 +581,12 @@ describe('nodes', function() {
                 }
             };
 
-            testHelper.createAnalyses(merge3, function(err, results) {
+            testHelper.createAnalyses(merge3, function (err, results) {
                 assert.ifError(err);
 
                 var rootNode = results.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
                     const uniqueIds = [...new Set(rows.map(r => r.cartodb_id))];
                     assert.equal(uniqueIds.length, rows.length);
@@ -601,7 +595,5 @@ describe('nodes', function() {
                 });
             });
         });
-
-
     });
 });

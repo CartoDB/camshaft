@@ -19,8 +19,8 @@ describe('deprecated-sql-function analysis', function () {
         }
     };
 
-    describe('basics', function() {
-        before(function(done) {
+    describe('basics', function () {
+        before(function (done) {
             testHelper.executeQuery([
                 'CREATE OR REPLACE FUNCTION DEP_EXT_test_deprecated_fn(',
                 '    operation text, table_name text, query text, columns text[],',
@@ -45,25 +45,25 @@ describe('deprecated-sql-function analysis', function () {
             ].join('\n'), done);
         });
 
-        after(function(done) {
+        after(function (done) {
             testHelper.executeQuery(
                 'DROP FUNCTION DEP_EXT_test_deprecated_fn(text, text, text, text[], numeric, numeric, numeric, text)',
                 done
             );
         });
 
-        function deprecatedSqlFnDefinition(fnArgs) {
+        function deprecatedSqlFnDefinition (fnArgs) {
             return {
                 type: 'deprecated-sql-function',
                 params: {
                     function_name: 'DEP_EXT_test_deprecated_fn',
                     primary_source: BASIC_SOURCE_NODE,
-                    function_args: fnArgs || [1, 2, 3, 'wadus'],
+                    function_args: fnArgs || [1, 2, 3, 'wadus']
                 }
             };
         }
 
-        function expectedRows(a, b, c) {
+        function expectedRows (a, b, c) {
             return [
                 {
                     cartodb_id: 1,
@@ -88,17 +88,17 @@ describe('deprecated-sql-function analysis', function () {
                     c: c,
                     st_x: 3 + a,
                     st_y: 3 + b + c
-                },
+                }
             ];
         }
 
         it('happy case', function (done) {
-            testHelper.createAnalyses(deprecatedSqlFnDefinition(), function(err, result) {
+            testHelper.createAnalyses(deprecatedSqlFnDefinition(), function (err, result) {
                 assert.ifError(err);
                 var query = 'select cartodb_id, a, b, c, st_x(the_geom), st_y(the_geom) from (' +
                     result.getRoot().getQuery() +
                     ') _q';
-                testHelper.getRows(query, function(err, rows) {
+                testHelper.getRows(query, function (err, rows) {
                     assert.ifError(err);
                     assert.equal(rows.length, 3);
                     assert.deepEqual(rows, expectedRows(1, 2, 3));
@@ -109,12 +109,12 @@ describe('deprecated-sql-function analysis', function () {
 
         it('change extra args', function (done) {
             var extraArgs = [9, 8, 7, 'wadus'];
-            testHelper.createAnalyses(deprecatedSqlFnDefinition(extraArgs), function(err, result) {
+            testHelper.createAnalyses(deprecatedSqlFnDefinition(extraArgs), function (err, result) {
                 assert.ifError(err);
                 var query = 'select cartodb_id, a, b, c, st_x(the_geom), st_y(the_geom) from (' +
                     result.getRoot().getQuery() +
                     ') _q';
-                testHelper.getRows(query, function(err, rows) {
+                testHelper.getRows(query, function (err, rows) {
                     assert.ifError(err);
                     assert.equal(rows.length, 3);
                     assert.deepEqual(rows, expectedRows.apply(null, extraArgs));
@@ -122,16 +122,14 @@ describe('deprecated-sql-function analysis', function () {
                 });
             });
         });
-
     });
 
-    describe('invalid schema', function() {
-
-        function createInvalidDeprecatedFunctionQuery(fnName, tableColumns) {
+    describe('invalid schema', function () {
+        function createInvalidDeprecatedFunctionQuery (fnName, tableColumns) {
             var tKeys = Object.keys(tableColumns);
             var sep = (tKeys.length > 0) ? ',' : '';
-            var columns = tKeys.map(function(c) { return tableColumns[c]; }).join(',') + sep;
-            var selectAsColumns = tKeys.map(function(c) { return c; }).join(',') + sep;
+            var columns = tKeys.map(function (c) { return tableColumns[c]; }).join(',') + sep;
+            var selectAsColumns = tKeys.map(function (c) { return c; }).join(',') + sep;
             return [
                 'CREATE OR REPLACE FUNCTION ' + fnName + '(',
                 '    operation text, table_name text, query text, columns text[], buster numeric',
@@ -150,7 +148,7 @@ describe('deprecated-sql-function analysis', function () {
             ].join('\n');
         }
 
-        function invalidSchemaDeprecatedSqlFnDefinition(fnName, buster) {
+        function invalidSchemaDeprecatedSqlFnDefinition (fnName, buster) {
             return {
                 type: 'deprecated-sql-function',
                 params: {
@@ -161,17 +159,17 @@ describe('deprecated-sql-function analysis', function () {
             };
         }
 
-        function mandatoryColumns() {
+        function mandatoryColumns () {
             return {
                 cartodb_id: 'cartodb_id numeric',
                 the_geom: 'the_geom geometry'
             };
         }
 
-        describe('missing columns', function() {
+        describe('missing columns', function () {
             var fnName = 'DEP_EXT_test_deprecated_fn_invalid_schema';
 
-            afterEach(function(done) {
+            afterEach(function (done) {
                 testHelper.executeQuery(
                     'DROP FUNCTION ' + fnName + '(text, text, text, text[], numeric)',
                     done
@@ -190,20 +188,20 @@ describe('deprecated-sql-function analysis', function () {
                 }
             ];
 
-            missingColumnScenarios.forEach(function(scenario, buster) {
+            missingColumnScenarios.forEach(function (scenario, buster) {
                 var missingColumns = scenario.columnsToMiss.join(' and ');
                 it('should fail on missing ' + missingColumns, function (done) {
                     var tableColumns = mandatoryColumns();
-                    scenario.columnsToMiss.forEach(function(columnToMiss) {
+                    scenario.columnsToMiss.forEach(function (columnToMiss) {
                         delete tableColumns[columnToMiss];
                     });
-                    var expectedMessage = scenario.columnsToMiss.map(function(columnToMiss) {
+                    var expectedMessage = scenario.columnsToMiss.map(function (columnToMiss) {
                         return 'Missing required column `' + columnToMiss + '`';
                     }).join('; ');
-                    testHelper.executeQuery(createInvalidDeprecatedFunctionQuery(fnName, tableColumns), function(err) {
+                    testHelper.executeQuery(createInvalidDeprecatedFunctionQuery(fnName, tableColumns), function (err) {
                         assert.ifError(err);
                         var def = invalidSchemaDeprecatedSqlFnDefinition(fnName, buster);
-                        testHelper.createAnalyses(def, function(err) {
+                        testHelper.createAnalyses(def, function (err) {
                             assert.ok(err);
                             assert.equal(err.message, 'Validation failed: ' + expectedMessage + '.');
                             return done();
@@ -213,10 +211,10 @@ describe('deprecated-sql-function analysis', function () {
             });
         });
 
-        describe('invalid column types', function() {
+        describe('invalid column types', function () {
             var fnName = 'DEP_EXT_test_deprecated_fn_invalid_type';
 
-            afterEach(function(done) {
+            afterEach(function (done) {
                 testHelper.executeQuery(
                     'DROP FUNCTION ' + fnName + '(text, text, text, text[], numeric)',
                     done
@@ -241,13 +239,13 @@ describe('deprecated-sql-function analysis', function () {
                     }
                 }
             ];
-            invalidTypeScenarios.forEach(function(scenario, index) {
+            invalidTypeScenarios.forEach(function (scenario, index) {
                 it('should fail for ' + scenario.column + ' invalid column type', function (done) {
                     var createFnQuery = createInvalidDeprecatedFunctionQuery(fnName, scenario.tableColumns);
-                    testHelper.executeQuery(createFnQuery, function(err) {
+                    testHelper.executeQuery(createFnQuery, function (err) {
                         assert.ifError(err);
                         var def = invalidSchemaDeprecatedSqlFnDefinition(fnName, index);
-                        testHelper.createAnalyses(def, function(err) {
+                        testHelper.createAnalyses(def, function (err) {
                             assert.ok(err);
                             assert.equal(
                                 err.message,
@@ -264,17 +262,16 @@ describe('deprecated-sql-function analysis', function () {
         });
     });
 
-    describe('optional arguments', function() {
-
+    describe('optional arguments', function () {
         var fnName = 'DEP_EXT_test_deprecated_fn_opt_args';
 
-        function formattedOptArgs(optArgs) {
-            return (Array.isArray(optArgs) && optArgs.length > 0) ?
-                ',' + optArgs.join(',') :
-                '';
+        function formattedOptArgs (optArgs) {
+            return (Array.isArray(optArgs) && optArgs.length > 0)
+                ? ',' + optArgs.join(',')
+                : '';
         }
 
-        function createOptArgsFnQuery(optArgs) {
+        function createOptArgsFnQuery (optArgs) {
             return [
                 'CREATE OR REPLACE FUNCTION ' + fnName + '(',
                 '    operation text, table_name text, query text, columns text[]' + formattedOptArgs(optArgs),
@@ -295,11 +292,11 @@ describe('deprecated-sql-function analysis', function () {
             ].join('\n');
         }
 
-        function dropOptArgsFnQuery(optArgs) {
-            return 'DROP FUNCTION ' + fnName + '(text, text, text, text[]'  + formattedOptArgs(optArgs) + ')';
+        function dropOptArgsFnQuery (optArgs) {
+            return 'DROP FUNCTION ' + fnName + '(text, text, text, text[]' + formattedOptArgs(optArgs) + ')';
         }
 
-        function optArgsDeprecatedSqlFnDefinition(secondarySource, extraArgs) {
+        function optArgsDeprecatedSqlFnDefinition (secondarySource, extraArgs) {
             var def = {
                 type: 'deprecated-sql-function',
                 params: {
@@ -365,12 +362,12 @@ describe('deprecated-sql-function analysis', function () {
             }
         ];
 
-        scenarios.forEach(function(scenario) {
-            it('should work with ' + scenario.desc, function(done) {
-                testHelper.executeQuery(createOptArgsFnQuery(scenario.extraFnArguments), function(err) {
+        scenarios.forEach(function (scenario) {
+            it('should work with ' + scenario.desc, function (done) {
+                testHelper.executeQuery(createOptArgsFnQuery(scenario.extraFnArguments), function (err) {
                     assert.ifError(err);
                     var def = optArgsDeprecatedSqlFnDefinition(scenario.secondarySource, scenario.extraFnParams);
-                    testHelper.getResult(def, function(err, rows) {
+                    testHelper.getResult(def, function (err, rows) {
                         assert.ok(!err, err);
                         assert.equal(rows.length, 3);
                         testHelper.executeQuery(dropOptArgsFnQuery(scenario.extraFnArguments), done);
@@ -380,11 +377,10 @@ describe('deprecated-sql-function analysis', function () {
         });
     });
 
-    describe('throw and catch errors', function() {
-
+    describe('throw and catch errors', function () {
         var fnName = 'DEP_EXT_test_deprecated_fn_raising_error';
 
-        before(function(done) {
+        before(function (done) {
             testHelper.executeQuery([
                 'CREATE OR REPLACE FUNCTION ' + fnName + '(',
                 '    operation text, table_name text, query text, columns text[], buster numeric',
@@ -409,14 +405,14 @@ describe('deprecated-sql-function analysis', function () {
             ].join('\n'), done);
         });
 
-        after(function(done) {
+        after(function (done) {
             testHelper.executeQuery(
                 'DROP FUNCTION ' + fnName + '(text, text, text, text[], numeric)',
                 done
             );
         });
 
-        function invalidSchemaDeprecatedSqlFnDefinition(buster) {
+        function invalidSchemaDeprecatedSqlFnDefinition (buster) {
             return {
                 type: 'deprecated-sql-function',
                 params: {
@@ -428,10 +424,10 @@ describe('deprecated-sql-function analysis', function () {
         }
 
         it('should work for valid buster param', function (done) {
-            testHelper.getResult(invalidSchemaDeprecatedSqlFnDefinition(1), function(err, rows) {
+            testHelper.getResult(invalidSchemaDeprecatedSqlFnDefinition(1), function (err, rows) {
                 assert.ok(!err, err);
                 assert.equal(rows.length, 3);
-                rows.forEach(function(row) {
+                rows.forEach(function (row) {
                     assert.equal(row.buster, 1);
                 });
                 return done();
@@ -439,7 +435,7 @@ describe('deprecated-sql-function analysis', function () {
         });
 
         it('should expose error raised from function', function (done) {
-            testHelper.createAnalyses(invalidSchemaDeprecatedSqlFnDefinition(-1), function(err) {
+            testHelper.createAnalyses(invalidSchemaDeprecatedSqlFnDefinition(-1), function (err) {
                 assert.ok(err);
                 assert.equal(err.message, 'Invalid buster value=-1');
                 assert.equal(err.hint, 'Please provide a positive value for buster');

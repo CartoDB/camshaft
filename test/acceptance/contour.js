@@ -3,9 +3,7 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-
 describe('contour', function () {
-
     var QUERY_AIRBNB_ROOMS = 'select * from airbnb_rooms';
 
     var analysisDefinition = {
@@ -28,7 +26,6 @@ describe('contour', function () {
 
     it('basic contour test', function (done) {
         testHelper.createAnalyses(analysisDefinition, function (err, contour) {
-
             assert.ifError(err);
 
             var rootNode = contour.getRoot();
@@ -43,5 +40,4 @@ describe('contour', function () {
             });
         });
     });
-
 });

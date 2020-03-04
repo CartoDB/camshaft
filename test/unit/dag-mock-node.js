@@ -1,6 +1,6 @@
 'use strict';
 
-function MockNode(id, inputNodes) {
+function MockNode (id, inputNodes) {
     this._id = id;
     this._inputNodes = [];
 
@@ -11,21 +11,21 @@ function MockNode(id, inputNodes) {
 
 module.exports = MockNode;
 
-MockNode.prototype.id = function() {
+MockNode.prototype.id = function () {
     return this._id;
 };
 
-MockNode.prototype.getInputNodes = function() {
+MockNode.prototype.getInputNodes = function () {
     return this._inputNodes;
 };
 
-MockNode.prototype.getType = function() {
+MockNode.prototype.getType = function () {
     return 'mock-node';
 };
 
-MockNode.prototype.toJSON = function() {
+MockNode.prototype.toJSON = function () {
     return {
         id: this._id,
-        inputNodes: this._inputNodes.map(function(n) { return n.id(); })
+        inputNodes: this._inputNodes.map(function (n) { return n.id(); })
     };
 };

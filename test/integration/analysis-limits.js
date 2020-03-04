@@ -8,10 +8,8 @@ var BatchClient = require('../../lib/postgresql/batch-client');
 
 var testConfig = require('../test-config');
 
-describe('workflow', function() {
-
-    describe('create', function() {
-
+describe('workflow', function () {
+    describe('create', function () {
         var QUERY_ATM_MACHINES = 'select * from atm_machines';
         var TRADE_AREA_WALK = 'walk';
         var TRADE_AREA_15M = 900;
@@ -36,7 +34,7 @@ describe('workflow', function() {
             }
         };
 
-        it('should abort analysis over the limits for source', function(done) {
+        it('should abort analysis over the limits for source', function (done) {
             var limitedConfig = testConfig.create({
                 limits: {
                     analyses: {
@@ -46,20 +44,20 @@ describe('workflow', function() {
                     }
                 }
             });
-            Analysis.create(limitedConfig, sourceAnalysisDefinition, function(err) {
+            Analysis.create(limitedConfig, sourceAnalysisDefinition, function (err) {
                 assert.ok(err);
                 done();
             });
         });
 
-        it('source analysis has no limit by default', function(done) {
-            Analysis.create(testConfig, sourceAnalysisDefinition, function(err) {
+        it('source analysis has no limit by default', function (done) {
+            Analysis.create(testConfig, sourceAnalysisDefinition, function (err) {
                 assert.ok(!err, err);
                 done();
             });
         });
 
-        it('should abort analysis over the limits for trade areas', function(done) {
+        it('should abort analysis over the limits for trade areas', function (done) {
             var limitedConfig = testConfig.create({
                 limits: {
                     analyses: {
@@ -71,18 +69,16 @@ describe('workflow', function() {
             });
 
             var enqueueFn = BatchClient.prototype.enqueue;
-            BatchClient.prototype.enqueue = function(query, callback) {
-                return callback(null, {status: 'ok'});
+            BatchClient.prototype.enqueue = function (query, callback) {
+                return callback(null, { status: 'ok' });
             };
 
-            Analysis.create(limitedConfig, tradeAreaAnalysisDefinition, function(err) {
+            Analysis.create(limitedConfig, tradeAreaAnalysisDefinition, function (err) {
                 BatchClient.prototype.enqueue = enqueueFn;
 
                 assert.ok(err);
                 done();
             });
         });
-
     });
-
 });

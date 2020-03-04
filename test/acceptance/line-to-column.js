@@ -3,7 +3,7 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-describe('line-to-column analysis', function() {
+describe('line-to-column analysis', function () {
     var QUERY_SOURCE = 'select * from atm_machines';
 
     var sourceAtmMachines = {
@@ -23,14 +23,14 @@ describe('line-to-column analysis', function() {
         };
 
         it('should create analysis', function (done) {
-            testHelper.createAnalyses(lineToColumnDefinition, function(err, lineToColumn) {
+            testHelper.createAnalyses(lineToColumnDefinition, function (err, lineToColumn) {
                 assert.ifError(err);
 
                 var rootNode = lineToColumn.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.length === 'number');

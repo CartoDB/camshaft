@@ -31,8 +31,8 @@ function create (override) {
 }
 
 function defaults (obj, def) {
-    Object.keys(def).forEach(function(key) {
-        if (!obj.hasOwnProperty(key)) {
+    Object.keys(def).forEach(function (key) {
+        if (!Object.prototype.hasOwnProperty.call(obj, key)) {
             obj[key] = def[key];
         }
     });

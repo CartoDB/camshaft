@@ -4,9 +4,8 @@ var assert = require('assert');
 var Range = require('../../../lib/filter/range');
 
 describe('range-filter', function () {
-
     describe('without limits', function () {
-        it('should throw an error', function() {
+        it('should throw an error', function () {
             var shouldThrow = function () {
                 this.column = 'age';
                 this.filterParams = {};
@@ -28,7 +27,7 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filtered query', function() {
+        it('should retrieve a filtered query', function () {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
@@ -45,7 +44,7 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filtered query', function() {
+        it('should retrieve a filtered query', function () {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
@@ -62,7 +61,7 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filtered query', function() {
+        it('should retrieve a filtered query', function () {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
@@ -79,7 +78,7 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filter query', function() {
+        it('should retrieve a filter query', function () {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
@@ -100,7 +99,7 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filter query', function() {
+        it('should retrieve a filter query', function () {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
@@ -121,10 +120,9 @@ describe('range-filter', function () {
             this.range = new Range(this.column, this.filterParams);
         });
 
-        it('should retrieve a filter query', function() {
+        it('should retrieve a filter query', function () {
             var rangeSql = this.range.sql('select age from population');
             assert.equal(rangeSql, EXPECTED_RANGE_SQL);
         });
     });
-
 });

@@ -4,24 +4,23 @@ var assert = require('assert');
 var Source = require('../../../lib/node/nodes/source');
 var Sampling = require('../../../lib/node/nodes/sampling');
 
-describe('sampling', function() {
-
+describe('sampling', function () {
     var owner = 'localhost';
     var source = new Source(owner, { query: 'select * from table' });
 
-    it('should set random sampling', function() {
+    it('should set random sampling', function () {
         var sampling = new Sampling(owner, { source: source, sampling: 0.4 });
 
         assert.equal(sampling.sampling, 0.4);
     });
 
-    it('should set seed', function() {
+    it('should set seed', function () {
         var sampling = new Sampling(owner, { source: source, sampling: 0.4, seed: 0.1 });
 
         assert.equal(sampling.seed, 0.1);
         assert.equal(sampling.sql(), [
-          'WITH _rndseed as ( select setseed(0.1) )',
-          'SELECT * FROM (select * from table) q where RANDOM() < 0.4'
+            'WITH _rndseed as ( select setseed(0.1) )',
+            'SELECT * FROM (select * from table) q where RANDOM() < 0.4'
         ].join('\n'));
     });
 });

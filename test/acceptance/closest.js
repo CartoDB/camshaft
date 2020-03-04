@@ -3,9 +3,7 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-
 describe('closest analysis', function () {
-
     var QUERY_SOURCE = 'select * from closest_analysis_source';
     /**
      * cartodb_id,x,y
@@ -28,7 +26,6 @@ describe('closest analysis', function () {
      * 9,C,3,0.3
      */
 
-
     /**
      *   C                   C                  C  \
      *   B                   B                  B  | <= TARGETS
@@ -37,7 +34,7 @@ describe('closest analysis', function () {
      * (1,0)               (2,0)              (3,0)
      */
 
-    function closestAnalysisDefinition(responses, category) {
+    function closestAnalysisDefinition (responses, category) {
         return {
             type: 'closest',
             params: {
@@ -60,7 +57,7 @@ describe('closest analysis', function () {
     }
 
     it('basic (1 target per source)', function (done) {
-        testHelper.getResult(closestAnalysisDefinition(), function(err, rows) {
+        testHelper.getResult(closestAnalysisDefinition(), function (err, rows) {
             assert.ifError(err);
             assert.equal(rows.length, 3);
             testHelper.checkCartodbIdIsSorted(rows);
@@ -86,7 +83,7 @@ describe('closest analysis', function () {
     });
 
     it('2 targets per source', function (done) {
-        testHelper.getResult(closestAnalysisDefinition(2), function(err, rows) {
+        testHelper.getResult(closestAnalysisDefinition(2), function (err, rows) {
             assert.ifError(err);
             assert.equal(rows.length, 6);
             testHelper.checkCartodbIdIsSorted(rows);
@@ -124,7 +121,7 @@ describe('closest analysis', function () {
     });
 
     it('4 targets per source, only checks for source=1', function (done) {
-        testHelper.getResult(closestAnalysisDefinition(4), function(err, rows) {
+        testHelper.getResult(closestAnalysisDefinition(4), function (err, rows) {
             assert.ifError(err);
             assert.equal(rows.length, 12);
             testHelper.checkCartodbIdIsUnique(rows);
@@ -152,7 +149,7 @@ describe('closest analysis', function () {
     });
 
     it('does not return more points than existing ones for big responses param', function (done) {
-        testHelper.getResult(closestAnalysisDefinition(10), function(err, rows) {
+        testHelper.getResult(closestAnalysisDefinition(10), function (err, rows) {
             assert.ifError(err);
             // max 9 targets per source
             assert.equal(rows.length, 27);
@@ -161,9 +158,9 @@ describe('closest analysis', function () {
         });
     });
 
-    describe('category', function() {
+    describe('category', function () {
         it('basic category (1 target per source and category)', function (done) {
-            testHelper.getResult(closestAnalysisDefinition(1, 'category'), function(err, rows) {
+            testHelper.getResult(closestAnalysisDefinition(1, 'category'), function (err, rows) {
                 assert.ifError(err);
                 assert.equal(rows.length, 9);
                 testHelper.checkCartodbIdIsSorted(rows);
@@ -189,7 +186,7 @@ describe('closest analysis', function () {
         });
 
         it('2 results per category per source', function (done) {
-            testHelper.getResult(closestAnalysisDefinition(2, 'category'), function(err, rows) {
+            testHelper.getResult(closestAnalysisDefinition(2, 'category'), function (err, rows) {
                 assert.ifError(err);
                 assert.equal(rows.length, 18);
                 testHelper.checkCartodbIdIsUnique(rows);
@@ -231,7 +228,7 @@ describe('closest analysis', function () {
         });
 
         it('does not return more results per category than existing ones', function (done) {
-            testHelper.getResult(closestAnalysisDefinition(4, 'category'), function(err, rows) {
+            testHelper.getResult(closestAnalysisDefinition(4, 'category'), function (err, rows) {
                 assert.ifError(err);
                 assert.equal(rows.length, 27);
                 testHelper.checkCartodbIdIsUnique(rows);

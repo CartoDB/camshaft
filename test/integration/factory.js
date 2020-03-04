@@ -13,9 +13,8 @@ const RANGE_FILTERS_ERROR_MESSAGE = 'Range filter expect to have at least one va
                                     'greater_than, greater_than_or_equal, ' +
                                     'less_than, less_than_or_equal, min, or max numeric params';
 
-describe('factory', function() {
-
-    before(function() {
+describe('factory', function () {
+    before(function () {
         var configuration = TestConfig.create({ batch: { inlineExecution: true } });
         this.configuration = configuration;
         this.databaseService = new DatabaseService(
@@ -26,12 +25,12 @@ describe('factory', function() {
         );
     });
 
-    it('basic test-source node', function(done) {
+    it('basic test-source node', function (done) {
         var TEST_SOURCE_TYPE = 'test-source';
         var TestSource = Node.create(TEST_SOURCE_TYPE, {
             table: Node.PARAM.STRING()
         }, { cache: true });
-        TestSource.prototype.sql = function() {
+        TestSource.prototype.sql = function () {
             return `select * from ${this.table}`;
         };
 
@@ -46,7 +45,7 @@ describe('factory', function() {
         typeNodeMap[TEST_SOURCE_TYPE] = TestSource;
 
         var factory = new Factory(this.configuration.user, this.databaseService, typeNodeMap);
-        factory.create(definition, function(err, rootNode) {
+        factory.create(definition, function (err, rootNode) {
             assert.ifError(err);
 
             assert.equal(rootNode.getType(), TEST_SOURCE_TYPE);
@@ -57,12 +56,12 @@ describe('factory', function() {
         });
     });
 
-    it('invalid filters in createCacheTable', function(done) {
+    it('invalid filters in createCacheTable', function (done) {
         const TEST_SOURCE_TYPE = 'test-source';
         const TestSource = Node.create(TEST_SOURCE_TYPE, {
             table: Node.PARAM.STRING()
         }, { cache: true });
-        TestSource.prototype.sql = function() {
+        TestSource.prototype.sql = function () {
             return `select * from ${this.table}`;
         };
 
@@ -77,7 +76,7 @@ describe('factory', function() {
         const sourceDefinition = {
             type: TEST_SOURCE_TYPE,
             params: {
-                table: 'airbnb_rooms',
+                table: 'airbnb_rooms'
             }
         };
         const samplingDefinition = {
@@ -94,7 +93,7 @@ describe('factory', function() {
             params: {
                 source: samplingDefinition,
                 sampling: 1,
-                seed: 12345,
+                seed: 12345
             }
         };
 
@@ -103,7 +102,7 @@ describe('factory', function() {
         typeNodeMap.sampling = Sampling;
 
         const factory = new Factory(this.configuration.user, this.databaseService, typeNodeMap);
-        factory.create(definition, function(err) {
+        factory.create(definition, function (err) {
             assert.equal(err.message, RANGE_FILTERS_ERROR_MESSAGE);
             return done();
         });

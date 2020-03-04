@@ -4,8 +4,7 @@ var assert = require('assert');
 
 var reference = require('../../../reference/index');
 
-describe('camshaft-reference-graph', function() {
-
+describe('camshaft-reference-graph', function () {
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
     var TRADE_AREA_WALK = 'walk';
     var TRADE_AREA_15M = 1200;
@@ -36,7 +35,7 @@ describe('camshaft-reference-graph', function() {
         }
     };
 
-    function alreadyFilteredTradeAreaDefinition() {
+    function alreadyFilteredTradeAreaDefinition () {
         return {
             id: 'a1',
             type: 'trade-area',
@@ -74,7 +73,7 @@ describe('camshaft-reference-graph', function() {
         }
     };
 
-    it('should return a dictionary with all nodes with ids', function() {
+    it('should return a dictionary with all nodes with ids', function () {
         var analysisGraph = new reference.AnalysisGraph(pointsInPolygonDefinition);
 
         var nodes = analysisGraph.getNodesWithId();
@@ -83,7 +82,7 @@ describe('camshaft-reference-graph', function() {
         assert.deepEqual(nodeIds, ['a2', 'b0', 'a1', 'a0']);
     });
 
-    it('should return a list with all nodes', function() {
+    it('should return a list with all nodes', function () {
         var analysisGraph = new reference.AnalysisGraph(pointsInPolygonDefinition);
 
         var nodesList = analysisGraph.getNodesList();
@@ -91,7 +90,7 @@ describe('camshaft-reference-graph', function() {
         assert.equal(nodesList.length, 4);
     });
 
-    it('should return a list with all nodes but skip node without id', function() {
+    it('should return a list with all nodes but skip node without id', function () {
         var analysisGraph = new reference.AnalysisGraph(noIdPointsInPolygonDefinition);
 
         var nodesList = analysisGraph.getNodesList();
@@ -102,7 +101,7 @@ describe('camshaft-reference-graph', function() {
         assert.deepEqual(nodeIds, ['b0', 'a1', 'a0']);
     });
 
-    it('should return a modified node with filters', function() {
+    it('should return a modified node with filters', function () {
         var analysisGraph = new reference.AnalysisGraph(tradeAreaDefinition);
         var filters = {
             bank_category: {
@@ -113,7 +112,7 @@ describe('camshaft-reference-graph', function() {
                 }
             }
         };
-        var analysisDefinition = analysisGraph.getDefinitionWith('a0', {filters: filters});
+        var analysisDefinition = analysisGraph.getDefinitionWith('a0', { filters: filters });
 
         var extendedGraph = new reference.AnalysisGraph(analysisDefinition);
         var nodes = extendedGraph.getNodesWithId();
@@ -121,7 +120,7 @@ describe('camshaft-reference-graph', function() {
         assert.deepEqual(nodes.a0.params.filters, filters);
     });
 
-    it('should return a modified node with filters, keeping previous filters', function() {
+    it('should return a modified node with filters, keeping previous filters', function () {
         var analysisGraph = new reference.AnalysisGraph(alreadyFilteredTradeAreaDefinition());
         var filters = {
             bank_category: {
@@ -132,7 +131,7 @@ describe('camshaft-reference-graph', function() {
                 }
             }
         };
-        var analysisDefinition = analysisGraph.getDefinitionWith('a1', {filters: filters});
+        var analysisDefinition = analysisGraph.getDefinitionWith('a1', { filters: filters });
 
         var extendedGraph = new reference.AnalysisGraph(analysisDefinition);
         var extendedNodes = extendedGraph.getNodesWithId();
@@ -148,7 +147,7 @@ describe('camshaft-reference-graph', function() {
         );
     });
 
-    it('should return a modified node with filters, overwriting keys', function() {
+    it('should return a modified node with filters, overwriting keys', function () {
         var analysisGraph = new reference.AnalysisGraph(alreadyFilteredTradeAreaDefinition());
         var filters = {
             original_bank_category: {
@@ -159,7 +158,7 @@ describe('camshaft-reference-graph', function() {
                 }
             }
         };
-        var analysisDefinition = analysisGraph.getDefinitionWith('a1', {filters: filters});
+        var analysisDefinition = analysisGraph.getDefinitionWith('a1', { filters: filters });
 
         var extendedGraph = new reference.AnalysisGraph(analysisDefinition);
         var extendedNodes = extendedGraph.getNodesWithId();
@@ -167,7 +166,7 @@ describe('camshaft-reference-graph', function() {
         assert.deepEqual(extendedNodes.a1.params.filters, filters);
     });
 
-    it('should work with missing optional nodes', function() {
+    it('should work with missing optional nodes', function () {
         var def = {
             id: 'a1',
             type: 'deprecated-sql-function',
@@ -192,7 +191,7 @@ describe('camshaft-reference-graph', function() {
                 range_filter: {
                     type: 'range',
                     column: 'y',
-                    params:{
+                    params: {
                         min: 2,
                         max: 8
                     }
@@ -207,5 +206,4 @@ describe('camshaft-reference-graph', function() {
         var extendedNodes = extendedGraph.getNodesWithId();
         assert.deepEqual(extendedNodes.a1.params.filters, filters);
     });
-
 });

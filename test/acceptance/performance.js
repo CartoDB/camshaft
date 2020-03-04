@@ -8,11 +8,10 @@ var Analysis = require('../../lib/analysis');
 
 var testConfig = require('../test-config');
 
-describe('performance', function() {
-
-    function explain(query, callback) {
+describe('performance', function () {
+    function explain (query, callback) {
         var queryRunner = new QueryRunner(testConfig.db);
-        queryRunner.run('EXPLAIN (FORMAT JSON) ' + query, function(err, result) {
+        queryRunner.run('EXPLAIN (FORMAT JSON) ' + query, function (err, result) {
             assert.ok(!err, err);
             assert.ok(result);
             var rows = result.rows || [{}];
@@ -24,10 +23,10 @@ describe('performance', function() {
     var enqueueFn;
     var enqueueCalled;
 
-    before(function() {
+    before(function () {
         enqueueFn = BatchClient.prototype.enqueue;
         enqueueCalled = 0;
-        BatchClient.prototype.enqueue = function(query, callback) {
+        BatchClient.prototype.enqueue = function (query, callback) {
             enqueueCalled += 1;
             return callback(null, { status: 'ok' });
         };
@@ -43,35 +42,35 @@ describe('performance', function() {
 
     var analyses = [
         {
-            'type': 'point-in-polygon',
-            'params': {
-                'points_source': {
-                    'type': 'source',
-                    'params': {
-                        'query': SOURCE_AIRBNB
+            type: 'point-in-polygon',
+            params: {
+                points_source: {
+                    type: 'source',
+                    params: {
+                        query: SOURCE_AIRBNB
                     }
                 },
-                'polygons_source': {
-                    'type': 'source',
-                    'params': {
-                        'query': SOURCE_DISTRICTS
+                polygons_source: {
+                    type: 'source',
+                    params: {
+                        query: SOURCE_DISTRICTS
                     }
                 }
             }
         },
         {
-            'type': 'intersection',
-            'params': {
-                'source': {
-                    'type': 'source',
-                    'params': {
-                        'query': SOURCE_AIRBNB
+            type: 'intersection',
+            params: {
+                source: {
+                    type: 'source',
+                    params: {
+                        query: SOURCE_AIRBNB
                     }
                 },
-                'target': {
-                    'type': 'source',
-                    'params': {
-                        'query': SOURCE_DISTRICTS
+                target: {
+                    type: 'source',
+                    params: {
+                        query: SOURCE_DISTRICTS
                     }
                 }
             }
@@ -97,17 +96,17 @@ describe('performance', function() {
         }
     ];
 
-    analyses.forEach(function(analysisDef) {
+    analyses.forEach(function (analysisDef) {
         it('should avoid CTE Scan in "' + analysisDef.type + '" analysis', function (done) {
             Analysis.create(testConfig, analysisDef, function (err, analysis) {
                 if (err) {
                     return done(err);
                 }
 
-                explain(analysis.getQuery(), function(err, queryPlan) {
+                explain(analysis.getQuery(), function (err, queryPlan) {
                     assert.ok(!err, err);
 
-                    getNodeTypes(queryPlan).forEach(function(nodeType) {
+                    getNodeTypes(queryPlan).forEach(function (nodeType) {
                         assert.notEqual(nodeType, 'CTE Scan', 'Found CTE Scan in query explain');
                     });
 
@@ -117,15 +116,14 @@ describe('performance', function() {
         });
     });
 
-    function getNodeTypes(queryPlan, nodeTypes) {
+    function getNodeTypes (queryPlan, nodeTypes) {
         nodeTypes = nodeTypes || [];
         nodeTypes.push(queryPlan['Node Type']);
         if (Array.isArray(queryPlan.Plans)) {
-            queryPlan.Plans.forEach(function(plan) {
+            queryPlan.Plans.forEach(function (plan) {
                 getNodeTypes(plan, nodeTypes);
             });
         }
         return nodeTypes;
     }
-
 });

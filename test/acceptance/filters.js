@@ -3,14 +3,12 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-
-describe('filters', function() {
-
+describe('filters', function () {
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
     var BANKS_ALL = ['BBVA', 'Santander', 'Santander', 'Santander', 'BBVA', 'ING'];
-    var BANKS_BBVA = BANKS_ALL.filter(function(bank) {return bank === 'BBVA'; });
+    var BANKS_BBVA = BANKS_ALL.filter(function (bank) { return bank === 'BBVA'; });
 
-    function filteredNodeDefinition(node, filters) {
+    function filteredNodeDefinition (node, filters) {
         var clonedNode = JSON.parse(JSON.stringify(node));
         clonedNode.params.filters = filters;
         return clonedNode;
@@ -23,14 +21,14 @@ describe('filters', function() {
         }
     };
 
-    it('should return all banks', function(done) {
-        testHelper.createAnalyses(sourceAnalysisDefinition, function(err, analysis) {
+    it('should return all banks', function (done) {
+        testHelper.createAnalyses(sourceAnalysisDefinition, function (err, analysis) {
             assert.ok(!err, err);
 
-            testHelper.getRows(analysis.getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
 
@@ -38,7 +36,6 @@ describe('filters', function() {
 
                 done();
             });
-
         });
     });
 
@@ -52,17 +49,17 @@ describe('filters', function() {
         }
     };
 
-    it('should return just BBVA banks as they are filtered', function(done) {
+    it('should return just BBVA banks as they are filtered', function (done) {
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
-        testHelper.createAnalyses(filteredSource, function(err, analysis) {
+        testHelper.createAnalyses(filteredSource, function (err, analysis) {
             assert.ok(!err, err);
 
             assert.deepEqual(analysis.getRoot().getFilters(), filters);
 
-            testHelper.getRows(analysis.getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
 
@@ -73,15 +70,15 @@ describe('filters', function() {
         });
     });
 
-    it('should return all banks as we are skipping the category filter', function(done) {
+    it('should return all banks as we are skipping the category filter', function (done) {
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
-        testHelper.createAnalyses(filteredSource, function(err, analysis) {
+        testHelper.createAnalyses(filteredSource, function (err, analysis) {
             assert.ok(!err, err);
 
-            testHelper.getRows(analysis.getRoot().getQuery({bank_category: false}), function(err, rows) {
+            testHelper.getRows(analysis.getRoot().getQuery({ bank_category: false }), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
 
@@ -92,7 +89,7 @@ describe('filters', function() {
         });
     });
 
-    it('should filter dependant analyses based on filters', function(done) {
+    it('should filter dependant analyses based on filters', function (done) {
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
 
         var tradeAreaAnalysisDefinition = {
@@ -103,13 +100,13 @@ describe('filters', function() {
             }
         };
 
-        testHelper.createAnalyses(tradeAreaAnalysisDefinition, function(err, analysis) {
+        testHelper.createAnalyses(tradeAreaAnalysisDefinition, function (err, analysis) {
             assert.ok(!err, err);
 
-            testHelper.getRows(analysis.getRoot().getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getRoot().getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
 
@@ -130,16 +127,16 @@ describe('filters', function() {
         }
     };
 
-    it('should filter using boolean values', function(done) {
+    it('should filter using boolean values', function (done) {
         var indoorAtms = ['BBVA', 'BBVA', 'ING'];
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, booleanFilter);
-        testHelper.createAnalyses(filteredSource, function(err, analysis) {
+        testHelper.createAnalyses(filteredSource, function (err, analysis) {
             assert.ok(!err, err);
 
-            testHelper.getRows(analysis.getRoot().getQuery(), function(err, rows) {
+            testHelper.getRows(analysis.getRoot().getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
 
@@ -150,12 +147,11 @@ describe('filters', function() {
         });
     });
 
-    describe('node-id', function() {
-
-        it('should have different id when filter is applied', function(done) {
+    describe('node-id', function () {
+        it('should have different id when filter is applied', function (done) {
             var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, filters);
 
-            testHelper.createAnalyses([sourceAnalysisDefinition, filteredSource], function(err, results) {
+            testHelper.createAnalyses([sourceAnalysisDefinition, filteredSource], function (err, results) {
                 assert.ok(!err, err);
 
                 assert.equal(results.length, 2);
@@ -165,7 +161,5 @@ describe('filters', function() {
                 done();
             });
         });
-
     });
-
 });

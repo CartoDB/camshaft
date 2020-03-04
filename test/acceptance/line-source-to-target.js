@@ -3,7 +3,7 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-describe('line-source-to-target analysis', function() {
+describe('line-source-to-target analysis', function () {
     var QUERY_SOURCE = 'select * from atm_machines where bank = \'Santander\'';
     var sourceAtmMachines = {
         type: 'source',
@@ -33,14 +33,14 @@ describe('line-source-to-target analysis', function() {
         };
 
         it('should create analysis joined by kind', function (done) {
-            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function (err, lineToLayerAllToAll) {
                 assert.ifError(err);
 
                 var rootNode = lineToLayerAllToAll.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.length === 'number');
@@ -55,14 +55,14 @@ describe('line-source-to-target analysis', function() {
             lineToLayerAllToAllDefinition.params.source_column = undefined;
             lineToLayerAllToAllDefinition.params.target_column = undefined;
 
-            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function (err, lineToLayerAllToAll) {
                 assert.ifError(err);
 
                 var rootNode = lineToLayerAllToAll.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.length === 'number');
@@ -87,14 +87,14 @@ describe('line-source-to-target analysis', function() {
         };
 
         it('should create analysis joined by kind', function (done) {
-            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function (err, lineToLayerAllToAll) {
                 assert.ifError(err);
 
                 var rootNode = lineToLayerAllToAll.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.length === 'number');
@@ -109,14 +109,14 @@ describe('line-source-to-target analysis', function() {
             lineToLayerAllToAllDefinition.params.source_column = undefined;
             lineToLayerAllToAllDefinition.params.target_column = undefined;
 
-            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function(err, lineToLayerAllToAll) {
+            testHelper.createAnalyses(lineToLayerAllToAllDefinition, function (err, lineToLayerAllToAll) {
                 assert.ifError(err);
 
                 var rootNode = lineToLayerAllToAll.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.length === 'number');

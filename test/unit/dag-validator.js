@@ -6,9 +6,8 @@ var validator = require('../../lib/dag/validator');
 
 var MockNode = require('./dag-mock-node');
 
-describe('dag-validator', function() {
-
-    it('should validate triangle', function() {
+describe('dag-validator', function () {
+    it('should validate triangle', function () {
         // A --> B
         // |     |
         // |     v
@@ -21,7 +20,7 @@ describe('dag-validator', function() {
         assert.ok(validator.isValid(aNode));
     });
 
-    it('should NOT validate a cycle', function() {
+    it('should NOT validate a cycle', function () {
         // A --> B
         // ^     |
         // |     v
@@ -34,5 +33,4 @@ describe('dag-validator', function() {
 
         assert.ok(!validator.isValid(aNode));
     });
-
 });

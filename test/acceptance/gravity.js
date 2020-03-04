@@ -4,7 +4,6 @@ var assert = require('assert');
 var testHelper = require('../helper');
 
 describe('gravity analysis', function () {
-
     var sourceAtmMachines = {
         type: 'source',
         params: {
@@ -20,8 +19,7 @@ describe('gravity analysis', function () {
     };
 
     describe('gravity', function () {
-
-        var node_definition = {
+        var nodeDefinition = {
             type: 'gravity',
             params: {
                 source: sourceAtmMachines,
@@ -34,8 +32,7 @@ describe('gravity analysis', function () {
         };
 
         it('should create analysis', function (done) {
-            testHelper.createAnalyses(node_definition, function (err, gravity) {
-
+            testHelper.createAnalyses(nodeDefinition, function (err, gravity) {
                 assert.ifError(err);
 
                 var rootNode = gravity.getRoot();
@@ -50,6 +47,5 @@ describe('gravity analysis', function () {
                 });
             });
         });
-
     });
 });

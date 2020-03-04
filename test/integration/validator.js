@@ -5,9 +5,7 @@ var assert = require('assert');
 var validator = require('../../lib/dag/validator');
 var Factory = require('../../lib/workflow/factory');
 
-
-describe('workflow-validator', function() {
-
+describe('workflow-validator', function () {
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
     var TRADE_AREA_WALK = 'walk';
     var TRADE_AREA_15M = 900;
@@ -46,9 +44,8 @@ describe('workflow-validator', function() {
         }
     };
 
-
-    function createServiceStub(result) {
-        return function(query, callback) {
+    function createServiceStub (result) {
+        return function (query, callback) {
             return callback(null, result);
         };
     }
@@ -58,10 +55,10 @@ describe('workflow-validator', function() {
         getSchema: createServiceStub([]),
         getColumnNames: createServiceStub([]),
         getColumns: createServiceStub([]),
-        getMetadataFromAffectedTables: function(query, skip, callback) {
-            return callback(null, {'last_update': new Date(), 'affected_tables': []});
+        getMetadataFromAffectedTables: function (query, skip, callback) {
+            return callback(null, { last_update: new Date(), affected_tables: [] });
         },
-        createCacheTable: function(node, callback) {
+        createCacheTable: function (node, callback) {
             return callback(null, true);
         },
         registerNodesInCatalog: createServiceStub([]),
@@ -69,9 +66,9 @@ describe('workflow-validator', function() {
         enqueue: createServiceStub({})
     };
 
-    it('should validate graph', function(done) {
+    it('should validate graph', function (done) {
         var factory = new Factory('foo-user', DatabaseServiceStub);
-        factory.create(tradeAreaAnalysisDefinition, function(err, node) {
+        factory.create(tradeAreaAnalysisDefinition, function (err, node) {
             assert.ok(!err, err);
 
             assert.ok(validator.isValid(node));
@@ -80,9 +77,9 @@ describe('workflow-validator', function() {
         });
     });
 
-    it('should have user from factory as owner', function(done) {
+    it('should have user from factory as owner', function (done) {
         var factory = new Factory('foo-user', DatabaseServiceStub);
-        factory.create(tradeAreaAnalysisDefinition, function(err, node) {
+        factory.create(tradeAreaAnalysisDefinition, function (err, node) {
             assert.ok(!err, err);
 
             assert.equal(node.getOwner(), 'foo-user');
@@ -91,9 +88,9 @@ describe('workflow-validator', function() {
         });
     });
 
-    it('should return error with missing param and the provided node id', function(done) {
+    it('should return error with missing param and the provided node id', function (done) {
         var factory = new Factory('foo-user', DatabaseServiceStub);
-        factory.create(missedParamTradeAreaAnalysisDefinition, function(err) {
+        factory.create(missedParamTradeAreaAnalysisDefinition, function (err) {
             assert.ok(err, err);
             assert.equal(err.message, 'Missing required param "kind"');
             assert.equal(err.node_id, 'HEAD');
@@ -101,15 +98,14 @@ describe('workflow-validator', function() {
         });
     });
 
-    it('should return error with missing param w/o node id', function(done) {
+    it('should return error with missing param w/o node id', function (done) {
         var factory = new Factory('foo-user', DatabaseServiceStub);
         delete missedParamTradeAreaAnalysisDefinition.id;
-        factory.create(missedParamTradeAreaAnalysisDefinition, function(err) {
+        factory.create(missedParamTradeAreaAnalysisDefinition, function (err) {
             assert.ok(err, err);
             assert.equal(err.message, 'Missing required param "kind"');
             assert.ok(!err.node_id, err.node_id);
             done();
         });
     });
-
 });

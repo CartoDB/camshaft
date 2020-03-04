@@ -4,13 +4,12 @@ var assert = require('assert');
 var Source = require('../../../lib/node/nodes/source');
 var FilterRange = require('../../../lib/node/nodes/filter-range');
 
-describe('filter-range', function() {
-
+describe('filter-range', function () {
     var owner = 'localhost';
     var column = 'wadus_column';
-    var source = new Source(owner, {query: 'select * from table'});
+    var source = new Source(owner, { query: 'select * from table' });
 
-    it('should work with min_or_equal param', function() {
+    it('should work with min_or_equal param', function () {
         var filterRange = new FilterRange(owner, { source: source, column: column, greater_than_or_equal: 100 });
 
         assert.equal(filterRange.column, column);
@@ -22,7 +21,7 @@ describe('filter-range', function() {
         assert.equal(filterRange.max, null);
     });
 
-    it('should work with max_or_equal param', function() {
+    it('should work with max_or_equal param', function () {
         var filterRange = new FilterRange(owner, { source: source, column: column, less_than_or_equal: 100 });
 
         assert.equal(filterRange.column, column);
@@ -34,7 +33,7 @@ describe('filter-range', function() {
         assert.equal(filterRange.max, null);
     });
 
-    it('should work with min param', function() {
+    it('should work with min param', function () {
         var filterRange = new FilterRange(owner, { source: source, column: column, min: 100 });
 
         assert.equal(filterRange.column, column);
@@ -46,7 +45,7 @@ describe('filter-range', function() {
         assert.equal(filterRange.max, null);
     });
 
-    it('should work with max param', function() {
+    it('should work with max param', function () {
         var filterRange = new FilterRange(owner, { source: source, column: column, max: 10000 });
 
         assert.equal(filterRange.column, column);
@@ -58,14 +57,12 @@ describe('filter-range', function() {
         assert.equal(filterRange.max, 10000);
     });
 
-    it('should fail when none param is provided', function() {
-        var filterRange;
-
+    it('should fail when none param is provided', function () {
         assert.throws(
-            function() {
-                filterRange = new FilterRange(owner, { source: source, column: column });
+            function () {
+                new FilterRange(owner, { source: source, column: column }); // eslint-disable-line no-new
             },
-            function(err) {
+            function (err) {
                 assert.equal(
                     err.message,
                     'Range filter expect to have at least one value in greater_than, greater_than_or_equal, ' +
@@ -75,5 +72,4 @@ describe('filter-range', function() {
             }
         );
     });
-
 });

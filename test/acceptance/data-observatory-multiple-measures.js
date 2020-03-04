@@ -3,8 +3,8 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-describe('data-observatory-multiple-measures analysis', function() {
-    function doMultipleMeasuresDefinition(params) {
+describe('data-observatory-multiple-measures analysis', function () {
+    function doMultipleMeasuresDefinition (params) {
         return {
             type: 'data-observatory-multiple-measures',
             params: {
@@ -27,8 +27,8 @@ describe('data-observatory-multiple-measures analysis', function() {
     var numerators = ['es.ine.t2_2', 'es.ine.t2_1'];
     var normalizations = ['denominated', 'denominated'];
     var denominators = ['es.ine.t1_1', 'es.ine.t1_1'];
-    var geom_ids = ['es.ine.the_geom', 'es.ine.the_geom'];
-    var numerator_timespans = ['2011', '2011'];
+    var geomIds = ['es.ine.the_geom', 'es.ine.the_geom'];
+    var numeratorTimespans = ['2011', '2011'];
     var columnNames = ['females', 'males'];
 
     it('should fail on different number of numerators and column names', function (done) {
@@ -41,7 +41,7 @@ describe('data-observatory-multiple-measures analysis', function() {
             columnNames: []
         });
 
-        testHelper.getResult(def, function(err) {
+        testHelper.getResult(def, function (err) {
             assert.ok(err);
             assert.equal(err.message, 'The number of numerators=2 does not match the number of column_names=0');
             return done();
@@ -58,7 +58,7 @@ describe('data-observatory-multiple-measures analysis', function() {
             columnNames: columnNames
         });
 
-        testHelper.getResult(def, function(err) {
+        testHelper.getResult(def, function (err) {
             assert.ok(err);
             assert.equal(err.message, 'The normalizations array cannot be empty');
             return done();
@@ -75,7 +75,7 @@ describe('data-observatory-multiple-measures analysis', function() {
             columnNames: columnNames
         });
 
-        testHelper.getResult(def, function(err) {
+        testHelper.getResult(def, function (err) {
             assert.ok(err);
             assert.equal(err.message, 'The numerators array cannot be empty');
             return done();
@@ -92,11 +92,11 @@ describe('data-observatory-multiple-measures analysis', function() {
             columnNames: columnNames
         });
 
-        testHelper.getResult(def, function(err, rows) {
+        testHelper.getResult(def, function (err, rows) {
             assert.ifError(err);
-            rows.forEach(function(row) {
-                columnNames.forEach(function(columnName) {
-                    assert.ok(row.hasOwnProperty(columnName), 'Missing ' + columnName + ' column');
+            rows.forEach(function (row) {
+                columnNames.forEach(function (columnName) {
+                    assert.ok(Object.prototype.hasOwnProperty.call(row, columnName), 'Missing ' + columnName + ' column');
                 });
             });
             return done();
@@ -108,16 +108,16 @@ describe('data-observatory-multiple-measures analysis', function() {
             numerators: numerators,
             denominators: denominators,
             normalizations: normalizations,
-            geom_ids: geom_ids,
-            numerator_timespans: numerator_timespans,
+            geom_ids: geomIds,
+            numerator_timespans: numeratorTimespans,
             columnNames: columnNames
         });
 
-        testHelper.getResult(def, function(err, rows) {
+        testHelper.getResult(def, function (err, rows) {
             assert.ifError(err);
-            rows.forEach(function(row) {
-                columnNames.forEach(function(columnName) {
-                    assert.ok(row.hasOwnProperty(columnName), 'Missing ' + columnName + ' column');
+            rows.forEach(function (row) {
+                columnNames.forEach(function (columnName) {
+                    assert.ok(Object.prototype.hasOwnProperty.call(row, columnName), 'Missing ' + columnName + ' column');
                 });
             });
             return done();
@@ -127,18 +127,18 @@ describe('data-observatory-multiple-measures analysis', function() {
     it('should create an analysis with all params allowing null elements for denominators', function (done) {
         var def = doMultipleMeasuresDefinition({
             numerators: numerators,
-            denominators: [ null, null ],
+            denominators: [null, null],
             normalizations: normalizations,
-            geom_ids: geom_ids,
-            numerator_timespans: numerator_timespans,
+            geom_ids: geomIds,
+            numerator_timespans: numeratorTimespans,
             columnNames: columnNames
         });
 
-        testHelper.getResult(def, function(err, rows) {
+        testHelper.getResult(def, function (err, rows) {
             assert.ifError(err);
-            rows.forEach(function(row) {
-                columnNames.forEach(function(columnName) {
-                    assert.ok(row.hasOwnProperty(columnName), 'Missing ' + columnName + ' column');
+            rows.forEach(function (row) {
+                columnNames.forEach(function (columnName) {
+                    assert.ok(Object.prototype.hasOwnProperty.call(row, columnName), 'Missing ' + columnName + ' column');
                 });
             });
             return done();

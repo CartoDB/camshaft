@@ -6,9 +6,8 @@ var Analysis = require('../../lib/analysis');
 
 var TestConfig = require('../test-config');
 
-describe('regressions', function() {
-
-    function duplicatedSourceStatusNotUpdated(nodeName) {
+describe('regressions', function () {
+    function duplicatedSourceStatusNotUpdated (nodeName) {
         return {
             id: nodeName,
             type: 'source',
@@ -37,7 +36,7 @@ describe('regressions', function() {
         }
     };
 
-    before(function(done) {
+    before(function (done) {
         this.testConfig = TestConfig.create({ batch: { inlineExecution: true } });
         Analysis.create(this.testConfig, sourcePending, done);
     });
@@ -48,7 +47,7 @@ describe('regressions', function() {
                 return done(err);
             }
 
-            function checkNodeIsReady(node) {
+            function checkNodeIsReady (node) {
                 var status = node.getStatus();
                 assert.equal(status, 'ready', 'Unexpected node status for ' + node.type);
             }

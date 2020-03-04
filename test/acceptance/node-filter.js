@@ -8,11 +8,10 @@ var Analysis = require('../../lib/analysis');
 
 var testConfig = require('../test-config');
 
-describe('node-filter', function() {
-
-    function getRows(query, callback) {
+describe('node-filter', function () {
+    function getRows (query, callback) {
         var queryRunner = new QueryRunner(testConfig.db);
-        queryRunner.run(query, function(err, result) {
+        queryRunner.run(query, function (err, result) {
             assert.ok(!err, err);
             assert.ok(result);
             var rows = result.rows;
@@ -25,10 +24,10 @@ describe('node-filter', function() {
     var enqueueFn;
     var enqueueCalled;
 
-    before(function() {
+    before(function () {
         enqueueFn = BatchClient.prototype.enqueue;
         enqueueCalled = 0;
-        BatchClient.prototype.enqueue = function(query, callback) {
+        BatchClient.prototype.enqueue = function (query, callback) {
             enqueueCalled += 1;
             return callback(null, { status: 'ok' });
         };
@@ -39,7 +38,7 @@ describe('node-filter', function() {
         BatchClient.prototype.enqueue = enqueueFn;
     });
 
-    describe('range', function() {
+    describe('range', function () {
         var rangeFilter = {
             id: 'a1',
             type: 'filter-range',
@@ -61,10 +60,10 @@ describe('node-filter', function() {
                     return done(err);
                 }
 
-                getRows(analysis.getQuery(), function(err, rows) {
+                getRows(analysis.getQuery(), function (err, rows) {
                     assert.ok(!err, err);
 
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(row.price >= 100, JSON.stringify(row));
                     });
 
@@ -74,7 +73,7 @@ describe('node-filter', function() {
         });
     });
 
-    describe('category', function() {
+    describe('category', function () {
         var rangeFilter = {
             id: 'a1',
             type: 'filter-category',
@@ -96,10 +95,10 @@ describe('node-filter', function() {
                     return done(err);
                 }
 
-                getRows(analysis.getQuery(), function(err, rows) {
+                getRows(analysis.getQuery(), function (err, rows) {
                     assert.ok(!err, err);
 
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(row.bank === 'Santander', JSON.stringify(row));
                     });
 
