@@ -3,6 +3,9 @@
 ## 0.65.3
 Release 2020-03-dd
 
+- Stop using two different tools for package management, testing, and any other developer workflow.
+  - Removes Makefile and related bash scripts
+  - Use npm scripts as the only tool for testing, CI and linting.
 - Removed `jshint` as linter in favour of `eslint` to check syntax, find problems, and enforce code style.
 - Fix noisy message logs while checking analyses' limits.
 - Fix CI setup, explicit use of PGPORT while creating the PostgreSQL cluster.

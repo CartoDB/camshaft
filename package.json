@@ -2,12 +2,6 @@
   "name": "camshaft",
   "version": "0.65.2",
   "description": "Analysis library to create data views from queries",
-  "main": "./lib/analysis.js",
-  "scripts": {
-    "lint:fix": "eslint --fix \"lib/**/*.js\" \"test/**/*.js\"",
-    "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\"",
-    "test": "make test-all"
-  },
   "keywords": [
     "cartodb",
     "analysis",
@@ -18,12 +12,19 @@
     "postgresql",
     "postgis"
   ],
-  "author": "Raul Ochoa <rochoa@cartodb.com>",
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
     "url": "git@github.com:CartoDB/camshaft.git"
   },
+  "author": "CARTO (https://carto.com)",
+  "contributors": [
+    "Raúl Ochoa <rochoa@carto.com>",
+    "Daniel García Aubert <dgaubert@carto.com>",
+    "Javier Goizueta <jgoizueta@carto.com>",
+    "Raúl Marín <rmrodriguez@carto.com>"
+  ],
+  "main": "./lib/analysis.js",
   "dependencies": {
     "async": "^1.5.2",
     "bunyan": "1.8.1",
@@ -44,6 +45,14 @@
     "nyc": "^15.0.0",
     "semver": "^5.1.0",
     "yargs": "^3.32.0"
+  },
+  "scripts": {
+    "lint:fix": "eslint --fix \"lib/**/*.js\" \"test/**/*.js\"",
+    "lint": "eslint \"lib/**/*.js\" \"test/**/*.js\"",
+    "pretest": "npm run lint",
+    "test": "NODE_ENV=test mocha -t 5000 --exit --recursive test/setup.js test/acceptance test/integration test/unit",
+    "test:performance": "NODE_ENV=test mocha -t 5000 --exit test/setup.js test/acceptance/performance.js",
+    "cover": "nyc --reporter=lcov npm test"
   },
   "engines": {
     "node": "^10.15.1",
