@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.65.3
-Release 2020-03-dd
+Release 2020-03-05
 
 - Stop using two different tools for package management, testing, and any other developer workflow.
   - Removes Makefile and related bash scripts
