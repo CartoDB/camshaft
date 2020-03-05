@@ -4,7 +4,6 @@ var assert = require('assert');
 var queryBuilder = require('../../../lib/filter/query-builder');
 
 describe('query-builder-filter', function () {
-
     it('.getSql() without filters should return the same query', function () {
         var EXPECTED_QUERY = 'select * form populated_places';
         var query = queryBuilder.getSql(EXPECTED_QUERY);
@@ -50,5 +49,4 @@ describe('query-builder-filter', function () {
 
         assert.throws(shouldThrow, /Unknown filter type/, 'did not throw with expected message');
     });
-
 });

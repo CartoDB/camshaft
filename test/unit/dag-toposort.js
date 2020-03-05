@@ -6,8 +6,8 @@ var toposort = require('../../lib/dag/toposort');
 
 var MockNode = require('./dag-mock-node');
 
-describe('dag-toposort', function() {
-    it('should not fail for empty nodes', function() {
+describe('dag-toposort', function () {
+    it('should not fail for empty nodes', function () {
         // A
 
         var aNode = new MockNode('A');
@@ -18,7 +18,7 @@ describe('dag-toposort', function() {
         assert.equal(sorted[0].id(), 'A');
     });
 
-    it('should work for happy case: two nodes connected', function() {
+    it('should work for happy case: two nodes connected', function () {
         // A --> B
 
         var bNode = new MockNode('B');
@@ -31,7 +31,7 @@ describe('dag-toposort', function() {
         assert.equal(sorted[1].id(), 'A');
     });
 
-    it('should work for triangle', function() {
+    it('should work for triangle', function () {
         // A --> B
         // |     |
         // |     v
@@ -49,8 +49,8 @@ describe('dag-toposort', function() {
         assert.equal(sorted[2].id(), 'A');
     });
 
-    describe('cycles', function() {
-        it('should fail for self cycle', function() {
+    describe('cycles', function () {
+        it('should fail for self cycle', function () {
             //  --> A ---
             // |         |
             //  ---------
@@ -58,17 +58,17 @@ describe('dag-toposort', function() {
             var aNode = new MockNode('A');
             var aaNode = new MockNode('A', aNode);
             assert.throws(
-                function() {
+                function () {
                     toposort(aaNode);
                 },
-                function(err) {
+                function (err) {
                     assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(aaNode));
                     return true;
                 }
             );
         });
 
-        it('should fail for basic cycle', function() {
+        it('should fail for basic cycle', function () {
             //  --> A ---
             // |         |
             //  --- B <--
@@ -77,17 +77,17 @@ describe('dag-toposort', function() {
             var aNode = new MockNode('A', bNode);
 
             assert.throws(
-                function() {
+                function () {
                     toposort(aNode);
                 },
-                function(err) {
+                function (err) {
                     assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(bNode));
                     return true;
                 }
             );
         });
 
-        it('should fail for cycle', function() {
+        it('should fail for cycle', function () {
             // A --> B
             // ^     |
             // |     v
@@ -99,10 +99,10 @@ describe('dag-toposort', function() {
             var aNode = new MockNode('A', bNode);
 
             assert.throws(
-                function() {
+                function () {
                     toposort(aNode);
                 },
-                function(err) {
+                function (err) {
                     assert.equal(err.message, 'Cycle at node: ' + JSON.stringify(bNode));
                     return true;
                 }
@@ -110,8 +110,8 @@ describe('dag-toposort', function() {
         });
     });
 
-    describe('regressions', function() {
-        it('should work for double dep', function() {
+    describe('regressions', function () {
+        it('should work for double dep', function () {
             // B --> C
             // ^     ^
             // |     |
@@ -129,7 +129,7 @@ describe('dag-toposort', function() {
             assert.equal(sorted[2].id(), 'C');
         });
 
-        it('should work for double dep hiding behind another node', function() {
+        it('should work for double dep hiding behind another node', function () {
             // B --------> D
             // ^           ^
             // |           |
@@ -150,8 +150,8 @@ describe('dag-toposort', function() {
         });
     });
 
-    describe('node/s used in different parts of the graph', function() {
-        it('(B1 used as parent of C1 and A2 ', function() {
+    describe('node/s used in different parts of the graph', function () {
+        it('(B1 used as parent of C1 and A2 ', function () {
             // C2 <-- C1 <-- CO
             // ^      ^
             // |      |
@@ -181,8 +181,7 @@ describe('dag-toposort', function() {
             assert.equal(sorted.length, 11);
         });
 
-
-        it('(B1 used as parent of C1 and A2 (2 inputs)', function() {
+        it('(B1 used as parent of C1 and A2 (2 inputs)', function () {
             // C2 <-- C1 <-- CO
             // ^      ^
             // |      |
@@ -209,7 +208,5 @@ describe('dag-toposort', function() {
             var sorted = toposort(c2);
             assert.equal(sorted.length, 9);
         });
-
     });
-
 });

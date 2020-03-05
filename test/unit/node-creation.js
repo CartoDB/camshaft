@@ -4,18 +4,16 @@ var assert = require('assert');
 
 var Node = require('../../lib/node/node');
 
-describe('node-creation', function() {
-
+describe('node-creation', function () {
     var owner = 'localhost';
 
-    describe('reserved keywords', function() {
-        it('should fail for reserved param names', function() {
-            var ReservedKeywordNode;
+    describe('reserved keywords', function () {
+        it('should fail for reserved param names', function () {
             assert.throws(
-                function() {
-                    ReservedKeywordNode = Node.create('test-reserved-keyword', { type: Node.PARAM.STRING() });
+                function () {
+                    Node.create('test-reserved-keyword', { type: Node.PARAM.STRING() });
                 },
-                function(err) {
+                function (err) {
                     assert.equal(
                         err.message,
                         'Invalid param name "type". It is a reserved keyword.'
@@ -24,61 +22,57 @@ describe('node-creation', function() {
                 }
             );
         });
-
     });
 
-    var TestSource = Node.create('test-source', {query: Node.PARAM.STRING()});
+    var TestSource = Node.create('test-source', { query: Node.PARAM.STRING() });
 
-    it('should validate params', function() {
+    it('should validate params', function () {
         var QUERY = 'select * from table';
         var source = new TestSource(owner, { query: QUERY });
         assert.equal(source.query, QUERY);
     });
 
-    it('should fail for missing params', function() {
-        var source;
+    it('should fail for missing params', function () {
         assert.throws(
-            function() {
-                 source = new TestSource(owner, {});
+            function () {
+                new TestSource(owner, {}); // eslint-disable-line no-new
             },
-            function(err) {
+            function (err) {
                 assert.equal(err.message, 'Missing required param "query"');
                 return true;
             }
         );
     });
 
-    it('should fail for invalid param type', function() {
-        var source;
+    it('should fail for invalid param type', function () {
         assert.throws(
-            function() {
-                source = new TestSource(owner, { query: 2 });
+            function () {
+                new TestSource(owner, { query: 2 }); // eslint-disable-line no-new
             },
-            function(err) {
+            function (err) {
                 assert.equal(err.message, 'Invalid type for param "query", expects "string" type, got `2`');
                 return true;
             }
         );
     });
 
-    describe('Node.PARAM.ENUM', function() {
+    describe('Node.PARAM.ENUM', function () {
         var EnumSource = Node.create('test-source', { classification: Node.PARAM.ENUM('knn', 'queen') });
 
-        it('should check ENUM uses one of the values', function() {
+        it('should check ENUM uses one of the values', function () {
             var CLASSIFICATIONS = ['knn', 'queen'];
-            CLASSIFICATIONS.forEach(function(classification) {
+            CLASSIFICATIONS.forEach(function (classification) {
                 var enumSource = new EnumSource(owner, { classification: classification });
                 assert.equal(enumSource.classification, classification);
             });
         });
 
-        it('should fail for invalid ENUM values', function() {
-            var enumSource;
+        it('should fail for invalid ENUM values', function () {
             assert.throws(
-                function() {
-                    enumSource = new EnumSource(owner, { classification: 'wadus' });
+                function () {
+                    new EnumSource(owner, { classification: 'wadus' }); // eslint-disable-line no-new
                 },
-                function(err) {
+                function (err) {
                     assert.equal(
                         err.message,
                         'Invalid type for param "classification", expects "enum("knn","queen")" type, got `"wadus"`'
@@ -87,28 +81,26 @@ describe('node-creation', function() {
                 }
             );
         });
-
     });
 
-    describe('Node.PARAM.NULLABLE', function() {
+    describe('Node.PARAM.NULLABLE', function () {
         var NullableNode = Node.create('test-nullable', {
             mandatory: Node.PARAM.STRING(),
             optional: Node.PARAM.NULLABLE(Node.PARAM.STRING())
         });
 
-        it('should work for valid params', function() {
+        it('should work for valid params', function () {
             var nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 'wadus_optional' });
             assert.equal(nullableNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableNode.optional, 'wadus_optional');
         });
 
-        it('should fail for invalid PARAM type', function() {
-            var nullableNode;
+        it('should fail for invalid PARAM type', function () {
             assert.throws(
-                function() {
-                    nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 1 });
+                function () {
+                    new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 1 }); // eslint-disable-line no-new
                 },
-                function(err) {
+                function (err) {
                     assert.equal(
                         err.message,
                         'Invalid type for param "optional", expects "string" type, got `1`'
@@ -118,13 +110,12 @@ describe('node-creation', function() {
             );
         });
 
-        it('should fail for invalid PARAM type with falsy values', function() {
-            var nullableNode;
+        it('should fail for invalid PARAM type with falsy values', function () {
             assert.throws(
-                function() {
-                    nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 0 });
+                function () {
+                    new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: 0 }); // eslint-disable-line no-new
                 },
-                function(err) {
+                function (err) {
                     assert.equal(
                         err.message,
                         'Invalid type for param "optional", expects "string" type, got `0`'
@@ -134,19 +125,19 @@ describe('node-creation', function() {
             );
         });
 
-        it('should allow to use null values for NULLABLE params', function() {
+        it('should allow to use null values for NULLABLE params', function () {
             var nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory', optional: null });
             assert.equal(nullableNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableNode.optional, null);
         });
 
-        it('should allow to use undefined values for NULLABLE params', function() {
+        it('should allow to use undefined values for NULLABLE params', function () {
             var nullableNode = new NullableNode(owner, { mandatory: 'wadus_mandatory' });
             assert.equal(nullableNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableNode.optional, null);
         });
 
-        it('should accept accept nullable geometry params', function() {
+        it('should accept accept nullable geometry params', function () {
             var NullableGeometryNode = Node.create('test-geometry-nullable', {
                 mandatory: Node.PARAM.STRING(),
                 optional_node: Node.PARAM.NULLABLE(Node.PARAM.NODE())
@@ -158,25 +149,24 @@ describe('node-creation', function() {
             assert.equal(nullableGeometryNode.mandatory, 'wadus_mandatory');
             assert.equal(nullableGeometryNode.optional_node, null);
         });
-
     });
 
-    describe('Node.PARAM.ARRAY', function() {
+    describe('Node.PARAM.ARRAY', function () {
         var ListNode = Node.create('test-array', {
             list: Node.PARAM.ARRAY()
         });
 
-        it('should work for mixed arrays', function() {
-            var listNode = new ListNode(owner, { list: [ 1, 'wadus' ] });
-            assert.deepEqual(listNode.list, [ 1, 'wadus' ]);
+        it('should work for mixed arrays', function () {
+            var listNode = new ListNode(owner, { list: [1, 'wadus'] });
+            assert.deepEqual(listNode.list, [1, 'wadus']);
         });
 
-        it('should work for empty arrays', function() {
+        it('should work for empty arrays', function () {
             var listNode = new ListNode(owner, { list: [] });
             assert.deepEqual(listNode.list, []);
         });
 
-        describe('typed array', function() {
+        describe('typed array', function () {
             var StringTypedListNode = Node.create('test-array-string', {
                 list: Node.PARAM.ARRAY(Node.PARAM.STRING())
             });
@@ -185,24 +175,22 @@ describe('node-creation', function() {
                 list: Node.PARAM.ARRAY(Node.PARAM.NUMBER())
             });
 
-            it('should work for string arrays', function() {
-                var listNode = new StringTypedListNode(owner, { list: [ 'wadus', 'wadus' ] });
-                assert.deepEqual(listNode.list, [ 'wadus', 'wadus' ]);
+            it('should work for string arrays', function () {
+                var listNode = new StringTypedListNode(owner, { list: ['wadus', 'wadus'] });
+                assert.deepEqual(listNode.list, ['wadus', 'wadus']);
             });
 
-            it('should work for number arrays', function() {
-                var listNode = new NumberTypedListNode(owner, { list: [ 1, 2, 3, 4 ] });
-                assert.deepEqual(listNode.list, [ 1, 2, 3, 4 ]);
+            it('should work for number arrays', function () {
+                var listNode = new NumberTypedListNode(owner, { list: [1, 2, 3, 4] });
+                assert.deepEqual(listNode.list, [1, 2, 3, 4]);
             });
 
-            it('should fail for mixed arrays', function() {
-                var listNode;
-
+            it('should fail for mixed arrays', function () {
                 assert.throws(
-                    function() {
-                        listNode = new StringTypedListNode(owner, { list: [ 1, 'wadus' ] });
+                    function () {
+                        new StringTypedListNode(owner, { list: [1, 'wadus'] }); // eslint-disable-line no-new
                     },
-                    function(err) {
+                    function (err) {
                         assert.equal(
                             err.message,
                             'Invalid type for param "list", expects "array<string>" type, got `[1,"wadus"]`'
@@ -212,14 +200,12 @@ describe('node-creation', function() {
                 );
             });
 
-            it('should fail for mixed arrays', function() {
-                var listNode;
-
+            it('should fail for mixed arrays', function () {
                 assert.throws(
-                    function() {
-                        listNode = new NumberTypedListNode(owner, { list: [ 1, 'wadus' ] });
+                    function () {
+                        new NumberTypedListNode(owner, { list: [1, 'wadus'] }); // eslint-disable-line no-new
                     },
-                    function(err) {
+                    function (err) {
                         assert.equal(
                             err.message,
                             'Invalid type for param "list", expects "array<number>" type, got `[1,"wadus"]`'
@@ -229,24 +215,22 @@ describe('node-creation', function() {
                 );
             });
 
-            describe('nullable', function() {
+            describe('nullable', function () {
                 var NullableStringTypedListNode = Node.create('test-array-string', {
                     list: Node.PARAM.NULLABLE(Node.PARAM.ARRAY(Node.PARAM.STRING()))
                 });
 
-                it('should work for null param', function() {
+                it('should work for null param', function () {
                     var listNode = new NullableStringTypedListNode(owner, {});
                     assert.equal(listNode.list, null);
                 });
 
-                it('still should fail for mixed arrays', function() {
-                    var listNode;
-
+                it('still should fail for mixed arrays', function () {
                     assert.throws(
-                        function() {
-                            listNode = new NullableStringTypedListNode(owner, { list: [ 1, 'wadus' ] });
+                        function () {
+                            new NullableStringTypedListNode(owner, { list: [1, 'wadus'] }); // eslint-disable-line no-new
                         },
-                        function(err) {
+                        function (err) {
                             assert.equal(
                                 err.message,
                                 'Invalid type for param "list", expects "array<string>" type, got `[1,"wadus"]`'
@@ -257,34 +241,32 @@ describe('node-creation', function() {
                 });
             });
 
-            describe('nullable array element', function() {
+            describe('nullable array element', function () {
                 var NullableStringTypedListNode = Node.create('test-array-string', {
                     list: Node.PARAM.ARRAY(Node.PARAM.NULLABLE(Node.PARAM.STRING()))
                 });
 
-                it('should work for list with one non null element', function() {
-                    var listNode = new NullableStringTypedListNode(owner, { list: [ 'wadus' ] });
-                    assert.deepEqual(listNode.list, [ 'wadus' ] );
+                it('should work for list with one non null element', function () {
+                    var listNode = new NullableStringTypedListNode(owner, { list: ['wadus'] });
+                    assert.deepEqual(listNode.list, ['wadus']);
                 });
 
-                it('should work for list with one null element', function() {
-                    var listNode = new NullableStringTypedListNode(owner, { list: [ null ] });
-                    assert.deepEqual(listNode.list, [ null ] );
+                it('should work for list with one null element', function () {
+                    var listNode = new NullableStringTypedListNode(owner, { list: [null] });
+                    assert.deepEqual(listNode.list, [null]);
                 });
 
-                it('should work for list with mixed null and string elements', function() {
-                    var listNode = new NullableStringTypedListNode(owner, { list: [ null, 'wadus' ] });
-                    assert.deepEqual(listNode.list, [ null, 'wadus' ] );
+                it('should work for list with mixed null and string elements', function () {
+                    var listNode = new NullableStringTypedListNode(owner, { list: [null, 'wadus'] });
+                    assert.deepEqual(listNode.list, [null, 'wadus']);
                 });
 
-                it('still should fail for mixed arrays', function() {
-                    var listNode;
-
+                it('still should fail for mixed arrays', function () {
                     assert.throws(
-                        function() {
-                            listNode = new NullableStringTypedListNode(owner, { list: [ null, 'wadus', 1 ] });
+                        function () {
+                            new NullableStringTypedListNode(owner, { list: [null, 'wadus', 1] }); // eslint-disable-line no-new
                         },
-                        function(err) {
+                        function (err) {
                             assert.equal(
                                 err.message,
                                 'Invalid type for param "list", expects "array<string>" type, got `[null,"wadus",1]`'
@@ -297,10 +279,10 @@ describe('node-creation', function() {
         });
     });
 
-    describe('Node custom validate', function() {
+    describe('Node custom validate', function () {
         var validList = [1, 2, 3, 4];
         var CustomValidationNode = Node.create('test-custom-validation', { list: Node.PARAM.ARRAY() }, {
-            beforeCreate: function() {
+            beforeCreate: function () {
                 assert.deepEqual(this.list, validList, 'Custom validation throws this');
             }
         });
@@ -310,14 +292,12 @@ describe('node-creation', function() {
             assert.deepEqual(customValidationNode.list, validList);
         });
 
-        it('should fail for unexpected array list', function() {
-            var customValidationNode;
-
+        it('should fail for unexpected array list', function () {
             assert.throws(
-                function() {
-                    customValidationNode = new CustomValidationNode(owner, { list: [1] });
+                function () {
+                    new CustomValidationNode(owner, { list: [1] }); // eslint-disable-line no-new
                 },
-                function(err) {
+                function (err) {
                     assert.equal(err.message, 'Custom validation throws this');
                     return true;
                 }
@@ -325,33 +305,33 @@ describe('node-creation', function() {
         });
     });
 
-    describe('Node ignoreParamForId', function() {
+    describe('Node ignoreParamForId', function () {
         var ANode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING() });
         var ABNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING(), b: Node.PARAM.STRING() });
         var AIgnoredBNode = Node.create('test-a-with-ignored-b', { a: Node.PARAM.STRING(), b: Node.PARAM.STRING() }, {
-            beforeCreate: function() {
+            beforeCreate: function () {
                 this.ignoreParamForId('b');
             }
         });
 
         it('should have different id for A and AB nodes', function () {
-            var aNode = new ANode(owner, {a: 'a'});
-            var abNode = new ABNode(owner, {a: 'a', b: 'b'});
+            var aNode = new ANode(owner, { a: 'a' });
+            var abNode = new ABNode(owner, { a: 'a', b: 'b' });
             assert.notEqual(aNode.id(), abNode.id());
         });
 
         it('should have same id for A and AIgnoredB nodes', function () {
-            var aNode = new ANode(owner, {a: 'a'});
-            var abNode = new AIgnoredBNode(owner, {a: 'a', b: 'b'});
+            var aNode = new ANode(owner, { a: 'a' });
+            var abNode = new AIgnoredBNode(owner, { a: 'a', b: 'b' });
             assert.equal(aNode.id(), abNode.id());
         });
     });
 
-    describe('Node validator defaultValue', function() {
+    describe('Node validator defaultValue', function () {
         var nullableParamTypes = Object.keys(Node.PARAM)
-            .filter(function(paramType) { return paramType !== 'NULLABLE' && paramType !== 'NODE'; });
+            .filter(function (paramType) { return paramType !== 'NULLABLE' && paramType !== 'NODE'; });
 
-        nullableParamTypes.forEach(function(paramType) {
+        nullableParamTypes.forEach(function (paramType) {
             it('should default to null for non provided "' + paramType + '" param', function () {
                 var ANode = Node.create('test-default-value-' + paramType, {
                     a: Node.PARAM.NULLABLE(Node.PARAM[paramType]())
@@ -394,9 +374,8 @@ describe('node-creation', function() {
         });
     });
 
-    describe('Cached table names', function() {
-
-        it('should be 60 chars at max for long type names', function() {
+    describe('Cached table names', function () {
+        it('should be 60 chars at max for long type names', function () {
             var ANode = Node.create('test-default-value', {
                 a: Node.PARAM.NULLABLE(Node.PARAM.STRING())
             });
@@ -405,7 +384,7 @@ describe('node-creation', function() {
             assert.equal(aNode.getTargetTable().length, 60);
         });
 
-        it('should be 60 chars also for short type names', function() {
+        it('should be 60 chars also for short type names', function () {
             var ANode = Node.create('t', {
                 a: Node.PARAM.NULLABLE(Node.PARAM.STRING())
             });
@@ -413,10 +392,9 @@ describe('node-creation', function() {
             var aNode = new ANode(owner, {});
             assert.equal(aNode.getTargetTable().length, 60);
         });
-
     });
 
-    describe('Validator', function() {
+    describe('Validator', function () {
         var SchemaValidatedNode = Node.create('validated-schema', {}, {
             validators: [new Node.Validator.Schema([
                 {
@@ -434,7 +412,7 @@ describe('node-creation', function() {
             ])]
         });
 
-        it('should work when schema is valid', function() {
+        it('should work when schema is valid', function () {
             var node = new SchemaValidatedNode(owner, {});
             node.setColumns([
                 {
@@ -453,7 +431,7 @@ describe('node-creation', function() {
             assert.ok(node.isValid());
         });
 
-        it('should fail when schema is missing a column', function() {
+        it('should fail when schema is missing a column', function () {
             var node = new SchemaValidatedNode(owner, {});
             node.setColumns([
                 {
@@ -471,7 +449,7 @@ describe('node-creation', function() {
             assert.equal(errors[0].message, 'Missing required column `wadus`');
         });
 
-        it('should fail when schema is missing more than a column', function() {
+        it('should fail when schema is missing more than a column', function () {
             var node = new SchemaValidatedNode(owner, {});
             node.setColumns([
                 {
@@ -486,7 +464,7 @@ describe('node-creation', function() {
             assert.equal(errors[1].message, 'Missing required column `wadus`');
         });
 
-        it('should fail when schema type does not match', function() {
+        it('should fail when schema type does not match', function () {
             var node = new SchemaValidatedNode(owner, {});
             node.setColumns([
                 {

@@ -2,18 +2,18 @@
 
 var assert = require('assert');
 var fs = require('fs');
+const path = require('path');
 
 var testHelper = require('../helper');
 
 describe('deprecated-sql-function examples', function () {
-
-    function readSql(fileName, callback) {
-        return fs.readFile(__dirname + '/sql/' + fileName, 'utf-8', callback);
+    function readSql (fileName, callback) {
+        return fs.readFile(path.join(__dirname, '/sql/', fileName), 'utf-8', callback);
     }
 
-    describe('buffer', function() {
-        before(function(done) {
-            readSql('DEP_EXT_buffer.sql', function(err, content) {
+    describe('buffer', function () {
+        before(function (done) {
+            readSql('DEP_EXT_buffer.sql', function (err, content) {
                 if (err) {
                     return done(err);
                 }
@@ -21,7 +21,7 @@ describe('deprecated-sql-function examples', function () {
             });
         });
 
-        after(function(done) {
+        after(function (done) {
             testHelper.executeQuery(
                 'DROP FUNCTION DEP_EXT_buffer(text, text, text, text[], numeric)',
                 done
@@ -30,10 +30,10 @@ describe('deprecated-sql-function examples', function () {
 
         var QUERY_SOURCE = [
             'select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom',
-            'from generate_series(1,3) as i',
+            'from generate_series(1,3) as i'
         ].join('\n');
 
-        function bufferDeprecatedSqlFnDefinition(radius) {
+        function bufferDeprecatedSqlFnDefinition (radius) {
             return {
                 type: 'deprecated-sql-function',
                 params: {
@@ -44,14 +44,14 @@ describe('deprecated-sql-function examples', function () {
                             query: QUERY_SOURCE
                         }
                     },
-                    function_args: [radius],
+                    function_args: [radius]
                 }
             };
         }
 
         it('should create a polygon with the expected area', function (done) {
             var radius = 1000;
-            testHelper.createAnalyses(bufferDeprecatedSqlFnDefinition(radius), function(err, result) {
+            testHelper.createAnalyses(bufferDeprecatedSqlFnDefinition(radius), function (err, result) {
                 assert.ifError(err);
                 var query = [
                     'SELECT',
@@ -59,10 +59,10 @@ describe('deprecated-sql-function examples', function () {
                     'FROM (' + result.getRoot().getQuery() + ') _q ORDER BY cartodb_id ASC'
                 ].join('\n');
                 var areaTolerance = 1e5;
-                testHelper.getRows(query, function(err, rows) {
+                testHelper.getRows(query, function (err, rows) {
                     assert.ifError(err);
                     assert.equal(rows.length, 3);
-                    rows.forEach(function(row, index) {
+                    rows.forEach(function (row, index) {
                         assert.equal(row.cartodb_id, index + 1);
                         assert.equal(row.gtype, 'ST_Polygon');
                         assert.ok(row.area > (Math.PI * Math.pow(radius, 2) - areaTolerance));
@@ -72,12 +72,11 @@ describe('deprecated-sql-function examples', function () {
                 });
             });
         });
-
     });
 
-    describe('Spatial Interpolation', function() {
-        before(function(done) {
-            readSql('DEP_EXT_SpatialInterpolation.sql', function(err, content) {
+    describe('Spatial Interpolation', function () {
+        before(function (done) {
+            readSql('DEP_EXT_SpatialInterpolation.sql', function (err, content) {
                 if (err) {
                     return done(err);
                 }
@@ -85,7 +84,7 @@ describe('deprecated-sql-function examples', function () {
             });
         });
 
-        after(function(done) {
+        after(function (done) {
             /*
             operation text, table_name text,
             primary_source_query text, primary_source_columns text[],
@@ -107,15 +106,15 @@ describe('deprecated-sql-function examples', function () {
 
         var QUERY_SOURCE = [
             'select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom, i * 100 * random() as wadus',
-            'from generate_series(1,3) as i',
+            'from generate_series(1,3) as i'
         ].join('\n');
 
         var QUERY_TARGET = [
             'select i as cartodb_id, st_setsrid(st_makepoint(0, i), 4326) as the_geom',
-            'from generate_series(1,3) as i',
+            'from generate_series(1,3) as i'
         ].join('\n');
 
-        function spatialInterpolationDeprecatedSqlFnDefinition() {
+        function spatialInterpolationDeprecatedSqlFnDefinition () {
             return {
                 type: 'deprecated-sql-function',
                 params: {
@@ -132,27 +131,26 @@ describe('deprecated-sql-function examples', function () {
                             query: QUERY_TARGET
                         }
                     },
-                    function_args: ['wadus', 1, 5, 0],
+                    function_args: ['wadus', 1, 5, 0]
                 }
             };
         }
 
         it('should create a table with wadus column from source', function (done) {
-            testHelper.getResult(spatialInterpolationDeprecatedSqlFnDefinition(), function(err, rows) {
+            testHelper.getResult(spatialInterpolationDeprecatedSqlFnDefinition(), function (err, rows) {
                 assert.ok(!err, err);
                 assert.equal(rows.length, 3);
-                rows.forEach(function(row) {
-                    assert.ok(row.hasOwnProperty('wadus'));
+                rows.forEach(function (row) {
+                    assert.ok(Object.prototype.hasOwnProperty.call(row, 'wadus'));
                 });
                 return done();
             });
         });
-
     });
 
-    describe('Python', function() {
-        before(function(done) {
-            readSql('DEP_EXT_python_weak_kmeans.sql', function(err, content) {
+    describe('Python', function () {
+        before(function (done) {
+            readSql('DEP_EXT_python_weak_kmeans.sql', function (err, content) {
                 if (err) {
                     return done(err);
                 }
@@ -160,7 +158,7 @@ describe('deprecated-sql-function examples', function () {
             });
         });
 
-        after(function(done) {
+        after(function (done) {
             testHelper.executeQuery(
                 [
                     'DROP FUNCTION DEP_EXT_python_weak_kmeans(',
@@ -175,10 +173,10 @@ describe('deprecated-sql-function examples', function () {
             'select',
             '    i as cartodb_id,',
             '    st_setsrid(st_makepoint(random() * 360 - 180, random() * 170 - 85), 4326) as the_geom',
-            'from generate_series(1,1000) as i',
+            'from generate_series(1,1000) as i'
         ].join('\n');
 
-        function pyexampleDeprecatedSqlFnDefinition() {
+        function pyexampleDeprecatedSqlFnDefinition () {
             return {
                 type: 'deprecated-sql-function',
                 params: {
@@ -189,24 +187,22 @@ describe('deprecated-sql-function examples', function () {
                             query: QUERY_SOURCE
                         }
                     },
-                    function_args: [5],
+                    function_args: [5]
                 }
             };
         }
 
         it('should work with plpythonu', function (done) {
-            testHelper.getResult(pyexampleDeprecatedSqlFnDefinition(), function(err, rows) {
+            testHelper.getResult(pyexampleDeprecatedSqlFnDefinition(), function (err, rows) {
                 assert.ok(!err, err);
                 assert.equal(rows.length, 1000);
-                rows.forEach(function(row) {
-                    assert.ok(row.hasOwnProperty('cluster_no'));
+                rows.forEach(function (row) {
+                    assert.ok(Object.prototype.hasOwnProperty.call(row, 'cluster_no'));
                     assert.ok(row.cluster_no >= 0);
                     assert.ok(row.cluster_no <= 4);
                 });
                 return done();
             });
         });
-
     });
-
 });

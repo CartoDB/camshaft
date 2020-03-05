@@ -8,23 +8,21 @@ var Analysis = require('../../lib/analysis');
 var TestConfig = require('../test-config');
 var QueryRunner = require('../../lib/postgresql/query-runner');
 
-
-describe('cached nodes', function() {
-
+describe('cached nodes', function () {
     var queryRunner;
 
-    before(function() {
+    before(function () {
         this.testConfig = TestConfig.create({ batch: { inlineExecution: true } });
 
-        this.createAnalysis = function(definition, callback) {
+        this.createAnalysis = function (definition, callback) {
             Analysis.create(this.testConfig, definition, callback);
         };
 
         queryRunner = new QueryRunner(this.testConfig.db);
     });
 
-    function getRows(query, callback) {
-        queryRunner.run(query, function(err, result) {
+    function getRows (query, callback) {
+        queryRunner.run(query, function (err, result) {
             assert.ok(!err, err);
             assert.ok(result);
             var rows = result.rows;
@@ -36,7 +34,7 @@ describe('cached nodes', function() {
 
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
 
-    function filteredNodeDefinition(node, filters) {
+    function filteredNodeDefinition (node, filters) {
         var clonedNode = JSON.parse(JSON.stringify(node));
         clonedNode.params.filters = filters;
         return clonedNode;
@@ -49,7 +47,7 @@ describe('cached nodes', function() {
         }
     };
 
-    function rankDefinition(source) {
+    function rankDefinition (source) {
         return {
             type: 'filter-rank',
             params: {
@@ -81,14 +79,14 @@ describe('cached nodes', function() {
         }
     };
 
-    it('should return just BBVA and ING banks from rank', function(done) {
-        Analysis.create(this.testConfig, rankDefinition(), function(err, analysis) {
+    it('should return just BBVA and ING banks from rank', function (done) {
+        Analysis.create(this.testConfig, rankDefinition(), function (err, analysis) {
             assert.ok(!err, err);
 
-            getRows(analysis.getQuery(), function(err, rows) {
+            getRows(analysis.getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
                 var BANKS_SORTED_THREE = ['BBVA', 'BBVA', 'ING'];
@@ -97,15 +95,14 @@ describe('cached nodes', function() {
 
                 done();
             });
-
         });
     });
 
-    it('should have different id when filter is applied: source and rank', function(done) {
+    it('should have different id when filter is applied: source and rank', function (done) {
         var filteredSource = filteredNodeDefinition(sourceAnalysisDefinition, sourceFilters);
         var analyses = [rankDefinition(), rankDefinition(filteredSource)];
 
-        async.map(analyses, this.createAnalysis.bind(this), function(err, results) {
+        async.map(analyses, this.createAnalysis.bind(this), function (err, results) {
             assert.ok(!err, err);
 
             assert.equal(results.length, 2);
@@ -117,7 +114,7 @@ describe('cached nodes', function() {
             var rawNodes = rawAnalysis.getNodes();
             var filteredNodes = filteredAnalysis.getNodes();
 
-            rawNodes.forEach(function(node, index) {
+            rawNodes.forEach(function (node, index) {
                 assert.equal(node.type, filteredNodes[index].type);
                 assert.notEqual(node.id(), filteredNodes[index].id());
                 assert.notEqual(node.getQuery(), filteredNodes[index].getQuery());
@@ -125,10 +122,10 @@ describe('cached nodes', function() {
 
             assert.notEqual(results[0].getQuery(), results[1].getQuery());
 
-            getRows(results[1].getQuery(), function(err, rows) {
+            getRows(results[1].getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
                 var BANKS_SORTED_THREE_BBVA_SKIPPED = ['ING', 'Santander', 'Santander'];
@@ -140,15 +137,14 @@ describe('cached nodes', function() {
         });
     });
 
-    describe('cached table', function() {
-
+    describe('cached table', function () {
         var rawAnalysis;
         var filteredAnalysis;
-        before(function(done) {
+        before(function (done) {
             var filteredRank = filteredNodeDefinition(rankDefinition(), rankFilters);
             var analyses = [rankDefinition(), filteredRank];
 
-            async.map(analyses, this.createAnalysis.bind(this), function(err, results) {
+            async.map(analyses, this.createAnalysis.bind(this), function (err, results) {
                 if (err) {
                     return done(err);
                 }
@@ -162,7 +158,7 @@ describe('cached nodes', function() {
             });
         });
 
-        it('should have same source id, different rank id', function() {
+        it('should have same source id, different rank id', function () {
             assert.notEqual(rawAnalysis.id(), filteredAnalysis.id());
 
             var rawNodes = rawAnalysis.getNodes();
@@ -180,11 +176,11 @@ describe('cached nodes', function() {
             assert.notEqual(rawRankNode.getQuery(), filteredRankNode.getQuery());
         });
 
-        it('should return just ING as BBVA is filtered at rank (not at source)', function(done) {
-            getRows(filteredAnalysis.getQuery(), function(err, rows) {
+        it('should return just ING as BBVA is filtered at rank (not at source)', function (done) {
+            getRows(filteredAnalysis.getQuery(), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
                 var BANKS_SORTED_THREE_BBVA_SKIPPED = ['ING'];
@@ -195,12 +191,12 @@ describe('cached nodes', function() {
             });
         });
 
-        it('should return just ING and BBVA when filter is switch off', function(done) {
+        it('should return just ING and BBVA when filter is switch off', function (done) {
             var filteredRankNode = filteredAnalysis.getRoot();
-            getRows(filteredRankNode.getQuery({ bank_category: false }), function(err, rows) {
+            getRows(filteredRankNode.getQuery({ bank_category: false }), function (err, rows) {
                 assert.ok(!err, err);
 
-                var banks = rows.map(function(row) {
+                var banks = rows.map(function (row) {
                     return row.bank;
                 });
                 var BANKS_SORTED_THREE_BBVA_SKIPPED = ['BBVA', 'BBVA', 'ING'];
@@ -211,7 +207,7 @@ describe('cached nodes', function() {
             });
         });
 
-        it('should return same result for rank and filtered when unfiltering', function(done) {
+        it('should return same result for rank and filtered when unfiltering', function (done) {
             var rawRankNode = rawAnalysis.getRoot();
             var filteredRankNode = filteredAnalysis.getRoot();
 
@@ -219,7 +215,7 @@ describe('cached nodes', function() {
                 rawRankNode.getQuery(),
                 filteredRankNode.getQuery({ bank_category: false })
             ];
-            async.map(queries, getRows, function(err, results) {
+            async.map(queries, getRows, function (err, results) {
                 if (err) {
                     return done(err);
                 }
@@ -231,7 +227,7 @@ describe('cached nodes', function() {
             });
         });
 
-        it('should use same table as rank unfiltered but with the filter applied over unfiltered version', function() {
+        it('should use same table as rank unfiltered but with the filter applied over unfiltered version', function () {
             var rawRankNode = rawAnalysis.getRoot();
             var filteredRankNode = filteredAnalysis.getRoot();
             assert.equal(rawRankNode.getTargetTable(), filteredRankNode.getTargetTable());
@@ -240,8 +236,7 @@ describe('cached nodes', function() {
         });
     });
 
-    describe('cached tables should not get recreated', function() {
-
+    describe('cached tables should not get recreated', function () {
         // TODO: clean analysis catalog after each test.
         // Use a different source to rest state.
         var source = {
@@ -254,8 +249,8 @@ describe('cached nodes', function() {
         var rawRank = rankDefinition(source);
         var filteredRank = filteredNodeDefinition(rankDefinition(source), rankFilters);
 
-        before(function(done) {
-            this.createAnalysis(rawRank, function(err, rankResult) {
+        before(function (done) {
+            this.createAnalysis(rawRank, function (err, rankResult) {
                 if (err) {
                     return done(err);
                 }
@@ -264,15 +259,15 @@ describe('cached nodes', function() {
             });
         });
 
-        it('should skip table creation for filtered cache table', function(done) {
+        it('should skip table creation for filtered cache table', function (done) {
             var self = this;
 
-            this.createAnalysis(rawRank, function(err, rawRankResult) {
+            this.createAnalysis(rawRank, function (err, rawRankResult) {
                 if (err) {
                     return done(err);
                 }
 
-                self.createAnalysis(filteredRank, function(err, filteredRankResult) {
+                self.createAnalysis(filteredRank, function (err, filteredRankResult) {
                     if (err) {
                         return done(err);
                     }
@@ -287,5 +282,4 @@ describe('cached nodes', function() {
             });
         });
     });
-
 });

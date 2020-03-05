@@ -3,7 +3,7 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-describe('trade-area analysis', function() {
+describe('trade-area analysis', function () {
     var QUERY = 'select * from atm_machines limit 2';
     var KIND = 'car';
     var TIME = 600;
@@ -29,14 +29,14 @@ describe('trade-area analysis', function() {
         };
 
         it('should create an analysis', function (done) {
-            testHelper.createAnalyses(tradeAreaDefinition, function(err, tradeArea) {
+            testHelper.createAnalyses(tradeAreaDefinition, function (err, tradeArea) {
                 assert.ifError(err);
 
                 var rootNode = tradeArea.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.data_range === 'number');
@@ -48,7 +48,7 @@ describe('trade-area analysis', function() {
         });
 
         it('should return unique cartodb_ids', function (done) {
-            testHelper.getResult(tradeAreaDefinition, function(err, result) {
+            testHelper.getResult(tradeAreaDefinition, function (err, result) {
                 assert.ifError(err);
                 const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
                 assert.equal(uniqueIds.length, result.length);
@@ -108,7 +108,7 @@ describe('trade-area analysis', function() {
                 }
             };
 
-            testHelper.getResult(tradeAreaDefinition3, function(err, result) {
+            testHelper.getResult(tradeAreaDefinition3, function (err, result) {
                 assert.ifError(err);
                 const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
                 assert.equal(uniqueIds.length, result.length);
@@ -116,7 +116,6 @@ describe('trade-area analysis', function() {
                 return done();
             });
         });
-
     });
 
     describe('trade area analysis dissolved', function () {
@@ -132,14 +131,14 @@ describe('trade-area analysis', function() {
         };
 
         it('should create an analysis with boudaries dissolved', function (done) {
-            testHelper.createAnalyses(tradeAreaDefinition, function(err, tradeArea) {
+            testHelper.createAnalyses(tradeAreaDefinition, function (err, tradeArea) {
                 assert.ifError(err);
 
                 var rootNode = tradeArea.getRoot();
 
-                testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+                testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                     assert.ifError(err);
-                    rows.forEach(function(row) {
+                    rows.forEach(function (row) {
                         assert.ok(typeof row.cartodb_id === 'number');
                         assert.ok(typeof row.the_geom === 'string');
                         assert.ok(typeof row.data_range === 'number');
@@ -173,7 +172,7 @@ describe('trade-area analysis', function() {
                 }
             };
 
-            testHelper.getResult(tradeAreaDefinition3, function(err, result) {
+            testHelper.getResult(tradeAreaDefinition3, function (err, result) {
                 assert.ifError(err);
                 const uniqueIds = [...new Set(result.map(r => r.cartodb_id))];
                 assert.equal(uniqueIds.length, result.length);
@@ -181,6 +180,5 @@ describe('trade-area analysis', function() {
                 return done();
             });
         });
-
     });
 });

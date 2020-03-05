@@ -3,9 +3,8 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-describe('georeference-street-address analysis', function() {
-
-    function georeferenceStreetAddressNode(query, streetColumn, template, extraParams) {
+describe('georeference-street-address analysis', function () {
+    function georeferenceStreetAddressNode (query, streetColumn, template, extraParams) {
         const definition = {
             type: 'georeference-street-address',
             params: {
@@ -25,7 +24,7 @@ describe('georeference-street-address analysis', function() {
         return definition;
     }
 
-    function wrapQueryWithXY(node) {
+    function wrapQueryWithXY (node) {
         return `
             SELECT *, ST_X(the_geom) AS x, ST_Y(the_geom) AS Y
             FROM (
@@ -35,7 +34,7 @@ describe('georeference-street-address analysis', function() {
 
     it('should check either street_address_column or street_address_template are provided', function (done) {
         var georeferenceStreetAddressDefinition = georeferenceStreetAddressNode('select 1 as cartodb_id', null);
-        testHelper.createAnalyses(georeferenceStreetAddressDefinition, function(err) {
+        testHelper.createAnalyses(georeferenceStreetAddressDefinition, function (err) {
             assert.ok(err);
             assert.equal(
                 err.message,
@@ -114,8 +113,8 @@ describe('georeference-street-address analysis', function() {
                 point: {
                     x: -2.517555,
                     y: 42.302939
-                },
-            }],
+                }
+            }]
         },
         {
             desc: 'template with spaces in token',
@@ -127,8 +126,8 @@ describe('georeference-street-address analysis', function() {
                 point: {
                     x: -2.517555,
                     y: 42.302939
-                },
-            }],
+                }
+            }]
         },
         {
             desc: 'with column and more free text',
@@ -140,7 +139,7 @@ describe('georeference-street-address analysis', function() {
                 point: {
                     x: -2.517555,
                     y: 42.302939
-                },
+                }
             }]
         },
         {
@@ -188,7 +187,7 @@ describe('georeference-street-address analysis', function() {
         }
     ];
 
-    scenarios.forEach(function(scenario) {
+    scenarios.forEach(function (scenario) {
         var testFn = it;
         if (scenario.test === 'skip') {
             testFn = it.skip;
@@ -201,15 +200,15 @@ describe('georeference-street-address analysis', function() {
             var definition = georeferenceStreetAddressNode(scenario.query,
                 scenario.column, scenario.template, scenario.params);
 
-            testHelper.createAnalyses(definition, function(err, result) {
+            testHelper.createAnalyses(definition, function (err, result) {
                 assert.ifError(err);
 
                 var rootNode = result.getRoot();
 
-                testHelper.getRows(wrapQueryWithXY(rootNode), function(err, rows) {
+                testHelper.getRows(wrapQueryWithXY(rootNode), function (err, rows) {
                     assert.ifError(err);
                     assert.equal(rows.length, scenario.addresses.length);
-                    for(let i = 0; i < rows.length; i++) {
+                    for (let i = 0; i < rows.length; i++) {
                         const row = rows[i];
                         const address = scenario.addresses[i];
 
@@ -219,7 +218,7 @@ describe('georeference-street-address analysis', function() {
                         assert.equal(row.x, address.point.x, row.x + ' != ' + address.point.x + ' at ' + i);
                         assert.equal(row.y, address.point.y);
 
-                        if(row.street_name && address.street_name) {
+                        if (row.street_name && address.street_name) {
                             assert.equal(row.street_name, address.street_name);
                         }
 
@@ -234,5 +233,4 @@ describe('georeference-street-address analysis', function() {
             });
         });
     });
-
 });

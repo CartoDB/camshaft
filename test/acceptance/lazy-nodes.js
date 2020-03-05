@@ -3,12 +3,10 @@
 var assert = require('assert');
 var testHelper = require('../helper');
 
-
-describe('lazy nodes', function() {
-
+describe('lazy nodes', function () {
     var QUERY_ATM_MACHINES = 'select * from atm_machines';
 
-    function filteredNodeDefinition(node, filters) {
+    function filteredNodeDefinition (node, filters) {
         var clonedNode = JSON.parse(JSON.stringify(node));
         clonedNode.params.filters = filters;
         return clonedNode;
@@ -51,7 +49,7 @@ describe('lazy nodes', function() {
         }
     };
 
-    function dataObservatoryMeasureDefinition(source) {
+    function dataObservatoryMeasureDefinition (source) {
         return {
             type: 'data-observatory-measure',
             params: {
@@ -62,24 +60,26 @@ describe('lazy nodes', function() {
         };
     }
 
-    it('should be ready in basic scenario', function(done) {
-        testHelper.createAnalyses(dataObservatoryMeasureDefinition(), function(err, doMeasureResult) {
+    it('should be ready in basic scenario', function (done) {
+        testHelper.createAnalyses(dataObservatoryMeasureDefinition(), function (err, doMeasureResult) {
+            assert.ifError(err);
             var rootNode = doMeasureResult.getRoot();
             assert.equal(rootNode.getStatus(), 'ready');
             return done();
         });
     });
 
-    it('should be ready and pick filters from parent node', function(done) {
+    it('should be ready and pick filters from parent node', function (done) {
         var filteredBuffer = filteredNodeDefinition(bufferDefinition, bankCategoryRejectFilter);
-        testHelper.createAnalyses(dataObservatoryMeasureDefinition(filteredBuffer), function(err, doMeasureResult) {
+        testHelper.createAnalyses(dataObservatoryMeasureDefinition(filteredBuffer), function (err, doMeasureResult) {
+            assert.ifError(err);
             var rootNode = doMeasureResult.getRoot();
             assert.equal(rootNode.getStatus(), 'ready');
-            testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+            testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                 if (err) {
                     return done(err);
                 }
-                rows.forEach(function(row) {
+                rows.forEach(function (row) {
                     assert.notEqual(row.bank, rejectedBank);
                 });
                 return done();
@@ -87,19 +87,20 @@ describe('lazy nodes', function() {
         });
     });
 
-    it('should be ready and pick filters from itself', function(done) {
+    it('should be ready and pick filters from itself', function (done) {
         var filteredDataObservatory = filteredNodeDefinition(
             dataObservatoryMeasureDefinition(),
             bankCategoryAcceptFilter
         );
-        testHelper.createAnalyses(filteredDataObservatory, function(err, doMeasureResult) {
+        testHelper.createAnalyses(filteredDataObservatory, function (err, doMeasureResult) {
+            assert.ifError(err);
             var rootNode = doMeasureResult.getRoot();
             assert.equal(rootNode.getStatus(), 'ready');
-            testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+            testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                 if (err) {
                     return done(err);
                 }
-                rows.forEach(function(row) {
+                rows.forEach(function (row) {
                     assert.equal(row.bank, acceptedBank);
                 });
                 return done();
@@ -107,22 +108,23 @@ describe('lazy nodes', function() {
         });
     });
 
-    it('should be ready and pick filters from parent node and itself', function(done) {
+    it('should be ready and pick filters from parent node and itself', function (done) {
         var filteredBuffer = filteredNodeDefinition(bufferDefinition, bankCategoryRejectFilter);
         var filteredDataObservatoryWithFilteredBuffer = filteredNodeDefinition(
             dataObservatoryMeasureDefinition(filteredBuffer),
             bankCategoryAcceptFilter
         );
-        testHelper.createAnalyses(filteredDataObservatoryWithFilteredBuffer, function(err, doMeasureResult) {
+        testHelper.createAnalyses(filteredDataObservatoryWithFilteredBuffer, function (err, doMeasureResult) {
+            assert.ifError(err);
             var rootNode = doMeasureResult.getRoot();
 
             assert.equal(rootNode.getStatus(), 'ready');
 
-            testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+            testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                 if (err) {
                     return done(err);
                 }
-                rows.forEach(function(row) {
+                rows.forEach(function (row) {
                     assert.equal(row.bank, acceptedBank);
                 });
                 return done();
@@ -130,7 +132,7 @@ describe('lazy nodes', function() {
         });
     });
 
-    it('should use same cache table for filters in node and parent node', function(done) {
+    it('should use same cache table for filters in node and parent node', function (done) {
         var filteredBuffer = filteredNodeDefinition(bufferDefinition, bankCategoryRejectFilter);
 
         var dataObservatoryMeasure = dataObservatoryMeasureDefinition();
@@ -151,25 +153,24 @@ describe('lazy nodes', function() {
             filteredDataObservatoryWithFilteredBuffer
         ];
 
-        testHelper.createAnalyses(analyses, function(err, results) {
+        testHelper.createAnalyses(analyses, function (err, results) {
             if (err) {
                 return done(err);
             }
 
             assert.equal(results.length, analyses.length);
-            var rootNodes = results.map(function(result) { return result.getRoot(); });
+            var rootNodes = results.map(function (result) { return result.getRoot(); });
 
             var dataObservatoryMeasureRoot = rootNodes[0];
 
-            rootNodes.slice(1).forEach(function(rootNode) {
+            rootNodes.slice(1).forEach(function (rootNode) {
                 assert.equal(dataObservatoryMeasureRoot.getTargetTable(), rootNode.getTargetTable());
             });
-            rootNodes.forEach(function(rootNode) {
+            rootNodes.forEach(function (rootNode) {
                 assert.equal(rootNode.getStatus(), 'ready');
             });
 
             return done();
         });
     });
-
 });

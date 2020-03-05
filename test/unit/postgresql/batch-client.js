@@ -1,6 +1,5 @@
 'use strict';
 
-
 var assert = require('assert');
 var batchConfig = require('../../test-config').batch;
 var endpoint = batchConfig.endpoint;
@@ -8,7 +7,6 @@ var username = batchConfig.username;
 var apiKey = batchConfig.apiKey;
 
 describe('batch-client-postgresql', function () {
-
     var scenarios = [{
         title: 'when Batch API works',
         fakeRequest: {

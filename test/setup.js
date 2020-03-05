@@ -13,7 +13,7 @@ var debug = require('../lib/util/debug')('test-setup');
 var DATABASE_NAME = testConfig.db.dbname;
 var DATABASE_USER = testConfig.db.user;
 
-before(function setupTestDatabase(done) {
+before(function setupTestDatabase (done) {
     var fixturePaths = [
         fs.realpathSync('./test/fixtures/postgis_extension.sql'),
         fs.realpathSync('./test/fixtures/plpythonu_extension.sql'),
@@ -48,15 +48,15 @@ before(function setupTestDatabase(done) {
 
     async.waterfall(
         [
-            function dropDatabaseIfExists(callback) {
-                exec('dropdb -U ' + DATABASE_USER + ' ' + DATABASE_NAME, function(/*ignore error*/) {
+            function dropDatabaseIfExists (callback) {
+                exec('dropdb -U ' + DATABASE_USER + ' ' + DATABASE_NAME, function (/* ignore error */) {
                     return callback(null);
                 });
             },
-            function createDatabase(callback) {
+            function createDatabase (callback) {
                 exec('createdb -U ' + DATABASE_USER + ' -EUTF8 ' + DATABASE_NAME, callback);
             },
-            function applyFixtures(stdout, stderr, callback) {
+            function applyFixtures (stdout, stderr, callback) {
                 async.eachSeries(fixturePaths, function (path, callback) {
                     debug('Loading SQL script: %s', path);
                     exec('psql -U ' + DATABASE_USER + ' -d ' + DATABASE_NAME + ' -f ' + path, (err, stdout, stderr) => {
@@ -68,7 +68,7 @@ before(function setupTestDatabase(done) {
                 }, callback);
             }
         ],
-        function finish(err, results) {
+        function finish (err, results) {
             debug('Test database setup, results: %j', results);
             done(err);
         }

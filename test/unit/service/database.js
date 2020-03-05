@@ -32,7 +32,7 @@ describe('database service', function () {
                 assert.ifError(err);
 
                 assert.ok(runQueryStubCalled);
-                assert.ok(metadatadata.hasOwnProperty('last_update'));
+                assert.ok(Object.prototype.hasOwnProperty.call(metadatadata, 'last_update'));
                 assert.ok(isValidDate(metadatadata.last_update), 'last_update is an invalid date');
                 this.databaseService.queryRunner.run = originalQueryRunner;
 

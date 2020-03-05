@@ -37,12 +37,12 @@ describe('moran analysis', function () {
     };
 
     it('should create the moran analyses when the query uses "\'" at some point', function (done) {
-        testHelper.createAnalyses(moranDefinition, function(err, moran) {
+        testHelper.createAnalyses(moranDefinition, function (err, moran) {
             assert.ifError(err);
 
             var rootNode = moran.getRoot();
 
-            testHelper.getRows(rootNode.getQuery(), function(err, rows) {
+            testHelper.getRows(rootNode.getQuery(), function (err, rows) {
                 assert.ifError(err);
                 rows.forEach(row => {
                     assert.ok(typeof row.cartodb_id === 'number');

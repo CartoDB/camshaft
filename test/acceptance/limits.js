@@ -4,9 +4,7 @@ var assert = require('assert');
 var testHelper = require('../helper');
 var TestConfig = require('../test-config');
 
-
-describe('cache query limits', function() {
-
+describe('cache query limits', function () {
     var sourceDefinition = {
         type: 'source',
         params: {
@@ -33,8 +31,7 @@ describe('cache query limits', function() {
         }
     };
 
-
-    function createConfig(limits) {
+    function createConfig (limits) {
         return TestConfig.create({
             limits: {
                 analyses: limits
@@ -43,9 +40,10 @@ describe('cache query limits', function() {
         });
     }
 
-    it('should use type timeout', function(done) {
+    it('should use type timeout', function (done) {
         var config = createConfig({ buffer: { timeout: 1000 } });
-        testHelper.createAnalyses(bufferDefinition, config, function(err, bufferResult) {
+        testHelper.createAnalyses(bufferDefinition, config, function (err, bufferResult) {
+            assert.ifError(err);
             var rootNode = bufferResult.getRoot();
             assert.equal(rootNode.getStatus(), 'ready');
             assert.equal(rootNode.getCacheQueryTimeout(), 1000);
@@ -53,9 +51,9 @@ describe('cache query limits', function() {
         });
     });
 
-    it('should use tag timeout', function(done) {
+    it('should use tag timeout', function (done) {
         var config = createConfig({ io4x: { timeout: 5000 } });
-        testHelper.createAnalyses(tradeAreaDefinition, config, function(err, tradeAreaResult) {
+        testHelper.createAnalyses(tradeAreaDefinition, config, function (err, tradeAreaResult) {
             assert.ok(!err, err);
             var rootNode = tradeAreaResult.getRoot();
             assert.equal(rootNode.getStatus(), 'ready');
@@ -64,9 +62,9 @@ describe('cache query limits', function() {
         });
     });
 
-    it('should use type over tag timeout', function(done) {
+    it('should use type over tag timeout', function (done) {
         var config = createConfig({ io4x: { timeout: 5000 }, 'trade-area': { timeout: 2000 } });
-        testHelper.createAnalyses(tradeAreaDefinition, config, function(err, tradeAreaResult) {
+        testHelper.createAnalyses(tradeAreaDefinition, config, function (err, tradeAreaResult) {
             assert.ok(!err, err);
             var rootNode = tradeAreaResult.getRoot();
             assert.equal(rootNode.getStatus(), 'ready');
@@ -74,5 +72,4 @@ describe('cache query limits', function() {
             return done();
         });
     });
-
 });

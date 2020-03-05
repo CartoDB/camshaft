@@ -4,9 +4,8 @@ var assert = require('assert');
 
 var Node = require('../../lib/node/node');
 
-describe('node-updated-at', function() {
-
-    function assertEqualTime(d1, d2) {
+describe('node-updated-at', function () {
+    function assertEqualTime (d1, d2) {
         if (d1 === null) {
             throw new Error('First argument must be a Date');
         }
@@ -22,7 +21,7 @@ describe('node-updated-at', function() {
     var START_TIME = new Date('1970-01-01T00:00:00.000Z');
 
     var FooSourceNode = Node.create('foo-source', { buster: Node.PARAM.STRING() }, {
-        beforeCreate: function() {
+        beforeCreate: function () {
             this.setUpdatedAt(START_TIME);
         }
     });
@@ -31,8 +30,7 @@ describe('node-updated-at', function() {
         source: Node.PARAM.NODE()
     });
 
-
-    it('should retrieve parent node updated at with getLastUpdatedAtFromInputNodes', function() {
+    it('should retrieve parent node updated at with getLastUpdatedAtFromInputNodes', function () {
         var aFooSource = new FooSourceNode(owner, { buster: 'a' });
         var childNode = new ChildNode(owner, { source: aFooSource });
         assert.equal(childNode.getUpdatedAt(), null);

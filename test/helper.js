@@ -10,11 +10,11 @@ var testConfig = TestConfig.create({ batch: { inlineExecution: true } });
 var Analysis = require('../lib/analysis');
 var QueryRunner = require('../lib/postgresql/query-runner');
 
-function createAnalysis(testConfig, definition, callback) {
+function createAnalysis (testConfig, definition, callback) {
     Analysis.create(testConfig, definition, callback);
 }
 
-function createAnalyses(analyses, config, callback) {
+function createAnalyses (analyses, config, callback) {
     if (!callback) {
         callback = config;
         config = testConfig;
@@ -24,11 +24,11 @@ function createAnalyses(analyses, config, callback) {
 
     var _createAnalysis = createAnalysis.bind(null, config);
 
-    async.map(analyses, _createAnalysis, function(err) {
+    async.map(analyses, _createAnalysis, function (err) {
         if (err) {
             return callback(err);
         }
-        async.map(analyses, _createAnalysis, function(err, results) {
+        async.map(analyses, _createAnalysis, function (err, results) {
             if (err) {
                 return callback(err);
             }
@@ -40,7 +40,7 @@ function createAnalyses(analyses, config, callback) {
 
 module.exports.createAnalyses = createAnalyses;
 
-function executeQuery(query, config, callback) {
+function executeQuery (query, config, callback) {
     if (!callback) {
         callback = config;
         config = testConfig;
@@ -52,7 +52,7 @@ function executeQuery(query, config, callback) {
 
 module.exports.executeQuery = executeQuery;
 
-function getRows(query, config, callback) {
+function getRows (query, config, callback) {
     if (!callback) {
         callback = config;
         config = testConfig;
@@ -60,7 +60,7 @@ function getRows(query, config, callback) {
     config = JSON.parse(JSON.stringify(config));
     config.readonly = true;
 
-    executeQuery(query, config, function(err, result) {
+    executeQuery(query, config, function (err, result) {
         assert.ok(!err, err);
         assert.ok(result);
         var rows = result.rows;
@@ -72,12 +72,12 @@ function getRows(query, config, callback) {
 
 module.exports.getRows = getRows;
 
-function getResult(analysisDefinition, config, callback) {
+function getResult (analysisDefinition, config, callback) {
     if (!callback) {
         callback = config;
         config = testConfig;
     }
-    createAnalyses(analysisDefinition, config, function(err, analysisResult) {
+    createAnalyses(analysisDefinition, config, function (err, analysisResult) {
         if (err) {
             return callback(err);
         }
@@ -87,13 +87,13 @@ function getResult(analysisDefinition, config, callback) {
 
 module.exports.getResult = getResult;
 
-function checkCartodbIdIsSorted(rows) {
-    var cartodbIds = rows.map(function(row) { return row.cartodb_id; });
+function checkCartodbIdIsSorted (rows) {
+    var cartodbIds = rows.map(function (row) { return row.cartodb_id; });
 
     var allAreNumeric = cartodbIds.every(Number.isFinite);
     assert.ok(allAreNumeric, 'cartodb_id should be a number');
 
-    var isSorted = cartodbIds.reduce(function(sorted, current, index, arr) {
+    var isSorted = cartodbIds.reduce(function (sorted, current, index, arr) {
         if (!sorted) {
             return false;
         }
@@ -107,11 +107,10 @@ function checkCartodbIdIsSorted(rows) {
 
 module.exports.checkCartodbIdIsSorted = checkCartodbIdIsSorted;
 
-
-function checkCartodbIdIsUnique(rows) {
+function checkCartodbIdIsUnique (rows) {
     var cartodbIds = {};
-    rows.forEach(function(row) {
-        assert.equal(cartodbIds.hasOwnProperty(row.cartodb_id), false);
+    rows.forEach(function (row) {
+        assert.equal(Object.prototype.hasOwnProperty.call(cartodbIds, row.cartodb_id), false);
         cartodbIds[row.cartodb_id] = true;
     });
 }
