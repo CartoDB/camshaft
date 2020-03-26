@@ -23,7 +23,6 @@ before(function setupTestDatabase (done) {
         fs.realpathSync('./test/fixtures/cdb_analysischeck.sql'),
         fs.realpathSync('./test/fixtures/cdb_invalidate_varnish.sql'),
 
-        fs.realpathSync('./test/fixtures/cdb_dataservices_client/schema.sql'),
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_geocoder.sql'),
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_isochrone.sql'),
         fs.realpathSync('./test/fixtures/cdb_dataservices_client/cdb_route_point_to_point.sql'),
@@ -55,6 +54,14 @@ before(function setupTestDatabase (done) {
             },
             function createDatabase (callback) {
                 exec('createdb -U ' + DATABASE_USER + ' -EUTF8 ' + DATABASE_NAME, callback);
+            },
+            function setDataservices (stdout, stderr, callback) {
+                // This is moved here because we need to add the cdb_dataservices_client schema to the test user search_path,
+                // so we need to both create the schema and assign it to the user (for this database only)
+                const command = 'psql -U ' + DATABASE_USER + ' -d ' + DATABASE_NAME +
+                                ' -c "CREATE SCHEMA IF NOT EXISTS cdb_dataservices_client; ' +
+                                'ALTER ROLE ' + DATABASE_USER + ' SET search_path = \\"\\$user\\", public, cdb_dataservices_client;"';
+                exec(command, callback);
             },
             function applyFixtures (stdout, stderr, callback) {
                 async.eachSeries(fixturePaths, function (path, callback) {
