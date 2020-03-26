@@ -16,10 +16,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Create geomval if it doesn't exist (in postgis 3+ it only exists in postgis_raster)
+-- Uses cdb_dataservices_client.geomval to match the behaviour followed there
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'geomval') THEN
-        CREATE TYPE geomval AS (
+        CREATE TYPE cdb_dataservices_client.geomval AS (
             geom geometry,
             val double precision
         );
