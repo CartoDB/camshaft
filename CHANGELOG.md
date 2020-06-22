@@ -1,9 +1,19 @@
 # Changelog
 
-## 0.65.4
+## 0.66.0
 Release 2020-mm-dd
 
-- Minor changes in the tests to create the geomval type, if necessary, in the cdb_dataservices_client schema. This is done to match the behaviour of that extension.
+Breaking:
+
+- Logging system revamp:
+
+  - Replace `bunyan` by `pino` as logger utility
+  - Now log entries are written to stdout instead of a configurable file
+  - Improved output of both analysis and errors for log entries to provide a better context
+
+- Chore:
+
+  - Minor changes in the tests to create the geomval type, if necessary, in the cdb_dataservices_client schema. This is done to match the behaviour of that extension.
 
 ## 0.65.3
 Release 2020-03-05
