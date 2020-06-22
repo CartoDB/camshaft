@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.66.0
-Release 2020-mm-dd
+Release 2020-06-22
 
 Breaking:
 
