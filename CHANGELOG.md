@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.67.0
+Release 2020-07-22
+
+- Chore:
+  - Adapt logger to the standard JSON sctructure
+
 ## 0.66.0
 Release 2020-06-22
 
