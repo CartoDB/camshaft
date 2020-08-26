@@ -1,6 +1,6 @@
 {
   "name": "camshaft",
-  "version": "0.67.0",
+  "version": "0.67.1",
   "description": "Analysis library to create data views from queries",
   "keywords": [
     "cartodb",
