@@ -4,7 +4,7 @@
 Release 2020-08-26
 
 - Fixes:
-  - Stop logging with a predefined JSON structure
+  - Stop logging without a predefined JSON structure
 
 ## 0.67.0
 Release 2020-07-22
