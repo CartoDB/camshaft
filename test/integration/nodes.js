@@ -595,5 +595,25 @@ describe('nodes', function () {
                 });
             });
         });
+
+        it('merge should allow table names with capital letters or spaces', function (done) {
+            var merge = {
+                type: 'merge',
+                params: {
+                    left_source: SOURCE_ATM_MACHINES_DEF,
+                    right_source: SOURCE_ATM_MACHINES_DEF,
+                    left_source_column: 'SourceColumm',
+                    right_source_column: 'Target Column',
+                    left_source_columns: ['the_geom', 'indoor', 'cartodb_id'],
+                    right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
+                }
+            };
+
+            testHelper.createAnalyses(merge, function (err, results) {
+                assert.ifError(err);
+
+                return done();
+            });
+        });
     });
 });
