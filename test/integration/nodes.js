@@ -602,8 +602,8 @@ describe('nodes', function () {
                 params: {
                     left_source: SOURCE_ATM_MACHINES_DEF,
                     right_source: SOURCE_ATM_MACHINES_DEF,
-                    left_source_column: 'SourceColumm',
-                    right_source_column: 'Target Column',
+                    left_source_column: 'BankWithCapitalLetters',
+                    right_source_column: 'bank with spaces',
                     left_source_columns: ['the_geom', 'indoor', 'cartodb_id'],
                     right_source_columns: ['the_geom', 'indoor', 'cartodb_id']
                 }
