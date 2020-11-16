@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.67.2
-Release 2020-10-29
+Release 2020-11-16
 
 - Fixes:
   - Use double quotes on identifiers to support queries for column names with spaces or capital letters
