@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.67.3
+Release 2021-02-15
+
+- Fixes:
+  - While logging, serialize single or multiple exceptions
+
 ## 0.67.2
 Release 2020-11-16
 
@@ -16,7 +22,7 @@ Release 2020-08-26
 Release 2020-07-22
 
 - Chore:
-  - Adapt logger to the standard JSON sctructure
+  - Adapt logger to the standard JSON structure
 
 ## 0.66.0
 Release 2020-06-22
