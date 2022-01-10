@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.67.4
+Release 2021-12-28
+
+- Fixes:
+  - Use node ID as buster for alias names on Merge analyses to avoid cache issues
+
 ## 0.67.3
 Release 2021-02-15
 
