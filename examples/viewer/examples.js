@@ -462,6 +462,14 @@ var lineToColumnDefinition = {
     }
 };
 
+var voronoiDefinition = {
+    id: 'voronoi-example',
+    type: 'voronoi',
+    params: {
+        source: sourceAtmDef
+    }
+};
+
 var examples = {
     deprecated_function: {
         /**
@@ -2329,5 +2337,21 @@ $$ LANGUAGE plpgsql;
         ].join('\n'),
         center: [ 40.7246183, -3.1864915 ],
         zoom: 9
+    },
+    'voronoi': {
+        name: 'voronoi',
+        def: voronoiDefinition,
+        cartocss: [
+            '#layer{',
+            '  polygon-fill: #FABADA;',
+            '  polygon-opacity: 0.6;',
+            '  polygon-opacity: 0.7;',
+            '  line-color: #FFF;',
+            '  line-width: 0.5;',
+            '  line-opacity: 1;',
+            '}'
+        ].join('\n'),
+        center: [40.44, -3.7],
+        zoom: 12
     }
 };
